@@ -16,17 +16,17 @@
 The name of this file : Deck.cpp
 Author : Hong Wi, hwi@wustl.edu
 
-This cpp file contains general use of Deck class. 
+This cpp file contains general use of Deck class.
 * Deck(char * fileName) is a constructor that will call load(fileName);
 
-* load function(char* fileName) returns errorcontrol to determine the success or the failiure. 
-This function behaaves samely from parsefile function of verifyCard.cpp. 
+* load function(char* fileName) returns errorcontrol to determine the success or the failiure.
+This function behaaves samely from parsefile function of verifyCard.cpp.
 
-* shuffle function simply shuffles private member varialbe deck. 
+* shuffle function simply shuffles private member varialbe deck.
 
-* size function returns private member variable deck's size. 
+* size function returns private member variable deck's size.
 
-* operator<< is for printing out what is in deck member variable. 
+* operator<< is for printing out what is in deck member variable.
 
 */
 
@@ -50,9 +50,6 @@ Deck::Deck(char* fileName)
 Deck::~Deck()
 {
 }
-
-/*
-*/
 
 ErrorControl Deck::load(char* fileName)
 {
@@ -93,10 +90,10 @@ ErrorControl Deck::load(char* fileName)
 					else if (suitAdded == 'D' || suitAdded == 'd') { c.s = Card::suit::diamonds; }
 					else if (suitAdded == 'H' || suitAdded == 'h') { c.s = Card::suit::hearts; }
 					else if (suitAdded == 'S' || suitAdded == 's') { c.s = Card::suit::spades; }
-					else 
-					{ 
+					else
+					{
 						cout << "INVALID CARD" << endl;
-						continue; 
+						continue;
 					} //if nothing matches, c.s will not be assigned a value. 
 				}//END OF WORD.LENGTH == THREE
 
@@ -104,7 +101,7 @@ ErrorControl Deck::load(char* fileName)
 				{
 					char suitAdded = word.at(1);
 					char rankAdded = word.at(0);
-					
+
 					if (rankAdded == '2') { c.r = Card::rank::two; }
 					else if (rankAdded == '3') { c.r = Card::rank::three; }
 					else if (rankAdded == '4') { c.r = Card::rank::four; }
@@ -117,22 +114,22 @@ ErrorControl Deck::load(char* fileName)
 					else if (rankAdded == 'K' || rankAdded == 'k') { c.r = Card::rank::king; }
 					else if (rankAdded == 'Q' || rankAdded == 'q') { c.r = Card::rank::queen; }
 					else if (rankAdded == 'A' || rankAdded == 'a') { c.r = Card::rank::ace; }
-					else 
-					{ 
+					else
+					{
 						cout << "INVALID CARD" << endl;
-						continue; 
+						continue;
 					}//same logic I mentioned in if (word.length() == three)
 					if (suitAdded == 'C' || suitAdded == 'c') { c.s = Card::suit::clubs; }
 					else if (suitAdded == 'H' || suitAdded == 'h') { c.s = Card::suit::hearts; }
 					else if (suitAdded == 'D' || suitAdded == 'd') { c.s = Card::suit::diamonds; }
 					else if (suitAdded == 'S' || suitAdded == 's') { c.s = Card::suit::spades; }
-					else 
-					{ 						
+					else
+					{
 						cout << "INVALID CARD" << endl;
-						continue; 
+						continue;
 					}
 				}//END OF WORD.LENGTH == 2
-				// if more than length 3. ... 
+				 // if more than length 3. ... 
 				deck.push_back(c);
 			} //end of while iss >> word
 
@@ -140,11 +137,17 @@ ErrorControl Deck::load(char* fileName)
 		ifs.close();
 		return success;
 	}
-	else 
+	else
 	{
 		return unable_to_open_file;
 	}
 };
+
+// add_card method in #4
+ErrorControl Deck::add_card(Card c) {
+	deck.push_back(c);
+	return success;
+}
 
 void Deck::shuffle()
 {

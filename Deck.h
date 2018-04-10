@@ -3,14 +3,14 @@
 /*
 The name of this file: Deck.h
 Author: Hong Wi, hwi@wustl.edu
-This header file contains header information about Deck class. 
-Deck class contains << operator, 
-two constructors (one is default), 
-destructor, 
+This header file contains header information about Deck class.
+Deck class contains << operator,
+two constructors (one is default),
+destructor,
 load function that takes a char* and returns errortype,
-shuffle function to shuffle the deck, 
-and size to return int value of deck of size. 
-And vector<Card> deck is a private member since we dont want it be accessed without authorization. 
+shuffle function to shuffle the deck,
+and size to return int value of deck of size.
+And vector<Card> deck is a private member since we dont want it be accessed without authorization.
 */
 
 
@@ -37,6 +37,7 @@ public:
 	Deck(char*);
 	~Deck();
 	ErrorControl load(char*);
+	ErrorControl add_card(Card);
 	void shuffle();
 	int size() const;
 private:
