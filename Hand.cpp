@@ -14,20 +14,20 @@ Author : Hong Wi, hwi@wustl.edu
 
 
 This cpp file contains general use of Hand class.
-* Hand(char * copiedHand) is a copy function. 
+* Hand(char * copiedHand) is a copy function.
 
-* int size() const; returns a size of hand member variable. 
+* int size() const; returns a size of hand member variable.
 
-* string asString() const; returns a string containing a space-seperated sequence of vaild card. 
+* string asString() const; returns a string containing a space-seperated sequence of vaild card.
 
-* Hand & operator= (const Hand &); 
+* Hand & operator= (const Hand &);
 * bool operator== (const Hand &) const;
 * bool operator< (const Hand &) const;
--======= these three operators are implemented for comparison purpose. 
+-======= these three operators are implemented for comparison purpose.
 
-* bool poker_rank(const Hand &FirHand, const Hand &SecHand); this function determines whether FirHand is higher than SecHand (based on rank). 
+* bool poker_rank(const Hand &FirHand, const Hand &SecHand); this function determines whether FirHand is higher than SecHand (based on rank).
 
-* int rank_hand(const Hand &givenHand); this function is determining the rank of the givenhand. 
+* int rank_hand(const Hand &givenHand); this function is determining the rank of the givenhand.
 
 
 */
@@ -46,7 +46,7 @@ Hand::Hand(const Hand &copiedHand)
 	this->hand = copiedHand.hand;
 }
 //I simply implement the printout function from verifyCard.cpp since both need to behave samely. 
-string Hand::asString() const 
+string Hand::asString() const
 {
 	string printed = "";
 	string temp;
@@ -77,7 +77,7 @@ string Hand::asString() const
 }
 
 //return size method of elements in the container member variable ( private hand)
-int Hand::size() const 
+int Hand::size() const
 {
 	return hand.size();
 }
@@ -89,12 +89,12 @@ Hand & Hand::operator= (const Hand &givenHand)
 	{
 		return *this;
 	}
-	this->hand = givenHand.hand;	
+	this->hand = givenHand.hand;
 	return *this;
 }
 
 //equilvalence operator
-bool Hand::operator== (const Hand &givenHand) const 
+bool Hand::operator== (const Hand &givenHand) const
 {
 	if (this->size() != givenHand.size())
 	{
@@ -109,23 +109,42 @@ bool Hand::operator== (const Hand &givenHand) const
 }
 
 //less than opeator. 
-bool Hand::operator< (const Hand &givenHand) const 
+bool Hand::operator< (const Hand &givenHand) const
 {
 	bool determineTruth = true;
 	for (auto i = 0; i < this->size(); ++i)
 	{
-		determineTruth &= ( (this->hand[i].r == givenHand.hand[i].r && this->hand[i].s == givenHand.hand[i].s) );
+		determineTruth &= ((this->hand[i].r == givenHand.hand[i].r && this->hand[i].s == givenHand.hand[i].s));
 	}
 	if (determineTruth && this->size() < givenHand.size())
 	{
 		return true;
 	}
 	auto t_s = 0;
-	while ( (this->hand[t_s].r == givenHand.hand[t_s].r && this->hand[t_s].s == givenHand.hand[t_s].s) )
+	while ((this->hand[t_s].r == givenHand.hand[t_s].r && this->hand[t_s].s == givenHand.hand[t_s].s))
 	{
 		++t_s;
 	}
 	return (this->hand[t_s + 1] < givenHand.hand[t_s + 1]);
+}
+
+//indexing operator in #5
+Card Hand::operator[](size_t i) {
+	if (i >= hand.size()) {
+		throw runtime_error("Error: there is no card at the position given");
+	}
+	else {
+		return hand[i];
+	}
+}
+
+void Hand::remove_card(size_t i) {
+	if (i >= hand.size()) {
+		throw runtime_error("Error: there is no card at the position given");
+	}
+	else {
+		hand.erase(hand.begin() + i);
+	}
 }
 
 //destructor
@@ -134,7 +153,7 @@ Hand::~Hand()
 }
 
 //printing out hands overloaded function using asString
-ostream & operator<<(ostream &o, const Hand &givenHand) 
+ostream & operator<<(ostream &o, const Hand &givenHand)
 {
 	o << givenHand.asString() << endl;
 	return o;
@@ -143,7 +162,7 @@ ostream & operator<<(ostream &o, const Hand &givenHand)
 void operator<<(Hand &givenHand, Deck &givenDeck)
 {
 
-	const int one = 1; 
+	const int one = 1;
 	Card card = givenDeck.deck[(givenDeck.deck.size() - one)];
 	givenHand.hand.push_back(card);
 	givenDeck.deck.pop_back();
@@ -151,14 +170,14 @@ void operator<<(Hand &givenHand, Deck &givenDeck)
 }
 
 //it determines the rank of a given hand. 
-int rank_hand(const Hand &givenHand) 
+int rank_hand(const Hand &givenHand)
 {
 	Card first = givenHand.hand[0];
 	Card second = givenHand.hand[1];
 	Card third = givenHand.hand[2];
 	Card fourth = givenHand.hand[3];
 	Card fifth = givenHand.hand[4];
-	
+
 	if ((first.s == second.s) && (second.s == third.s) && (third.s == fourth.s) && (fourth.s == fifth.s))  // if same suit. 
 	{
 		if (fifth.r == Card::ace)
@@ -199,7 +218,7 @@ int rank_hand(const Hand &givenHand)
 		return HandRank::flush;
 	}
 	else //if not same suit. 
-	{ 
+	{
 		// meaning that if fifth one is great than first one by 5. - consecutive 
 		if ((fifth.r - fourth.r) == 1 && (fourth.r - third.r) == 1 && (third.r - second.r) == 1 && (second.r - first.r) == 1
 			)
@@ -251,11 +270,11 @@ int rank_hand(const Hand &givenHand)
 
 
 // it returns wheter firsthand is greater than secondhand. 
-bool poker_rank(const Hand &FirHand, const Hand &SecHand) 
+bool poker_rank(const Hand &FirHand, const Hand &SecHand)
 {
 	int first = 0, second = 1, third = 2, fourth = 3, fifth = 4; // to deal with hardcoding problem. first = first card. I set first as 0 since array index 0 is essseitnally first. 
-	// since we have const givens, I make two hand classes to deal with this problem. 
-	Hand hand1; 
+																 // since we have const givens, I make two hand classes to deal with this problem. 
+	Hand hand1;
 	for (int i = 0; i < FirHand.size(); i++) {
 		hand1.hand.push_back(FirHand.hand[i]);
 	}
@@ -271,7 +290,7 @@ bool poker_rank(const Hand &FirHand, const Hand &SecHand)
 	//if not, we have to compare each case. 
 
 
-	if (rankhand1 == rankhand2) 
+	if (rankhand1 == rankhand2)
 	{
 		//if it is straight or straightflush, just sort by hand
 		if (rankhand1 == HandRank::straight || rankhand1 == HandRank::straightflush)
@@ -430,14 +449,14 @@ bool poker_rank(const Hand &FirHand, const Hand &SecHand)
 			else //122KK and 122AA right? then simply return fourth one. 
 			{
 				return hand2.hand[fourth].r < hand1.hand[third].r;
-			}	
+			}
 		}
 		//if one pair
 		else if (rankhand1 == HandRank::onepair)
 		{
 			//find one pair of each first. 
 			Card::rank onePairFirHandRank;
-			for (auto i = 0; i < FirHand.size()-1; ++i) // no point of looking the last element of the hand.
+			for (auto i = 0; i < FirHand.size() - 1; ++i) // no point of looking the last element of the hand.
 			{
 				if (FirHand.hand[i].r == FirHand.hand[i + 1].r)
 				{
@@ -477,7 +496,7 @@ bool poker_rank(const Hand &FirHand, const Hand &SecHand)
 						SecHandOthers.push_back(SecHand.hand[i]);
 					}
 				}
-				const int first = 0; 
+				const int first = 0;
 				const int second = 1;
 				const int third = 2;
 				// sort is needed to be safely determining. 
@@ -507,7 +526,7 @@ bool poker_rank(const Hand &FirHand, const Hand &SecHand)
 		}
 	}
 	else  //if rankhand1 and rankhand2 are not equal, then simply return it. 
-	{ 
+	{
 		return rankhand1 > rankhand2;
 	}
 }

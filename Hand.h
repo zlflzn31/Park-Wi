@@ -16,10 +16,10 @@ This header file contains header information about Hand class.
 Hand class contains << operators for (insertiob for output and for from deck to hand)
 two constructors (one is default),
 destructor,
-asString() that returns a string value, 
+asString() that returns a string value,
 operators ( =, ==, and < ) that are needed for comparison,
 size function to return int value of hand of size,
-and pokerrank function along with rank_hand to determine the rank of the hand. 
+and pokerrank function along with rank_hand to determine the rank of the hand.
 And vector<Card> Hand is a private member since we dont want it be accessed without authorization.
 */
 
@@ -31,7 +31,7 @@ class Deck;
 class Hand {
 	//these functions are friended due to they need to access private variable. 
 	friend void operator<<(Hand &, Deck &);
-	friend ostream & operator<<(ostream &, const Hand &); 
+	friend ostream & operator<<(ostream &, const Hand &);
 	friend bool poker_rank(const Hand &hand1, const Hand &hand2);
 	friend int rank_hand(const Hand &ahand);
 
@@ -44,6 +44,8 @@ public:
 	Hand & operator= (const Hand &);
 	bool operator== (const Hand &) const;
 	bool operator< (const Hand &) const;
+	Card operator[] (size_t);
+	void remove_card(size_t);
 	~Hand();
 
 private:
