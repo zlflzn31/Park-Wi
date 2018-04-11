@@ -1,4 +1,9 @@
 #include "Player.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
 
 Player::Player(char * givenName) :
 	playerName(givenName), winCounts(0), lossCounts(0) { //using the parameter to initialize the playerName. Also, Initaiizing win and loss to 0. 
@@ -16,7 +21,7 @@ Player::Player(char * givenName) :
 		}
 		//vector size matters. If stored's size is less than 3, then it cant extract  every information we need (name, win, loss). 
 		//so it has to be greater than 3. 
-		if (stored.size() >= 3)
+		if (stored.size() >= 3) 
 		{
 			playerName = stoi(stored[0]);
 			winCounts = stoi(stored[1]); //to convert from string to int. 

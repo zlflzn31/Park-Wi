@@ -1,14 +1,12 @@
 #pragma once
+#ifndef PLAYER_H_
+#define PLAYER_H_
 
-#include "stdafx.h"
+
 #include "VerifyCard.h"
 #include "Hand.h"
 #include "Deck.h"
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <mutex>
 struct Player
 {
 
@@ -22,3 +20,5 @@ struct Player
 
 };
 ostream& operator<<(ostream&, const Player&); // non-member insertion operator << 
+
+#endif  //PLAYER_H_
