@@ -11,6 +11,7 @@
 using namespace std;
 class Deck;
 struct Player;
+class FiveCardDraw;
 
 class Game {
 
