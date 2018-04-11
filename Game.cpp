@@ -27,27 +27,32 @@ void start_game(const string& s) {
 //vector<shared_ptr<Player>> players;
 ErrorControl Game::add_player(const string & givenPlayer)
 {
-
-	if (// there is a same name. 
-	    )
+	string playerName = givenPlayer; // name of "given" player's
+	//this for loop checks if given player's name is same with players' name of the vector. 
+	for (vector<shared_ptr<Player>>::iterator it = playersVec.begin(); it != playersVec.end(); ++it) 
 	{
-		throw runtime_error("Error: already_playing");
-	}
-	else // if there is no same name. we have to add. 
-	{
-		// I have no idea from here ): 
-		Player addedPlayer = Player(givenPlayer); 
-
-	}
-	//I feel that we have to iterate all the vector<player> However, we have vector of pointers, so it seems a bit challenging to do so. 
-	for (vector<Player> iterator it = players.begin(); it != players.end(); ++it)
-	{
-
-	}
+		if ((*it)->playerName == playerName) { // compare playername of each Player of the vector to "given" player's name. 
+			throw runtime_error("Error: already_playing");
+		}
+	} 
+	//this below logic push backs the given player's name into the vector of the players. 
+	vector<char> playerNameCStyle(playerName.length() + 1);
+	strcpy(&playerNameCStyle[0], playerName.c_str());
+	char* pnc = &playerNameCStyle[0];
+	Player temp(pnc);
+	playersVec.push_back(make_shared<Player>(temp));
 	return ErrorControl();
 }
 
-shared_ptr<Player> Game::find_player(const string &)
+shared_ptr<Player> Game::find_player(const string & givenPlayer)
 {
-	return shared_ptr<Player>();
+	//a logic to iterate vector<shared_ptr<Playrer>> in game class. 
+	for (vector<shared_ptr<Player>>::iterator it = playersVec.begin(); it != playersVec.end(); ++it) 
+	{
+		if ((*it)->playerName == givenPlayer) {
+			return *it;
+		}
+	}
+	//if no matching, return a singular pointer. So I decided to return nullptr. 
+	return nullptr;
 }
