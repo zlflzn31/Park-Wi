@@ -17,7 +17,7 @@ class Game {
 protected:
 	static shared_ptr<Game> pGame;
 	Deck mainDeck;
-	vector<shared_ptr<Player>> players;
+	vector<shared_ptr<Player>> playersVec;
 
 public:
 	static shared_ptr<Game> instance();
