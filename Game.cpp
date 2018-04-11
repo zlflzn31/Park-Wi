@@ -1,13 +1,29 @@
 #include "stdafx.h"
-#include<iostream>
-#include<fstream>
-#include<sstream>
-#include <string>
-#include <mutex>
 #include "Game.h"
+#include<iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 
+// instance method that returns a copy of the static pointer member variable
+shared_ptr<Game> Game::instance() {
+	if (pGame == nullptr) {
+		throw runtime_error("Error: instance_not_available");
+	}
+	else {
+		shared_ptr<Game> ptr = pGame;
+		return pGame;
+	}
+}
 
-using namespace std;
+// start_game method. NOT COMPLETED
+void start_game(const string& s) {
+	if (pGame != nullptr) {
+		throw 
+	}
+}
+//NOT COMPLETED
+
 //vector<shared_ptr<Player>> players;
 ErrorControl Game::add_player(const string & givenPlayer)
 {
