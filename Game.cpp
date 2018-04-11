@@ -16,13 +16,28 @@ shared_ptr<Game> Game::instance() {
 	}
 }
 
-// start_game method. NOT COMPLETED
-void start_game(const string& s) {
-	if (pGame != nullptr) {
-		throw 
+// start_game method
+void Game::start_game(const string& s) {
+	string f = "FiveCardDraw";
+	if (pGame != nullptr) { // check if the static pointer member variable is non-singular
+		throw runtime_error("Error: game_already_started");
+	}
+	else if (s.find(f) == string::npos) { // check if the string contains "FiveCardDraw"
+		throw runtime_error("Error: unknown_game");
+	}
+	else { // dynamically allocate an instance of FiveCardDraw and store its address in pGame
+		shared_ptr<FiveCardDraw> fcd = make_shared<FiveCardDraw>(); 
+		pGame = fcd;
 	}
 }
-//NOT COMPLETED
+
+// stop_game method
+void Game::stop_game() {
+	if (pGame == nullptr) { // check if the static pointer member variable is singular
+		throw runtime_error("Error: no_game_in_progress");
+	}
+	pGame = nullptr;
+}
 
 //vector<shared_ptr<Player>> players;
 ErrorControl Game::add_player(const string & givenPlayer)
