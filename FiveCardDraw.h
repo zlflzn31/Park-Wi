@@ -13,15 +13,15 @@
 #include <string>
 
 
-class FiveCardDraw :public Game 
+class FiveCardDraw : public Game
 {
+	friend bool poker_rank(const shared_ptr<Player>&, const shared_ptr<Player>&);
 protected:
 	size_t dealer;
 	Deck discardedDeck; // discard deck. 
 	Deck mainDeck; // main deck. 
 public:
 	FiveCardDraw();
-	~FiveCardDraw();
 	virtual int before_turn(Player&);
 	virtual int turn(Player&);
 	virtual int after_turn(Player&);
@@ -30,6 +30,6 @@ public:
 	virtual int after_round();
 };
 
-
+bool poker_rank(const shared_ptr<Player>&, const shared_ptr<Player>&);
 
 #endif  //FiveCardDraw_H_
