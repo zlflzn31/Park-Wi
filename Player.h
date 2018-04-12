@@ -12,7 +12,7 @@ struct Player
 
 	string playerName;
 	Hand playerHand;
-	
+
 	unsigned int winCounts;
 	unsigned int lossCounts;
 

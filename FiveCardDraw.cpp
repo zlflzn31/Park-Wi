@@ -75,16 +75,16 @@ int FiveCardDraw::before_round()
 	mainDeck.shuffle();
 
 	playersVec[0];
-	if ( dealer == playersVec.size() -1) // if dealer is at last position. 
+	if (dealer == playersVec.size() - 1) // if dealer is at last position. 
 	{
 		const int startIndex = 0;
-		const int endIndex = playersVec.size()-1;
+		const int endIndex = playersVec.size() - 1;
 		const int max_handsize = 5;
 		//while loop with a condition that looks for both values are 5 or not. If 5, then done. 
 		//since we want to make sure each player has received five cards. 
 		size_t eachIndex = 0;
 		//this while loop deals one card from deck to each player. 
-		while ( playersVec[startIndex]->playerHand.size() != max_handsize && playersVec[endIndex]->playerHand.size() != max_handsize ) 
+		while (playersVec[startIndex]->playerHand.size() != max_handsize && playersVec[endIndex]->playerHand.size() != max_handsize)
 		{
 			playersVec[eachIndex % playersVec.size()]->playerHand << mainDeck;
 			++eachIndex;
@@ -172,7 +172,6 @@ int FiveCardDraw::round()
 	}
 }
 
-
 // this is needed to sort in after_round. 
 bool poker_rank(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2)
 {
@@ -184,12 +183,11 @@ bool poker_rank(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2)
 	{
 		return true;
 	}
-	else 
+	else
 	{
 		return poker_rank(p1->playerHand, p2->playerHand);
 	}
 }
-
 
 int FiveCardDraw::after_round()
 {
@@ -212,8 +210,8 @@ int FiveCardDraw::after_round()
 	}
 
 	cout << endl;
-	for (size_t i = temp.size()-1; i >= 0; --i) // print out from highest to lowest. and 0 index is the lowest. 
- 	{
+	for (size_t i = temp.size() - 1; i >= 0; --i) // print out from highest to lowest. and 0 index is the lowest. 
+	{
 		cout << "player name: " << temp[i]->playerName << "number of wins: " << temp[i]->winCounts << "number of losses: " << temp[i]->lossCounts << "player's hand: " << temp[i]->playerHand << endl;
 	}
 
@@ -234,16 +232,11 @@ int FiveCardDraw::after_round()
 
 
 	//ask the rest of the players whether to leave the game
-	string checktemp;
-	string quitName; // make it as left player. from quitName
-	ofstream output; // make it to o. 
-	int quitIndex = -1; 
-	bool findNo;
 
 	string leftPlayerName;
 	string playerTempHolder;
 	int indexOfLeftPlayer = -1;
-	bool no;
+	bool leave;
 
 	do {
 		cout << endl;
@@ -253,11 +246,11 @@ int FiveCardDraw::after_round()
 		cin >> leftPlayerName;
 		playerTempHolder = leftPlayerName;
 
-		if (checktemp.find("no") != string::npos && checktemp.length() == 2) {
-			no = true; // meaning that no one is leaving, so done with this do-while loop. 
+		if (playerTempHolder.find("no") != string::npos && playerTempHolder.length() == 2) {
+			leave = false; // meaning that no one is leaving, so done with this do-while loop. 
 		}
 		else {
-			no = false; // we want someone to leave the game. 
+			leave = true; // we want someone to leave the game. 
 		}
 		bool validPlayer = true;
 		for (size_t i = 0; i < playersVec.size(); ++i)
@@ -267,13 +260,13 @@ int FiveCardDraw::after_round()
 				validPlayer = false;
 			}
 		}
-		if (!no && validPlayer)  // if validPlayer is not true ( meaning that we have an invalid player, so we should skip this part)
-		{ 
+		if (leave && validPlayer)  // if validPlayer is not true ( meaning that we have an invalid player, so we should skip this part)
+		{
 			ofstream ofs(leftPlayerName + ".txt");
 			ofs << leftPlayerName;
 			ofs.close();
 
-			for (size_t i = 0; i < playersVec.size(); ++i) 
+			for (size_t i = 0; i < playersVec.size(); ++i)
 			{
 				if (leftPlayerName == (*playersVec[i]).playerName) {
 					indexOfLeftPlayer = i;
@@ -283,35 +276,36 @@ int FiveCardDraw::after_round()
 				playersVec.erase(playersVec.begin() + indexOfLeftPlayer);
 			}
 		}
-		quitIndex = -1;
-	} while (!findNo);
+		indexOfLeftPlayer = -1;
+	} while (leave);
 
 	//ask whether to join the game
 	string joiningPlayer;
 	string joiningPlayerTempHolder;
+	bool join = false;
 	do {
 		cout << endl;
 		cout << "Is there any player whom you want to join? Enter 'no' if you don't want. 'NO' 'No' 'nO' won't be accepted! " << endl;
 		cout << "Player's name: " << endl;
 		cin >> joiningPlayer;
 		joiningPlayerTempHolder = joiningPlayer;
-		if (checktemp.find("no") != string::npos && joiningPlayer.length() == 2) {
-			no = true;
+		if (joiningPlayerTempHolder.find("no") != string::npos && joiningPlayerTempHolder.length() == 2) {
+			join = false;
 		}
 		else {
-			findNo = false;
+			join = true;
 		}
 
-		if (!findNo)
+		if (join)
 		{
-				add_player(joiningPlayer); //add_player has a logic to check the duplicates. 
+			add_player(joiningPlayer); //add_player has a logic to check the duplicates. 
 		}
-	} while (!findNo);
+	} while (join);
 	cout << endl;
 
 	//next dealer ! 
-	if (dealer >= playersVec.size() -1)
-	{ 
+	if (dealer >= playersVec.size() - 1)
+	{
 		dealer = 0;
 	}
 	else {

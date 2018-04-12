@@ -43,7 +43,8 @@ enum ErrorControl {
 	More_than_3Args = 7,
 	floated_error = 8,
 	wrong_implementation_of_poker_rank = 9,
-	no_cards_left = 10
+	no_cards_left = 10,
+	run_time_error = 11
 };
 
 /*

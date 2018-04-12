@@ -11,6 +11,7 @@
 #include <sstream>
 #include <vector> 
 #include <string>
+#include <fstream>
 
 
 class FiveCardDraw : public Game

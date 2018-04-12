@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Game.h"
+#include "FiveCardDraw.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -20,18 +21,17 @@ shared_ptr<Game> Game::instance() {
 
 // start_game method
 void Game::start_game(const string& s) {
-	//	string f = "FiveCardDraw";
-	//	if (pGame != nullptr) { // check if the static pointer member variable is non-singular
-	//		throw runtime_error("Error: game_already_started");
-	//	}
-	//	else if (s.find(f) == string::npos) { // check if the string contains "FiveCardDraw"
-	//		throw runtime_error("Error: unknown_game");
-	//	}
-	//	else { // dynamically allocate an instance of FiveCardDraw and store its address in pGame
-	//		shared_ptr<FiveCardDraw> fcd = make_shared<FiveCardDraw>();
-	//		pGame = fcd;
-	//	}
-	return;
+		string f = "FiveCardDraw";
+		if (pGame != nullptr) { // check if the static pointer member variable is non-singular
+			throw runtime_error("Error: game_already_started");
+		}
+		else if (s.find(f) == string::npos) { // check if the string contains "FiveCardDraw"
+			throw runtime_error("Error: unknown_game");
+		}
+		else { // dynamically allocate an instance of FiveCardDraw and store its address in pGame
+			shared_ptr<FiveCardDraw> fcd = make_shared<FiveCardDraw>();
+			pGame = fcd;
+		}
 }
 
 // stop_game method
@@ -40,6 +40,10 @@ void Game::stop_game() {
 		throw runtime_error("Error: no_game_in_progress");
 	}
 	pGame = nullptr;
+}
+
+int Game::get_num_player() {
+	return playersVec.size();
 }
 
 //vector<shared_ptr<Player>> players;
@@ -60,7 +64,7 @@ ErrorControl Game::add_player(const string & givenPlayer)
 	char* pnc = &playerNameCStyle[0];
 	Player temp(pnc);
 	playersVec.push_back(make_shared<Player>(temp));
-	return ErrorControl();
+	return success;
 }
 
 shared_ptr<Player> Game::find_player(const string & givenPlayer)

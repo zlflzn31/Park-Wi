@@ -27,6 +27,7 @@ public:
 
 	ErrorControl add_player(const string&);
 	shared_ptr<Player> find_player(const string&);
+	int get_num_player();
 	virtual int before_turn(Player&) = 0;
 	virtual int turn(Player&) = 0;
 	virtual int after_turn(Player&) = 0;
