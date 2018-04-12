@@ -18,7 +18,7 @@ class FiveCardDraw :public Game
 protected:
 	size_t dealer;
 	Deck discardedDeck; // discard deck. 
-	Deck deck; // main deck. 
+	Deck mainDeck; // main deck. 
 public:
 	FiveCardDraw();
 	~FiveCardDraw();
