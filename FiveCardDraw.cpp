@@ -5,8 +5,7 @@ FiveCardDraw::FiveCardDraw()
 {
 	dealer = 0;
 	discardedDeck = Deck();
-
-	deck = Deck();
+	mainDeck = Deck();
 	vector<Card> cards = vector<Card>();
 	int suitNum = 4;
 	int rankNum = 13;
