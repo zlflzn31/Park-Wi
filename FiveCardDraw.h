@@ -6,12 +6,19 @@
 #include "Deck.h"
 #include "Hand.h"
 #include "VerifyCard.h"
+#include "Game.h"
+#include <iostream>
+#include <sstream>
+#include <vector> 
+#include <string>
 
-class FiveCardDraw
+
+class FiveCardDraw :public Game 
 {
 protected:
 	size_t dealer;
-	Deck discardedCardsDeck; 
+	Deck discardedDeck; // discard deck. 
+	Deck deck; // main deck. 
 public:
 	FiveCardDraw();
 	~FiveCardDraw();
