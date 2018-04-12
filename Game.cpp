@@ -5,6 +5,8 @@
 #include <sstream>
 #include <string>
 
+shared_ptr<Game> Game::pGame;
+
 // instance method that returns a copy of the static pointer member variable
 shared_ptr<Game> Game::instance() {
 	if (pGame == nullptr) {
@@ -12,23 +14,24 @@ shared_ptr<Game> Game::instance() {
 	}
 	else {
 		shared_ptr<Game> ptr = pGame;
-		return pGame;
+		return ptr;
 	}
 }
 
 // start_game method
 void Game::start_game(const string& s) {
-//	string f = "FiveCardDraw";
-//	if (pGame != nullptr) { // check if the static pointer member variable is non-singular
-//		throw runtime_error("Error: game_already_started");
-//	}
-//	else if (s.find(f) == string::npos) { // check if the string contains "FiveCardDraw"
-//		throw runtime_error("Error: unknown_game");
-//	}
-//	else { // dynamically allocate an instance of FiveCardDraw and store its address in pGame
-//		shared_ptr<FiveCardDraw> fcd = make_shared<FiveCardDraw>();
-//		pGame = fcd;
-//	}
+	//	string f = "FiveCardDraw";
+	//	if (pGame != nullptr) { // check if the static pointer member variable is non-singular
+	//		throw runtime_error("Error: game_already_started");
+	//	}
+	//	else if (s.find(f) == string::npos) { // check if the string contains "FiveCardDraw"
+	//		throw runtime_error("Error: unknown_game");
+	//	}
+	//	else { // dynamically allocate an instance of FiveCardDraw and store its address in pGame
+	//		shared_ptr<FiveCardDraw> fcd = make_shared<FiveCardDraw>();
+	//		pGame = fcd;
+	//	}
+	return;
 }
 
 // stop_game method
