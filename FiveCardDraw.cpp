@@ -75,16 +75,16 @@ int FiveCardDraw::before_round()
 	mainDeck.shuffle();
 
 	playersVec[0];
-	if (dealer == playersVec.size() - 1) // if dealer is at last position. 
+	if ( dealer == playersVec.size() -1) // if dealer is at last position. 
 	{
 		const int startIndex = 0;
-		const int endIndex = playersVec.size() - 1;
+		const int endIndex = playersVec.size()-1;
 		const int max_handsize = 5;
 		//while loop with a condition that looks for both values are 5 or not. If 5, then done. 
 		//since we want to make sure each player has received five cards. 
 		size_t eachIndex = 0;
 		//this while loop deals one card from deck to each player. 
-		while (playersVec[startIndex]->playerHand.size() != max_handsize && playersVec[endIndex]->playerHand.size() != max_handsize)
+		while ( playersVec[startIndex]->playerHand.size() != max_handsize && playersVec[endIndex]->playerHand.size() != max_handsize ) 
 		{
 			playersVec[eachIndex % playersVec.size()]->playerHand << mainDeck;
 			++eachIndex;
@@ -92,9 +92,10 @@ int FiveCardDraw::before_round()
 		//this for loop calls before_turn. 
 		for (size_t i = startIndex; i < playersVec.size(); ++i)
 		{
-			//at each player, call before turn. 
+			before_turn(*playersVec[i]);
 			//return 0, if success. 
 		}
+		return success;
 	}
 	else // if deal is not at last position. i.e among 3 players, if second player is a dealer, then first player's index is the starting point. 
 	{
@@ -111,14 +112,16 @@ int FiveCardDraw::before_round()
 		//this for loop calls before_turn. 
 		// since startIndex can happen at the middle, 
 		//playersvec.size() + (starIndex % playersVec.size()) will iterate indexes that are less than startPoint. 
-		for (size_t i = startIndex; i < playersVec.size() + (startIndex % playersVec.size()); ++i)
+		for (size_t i = startIndex; i < playersVec.size(); ++i)
 		{
-			//at each player, call before turn. 
-			//return 0, if success. 
+			before_turn(*playersVec[i]);
 		}
+		for (size_t j = 0; j < startIndex; ++j)
+		{
+			before_turn(*playersVec[j]);
+		}
+		return success;
 	}
-
-	return 0; //temporarily inserted. 
 }
 
 int FiveCardDraw::round()
@@ -130,27 +133,45 @@ int FiveCardDraw::round()
 		const int max_handsize = 5;
 		for (size_t i = startIndex; i < playersVec.size(); ++i)
 		{
-			//at each player, call turn and after_turn. 
-			// if any turn method returns a non-zero value, then immediately return it.
-			//return 0, if success. 
-
+			int turnResult = turn(*playersVec[i]);
+			if (turnResult != 0)
+			{
+				return turnResult;
+			}
+			after_turn(*playersVec[i]);
 		}
+		return success;
 	}
 	else
 	{
 		const int startIndex = dealer + 1;
 		const int endIndex = playersVec.size() - 1;
 		const int max_handsize = 5;
-		for (size_t i = startIndex; i < playersVec.size() + (startIndex % playersVec.size()); ++i)
+		for (size_t i = startIndex; i < playersVec.size(); ++i)
 		{
+			int turnResult = turn(*playersVec[i]);
+			if (turnResult != 0)
+			{
+				return turnResult;
+			}
+			after_turn(*playersVec[i]);
 			//at each player, call turn and after_turn. 
 			// if any turn method returns a non-zero value, then immediately return it.
 			//return 0, if success. 
 		}
+		for (size_t j = 0; j < startIndex; ++j)
+		{
+			int turnResult = turn(*playersVec[j]);
+			if (turnResult != 0)
+			{
+				return turnResult;
+			}
+			after_turn(*playersVec[j]);
+		}
+		return success;
 	}
-
-	return 0; //temporarily inserted. 
 }
+
 
 // this is needed to sort in after_round. 
 bool poker_rank(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2)
@@ -159,15 +180,16 @@ bool poker_rank(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2)
 	{
 		return false;
 	}
-	else if(p2.get() == NULL)// if p1 is not singular but p2 is singular, return true.  
+	else if (p2.get() == NULL)
 	{
 		return true;
 	}
-	else
+	else 
 	{
 		return poker_rank(p1->playerHand, p2->playerHand);
 	}
 }
+
 
 int FiveCardDraw::after_round()
 {
@@ -177,5 +199,124 @@ int FiveCardDraw::after_round()
 		temp.push_back(playersVec[i]);
 	}
 	sort(temp.begin(), temp.end(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1, p2); });
+
+	size_t index = 0;
+	while (temp[index] < temp[index + 1]) // if temp[index] >= temp[index+1] meaning that, temp[index] is the loser. 
+	{
+		++temp[index]->lossCounts;
+		++index;
+	}
+	for (size_t i = index; i < temp.size(); ++i)// So from the index to temp.size() (exclusive), they are the winners. 
+	{
+		++temp[i]->winCounts;
+	}
+
+	cout << endl;
+	for (size_t i = temp.size()-1; i >= 0; --i) // print out from highest to lowest. and 0 index is the lowest. 
+ 	{
+		cout << "player name: " << temp[i]->playerName << "number of wins: " << temp[i]->winCounts << "number of losses: " << temp[i]->lossCounts << "player's hand: " << temp[i]->playerHand << endl;
+	}
+
+	for (size_t p = 0; p < playersVec.size(); ++p) // move all players cards to main deck. 
+	{
+		for (size_t h = 0; h < playersVec[p]->playerHand.size(); ++h)
+		{
+			mainDeck.add_card(playersVec[p]->playerHand[h]); // add card from player's hand at position h
+			playersVec[p]->playerHand.remove_card(h); // and remove the card of the hand at position h. 
+		}
+	}
+	Hand discardDeckHolder;
+	for (size_t dh = 0; dh < discardDeckHolder.size(); ++dh)
+	{
+		mainDeck.add_card(discardDeckHolder[dh]);
+		discardDeckHolder.remove_card(dh);
+	}
+
+
+	//ask the rest of the players whether to leave the game
+	string checktemp;
+	string quitName; // make it as left player. from quitName
+	ofstream output; // make it to o. 
+	int quitIndex = -1; 
+	bool findNo;
+
+	string leftPlayerName;
+	string playerTempHolder;
+	int indexOfLeftPlayer = -1;
+	bool no;
+
+	do {
+		cout << endl;
+		cout << "Is ther any player whom you want to leave? If there is not, enter 'no'. 'No', 'NO', 'nO' won't be accepted !  " << endl;
+
+		cout << "Player's name: " << endl;
+		cin >> leftPlayerName;
+		playerTempHolder = leftPlayerName;
+
+		if (checktemp.find("no") != string::npos && checktemp.length() == 2) {
+			no = true; // meaning that no one is leaving, so done with this do-while loop. 
+		}
+		else {
+			no = false; // we want someone to leave the game. 
+		}
+		bool validPlayer = true;
+		for (size_t i = 0; i < playersVec.size(); ++i)
+		{
+			if (leftPlayerName != playersVec[i]->playerName)
+			{
+				validPlayer = false;
+			}
+		}
+		if (!no && validPlayer)  // if validPlayer is not true ( meaning that we have an invalid player, so we should skip this part)
+		{ 
+			ofstream ofs(leftPlayerName + ".txt");
+			ofs << leftPlayerName;
+			ofs.close();
+
+			for (size_t i = 0; i < playersVec.size(); ++i) 
+			{
+				if (leftPlayerName == (*playersVec[i]).playerName) {
+					indexOfLeftPlayer = i;
+				}
+			}
+			if (indexOfLeftPlayer != -1) {
+				playersVec.erase(playersVec.begin() + indexOfLeftPlayer);
+			}
+		}
+		quitIndex = -1;
+	} while (!findNo);
+
+	//ask whether to join the game
+	string joiningPlayer;
+	string joiningPlayerTempHolder;
+	do {
+		cout << endl;
+		cout << "Is there any player whom you want to join? Enter 'no' if you don't want. 'NO' 'No' 'nO' won't be accepted! " << endl;
+		cout << "Player's name: " << endl;
+		cin >> joiningPlayer;
+		joiningPlayerTempHolder = joiningPlayer;
+		if (checktemp.find("no") != string::npos && joiningPlayer.length() == 2) {
+			no = true;
+		}
+		else {
+			findNo = false;
+		}
+
+		if (!findNo)
+		{
+				add_player(joiningPlayer); //add_player has a logic to check the duplicates. 
+		}
+	} while (!findNo);
+	cout << endl;
+
+	//next dealer ! 
+	if (dealer >= playersVec.size() -1)
+	{ 
+		dealer = 0;
+	}
+	else {
+		++dealer;
+	}
+
 	return 0;
 }
