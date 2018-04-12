@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "FiveCardDraw.h"
+#include <algorithm>
 
 FiveCardDraw::FiveCardDraw()
 {
@@ -25,7 +26,7 @@ FiveCardDraw::FiveCardDraw()
 int FiveCardDraw::before_turn(Player& p)
 {
 	cout << "Player's name: " << p.playerName << ", Hand content:" << p.playerHand << endl;
-	
+
 	int count = 0;
 	vector<size_t> indices;
 	do {
@@ -74,16 +75,16 @@ int FiveCardDraw::before_round()
 	mainDeck.shuffle();
 
 	playersVec[0];
-	if ( dealer == playersVec.size() -1) // if dealer is at last position. 
+	if (dealer == playersVec.size() - 1) // if dealer is at last position. 
 	{
 		const int startIndex = 0;
-		const int endIndex = playersVec.size()-1;
+		const int endIndex = playersVec.size() - 1;
 		const int max_handsize = 5;
 		//while loop with a condition that looks for both values are 5 or not. If 5, then done. 
 		//since we want to make sure each player has received five cards. 
 		size_t eachIndex = 0;
 		//this while loop deals one card from deck to each player. 
-		while ( playersVec[startIndex]->playerHand.size() != max_handsize && playersVec[endIndex]->playerHand.size() != max_handsize ) 
+		while (playersVec[startIndex]->playerHand.size() != max_handsize && playersVec[endIndex]->playerHand.size() != max_handsize)
 		{
 			playersVec[eachIndex % playersVec.size()]->playerHand << mainDeck;
 			++eachIndex;
@@ -110,7 +111,7 @@ int FiveCardDraw::before_round()
 		//this for loop calls before_turn. 
 		// since startIndex can happen at the middle, 
 		//playersvec.size() + (starIndex % playersVec.size()) will iterate indexes that are less than startPoint. 
-		for (size_t i = startIndex; i < playersVec.size() + (startIndex % playersVec.size() ); ++i)
+		for (size_t i = startIndex; i < playersVec.size() + (startIndex % playersVec.size()); ++i)
 		{
 			//at each player, call before turn. 
 			//return 0, if success. 
@@ -152,21 +153,20 @@ int FiveCardDraw::round()
 }
 
 // this is needed to sort in after_round. 
-bool poker_rank(shared_ptr<Player>& p1, shared_ptr<Player>& p2)
+bool poker_rank(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2)
 {
 	if (p1.get() == NULL) // if p1 is singular, return false. 
 	{
 		return false;
 	}
-	else // if p1 is not singualr, return true.  
+	else if(p2.get() == NULL)// if p1 is not singular but p2 is singular, return true.  
 	{
 		return true;
 	}
-	if (p2.get() == NULL) // if p2 = singular, return true/. 
+	else
 	{
-		return true;
+		return poker_rank(p1->playerHand, p2->playerHand);
 	}
-	return poker_rank(p1->playerHand, p2->playerHand);
 }
 
 int FiveCardDraw::after_round()
@@ -176,6 +176,6 @@ int FiveCardDraw::after_round()
 	{
 		temp.push_back(playersVec[i]);
 	}
-	sort(temp.begin(), temp.end());
+	sort(temp.begin(), temp.end(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1, p2); });
 	return 0;
 }
