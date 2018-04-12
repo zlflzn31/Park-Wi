@@ -16,7 +16,7 @@ FiveCardDraw::FiveCardDraw()
 			Card c;
 			c.s = static_cast<Card::suit>(i); // I used static cast, but I feel that it should be different... 
 			c.r = static_cast<Card::rank>(j); // 
-			deck.add_card(c);
+			mainDeck.add_card(c);
 		}
 	}
 }
