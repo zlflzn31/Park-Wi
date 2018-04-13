@@ -52,6 +52,10 @@ Design Decisions
 --------------
 Return Results
 --------------
+COMMAND LINE INPUT:
+lab3 FiveCardDraw a b c 
+
+
 
 ------------------
 Errors Encountered
