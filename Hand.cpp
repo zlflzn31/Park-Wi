@@ -32,9 +32,6 @@ This cpp file contains general use of Hand class.
 
 */
 
-
-
-
 using namespace std;
 
 //default constructor

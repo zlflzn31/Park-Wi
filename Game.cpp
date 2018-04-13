@@ -1,3 +1,15 @@
+/*
+
+The name of this file : Game.cpp
+Author : Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
+
+
+This cpp file contains definitions of methods in the Game abstract base class.
+It includes methods regarding the actual Game instance (instance(), start_game, stop_game),
+the players (add_player, find_player), the turns (before_turn, turn, after_turn), 
+and the rounds (before_round, round, after_round).
+*/
+
 #include "stdafx.h"
 #include "Game.h"
 #include "FiveCardDraw.h"
@@ -58,11 +70,7 @@ ErrorControl Game::add_player(const string & givenPlayer)
 		}
 	}
 	//this below logic push backs the given player's name into the vector of the players. 
-	vector<char> playerNameCStyle(givenName.length() + 1);
-	givenName.c_str();
-	strcpy_s(&playerNameCStyle[0], sizeof(playerNameCStyle[0]), givenPlayer.c_str());
-	char* pnc = &playerNameCStyle[0];
-	Player temp(pnc);
+	Player temp(givenName);
 	playersVec.push_back(make_shared<Player>(temp));
 	return success;
 }

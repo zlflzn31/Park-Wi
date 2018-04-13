@@ -2,7 +2,7 @@
 
 /*
 The name of this file: Deck.h
-Author: Hong Wi, hwi@wustl.edu
+Author: Hong Wi, Jongwhan Park, hwi@wustl.edu, jongwhan@wustl.edu
 This header file contains header information about Deck class.
 Deck class contains << operator,
 two constructors (one is default),

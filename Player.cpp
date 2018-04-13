@@ -1,3 +1,16 @@
+/*
+
+The name of this file : Player.cpp
+Author : Hong Wi, hwi@wustl.edu
+		Jongwhan Park, jongwhan@wustl.edu
+
+
+This cpp file contains definitions of methods in the Player struct.
+It includes the constructor that takes in a player's name and a overloaded insertion operator that
+prints out the player's name, number of wins, and number of losses.
+
+*/
+
 #include "stdafx.h"
 #include "Player.h"
 #include <iostream>
@@ -6,7 +19,7 @@
 
 using namespace std;
 
-Player::Player(char * givenName) :
+Player::Player(string givenName) :
 	playerName(givenName), winCounts(0), lossCounts(0) { //using the parameter to initialize the playerName. Also, Initaiizing win and loss to 0. 
 	playerHand = Hand(); // this has to be default constructed to be empty. 
 	string fileName = givenName;

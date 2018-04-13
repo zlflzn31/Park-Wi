@@ -1,4 +1,12 @@
 #pragma once
+
+/*
+The name of this file: Player.h
+Author: Hong Wi, Jongwhan Park, hwi@wustl.edu, jongwhan@wustl.edu
+This header file contains header information about Player struct.
+This includes the constructor, and win and loss counts of each Player.
+*/
+
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
@@ -16,7 +24,7 @@ struct Player
 	unsigned int winCounts;
 	unsigned int lossCounts;
 
-	Player(char*);
+	Player(string);
 
 };
 ostream& operator<<(ostream&, const Player&); // non-member insertion operator << 

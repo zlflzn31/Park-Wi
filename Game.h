@@ -1,4 +1,12 @@
 #pragma once
+
+/*
+The name of this file: Game.h
+Author: Hong Wi, Jongwhan Park, hwi@wustl.edu, jongwhan@wustl.edu
+This header file contains header information about Game class, including all methods concerning turns and rounds.
+It also contains start_game and stop_game methods, and an instance method.
+*/
+
 #ifndef GAME_H_
 #define GAME_H_
 
