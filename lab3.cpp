@@ -1,6 +1,6 @@
 /*
-The name of this file: lab2.cpp
-Author: Hong Wi, hwi@wustl.edu
+The name of this file: lab3.cpp
+Author: Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
 This file contains main function.
 */
 
@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 {
 	const int program_name = 0;
 	const int game_name = 1;
-	const int least_num_players = 2;
+	const int least_num_players = 1;
 	const int least_num_arg = 4;
 	const int hands_number = 9;
 	const string shuffle = "-shuffle";
