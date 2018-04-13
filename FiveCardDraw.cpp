@@ -145,12 +145,10 @@ int FiveCardDraw::before_round()
 		for (size_t i = startIndex; i < playersVec.size(); ++i)
 		{
 			before_turn(*playersVec[i]);
-			cout << "current discard deck : " << discardedDeck << endl;
 		}
 		for (size_t j = 0; j < startIndex; ++j)
 		{
 			before_turn(*playersVec[j]);
-			cout << "current discard deck : " << discardedDeck << endl;
 		}
 		return success;
 	}
