@@ -46,7 +46,7 @@ int FiveCardDraw::before_turn(Player& p)
 			}
 		}
 	} while (indices.size() > static_cast<size_t>(p.playerHand.size()) || valid_index == false);
-
+	
 	sort(indices.begin(), indices.end());
 	reverse(indices.begin(), indices.end());
 
@@ -59,8 +59,12 @@ int FiveCardDraw::before_turn(Player& p)
 
 int FiveCardDraw::turn(Player& p)
 {
-	const int max_handsize = 5;
-	for (size_t i = 0; i < max_handsize - static_cast<size_t>(p.playerHand.size()); ++i) {
+	size_t t = 0;
+	const int maxHandSize = 5; 
+	int initialPlayerHandSize = p.playerHand.size();
+
+	while (t < maxHandSize - initialPlayerHandSize)
+	{
 		if (mainDeck.size() > 0) {
 			p.playerHand << mainDeck;
 		}
@@ -70,7 +74,10 @@ int FiveCardDraw::turn(Player& p)
 		else {
 			return no_cards_left;
 		}
+
+		++t;
 	}
+
 	return success;
 }
 
@@ -82,15 +89,13 @@ int FiveCardDraw::after_turn(Player& p)
 
 int FiveCardDraw::before_round()
 {
-	const int endIndex = playersVec.size() - 1;
-	const int max_handsize = 5;
-
 	mainDeck.shuffle();
 
 	if (dealer == playersVec.size() - 1) // if dealer is at last position. 
 	{
 		const int startIndex = 0;
-		
+		const int endIndex = playersVec.size() - 1;
+		const int max_handsize = 5;
 		//while loop with a condition that looks for both values are 5 or not. If 5, then done. 
 		//since we want to make sure each player has received five cards. 
 		size_t eachIndex = 0;
@@ -99,24 +104,29 @@ int FiveCardDraw::before_round()
 		{
 			playersVec[eachIndex % playersVec.size()]->playerHand << mainDeck;
 			++eachIndex;
+
 		}
 		//this for loop calls before_turn. 
 		for (size_t i = startIndex; i < playersVec.size(); ++i)
 		{
 			before_turn(*playersVec[i]);
-			//return 0, if success. 
+			cout << "current discard deck : " << discardedDeck << endl;
 		}
+		cout << "current mainDeck : " << mainDeck << endl;
 		return success;
 	}
 	else // if deal is not at last position. i.e among 3 players, if second player is a dealer, then first player's index is the starting point. 
 	{
 		const int startIndex = dealer + 1;
+		const int endIndex = playersVec.size() - 1;
+		const int max_handsize = 5;
 		size_t eachIndex = startIndex;
 		//this while loop deals one card from deck to each player. 
 		while (playersVec[startIndex]->playerHand.size() != max_handsize || playersVec[dealer]->playerHand.size() != max_handsize)
 		{
 			playersVec[eachIndex % playersVec.size()]->playerHand << mainDeck; // to iterate each player in the playersvec, used % playersVec.size()
 			++eachIndex;
+
 		}
 		//this for loop calls before_turn. 
 		// since startIndex can happen at the middle, 
@@ -124,20 +134,20 @@ int FiveCardDraw::before_round()
 		for (size_t i = startIndex; i < playersVec.size(); ++i)
 		{
 			before_turn(*playersVec[i]);
-//			cout << "current discarded Deck: " << discardedDeck << endl; // DEBUGGIN PURPOSES
+			cout << "current discard deck : " << discardedDeck << endl;
 		}
 		for (size_t j = 0; j < startIndex; ++j)
 		{
 			before_turn(*playersVec[j]);
-//			cout << "current discarded Deck: " << discardedDeck << endl; // DEBUGGIN PURPOSES
+			cout << "current discard deck : " << discardedDeck << endl;
 		}
-//		cout << "current main Dekc: " << mainDeck << endl; // DEBUGGIN PURPOSES
 		return success;
 	}
 }
 
 int FiveCardDraw::round()
 {
+
 	if (dealer == playersVec.size() - 1) // if dealer is at last position. 
 	{
 		const int startIndex = 0;
@@ -145,6 +155,8 @@ int FiveCardDraw::round()
 		const int max_handsize = 5;
 		for (size_t i = startIndex; i < playersVec.size(); ++i)
 		{
+
+
 			int turnResult = turn(*playersVec[i]);
 			if (turnResult != 0)
 			{
@@ -159,26 +171,15 @@ int FiveCardDraw::round()
 		const int startIndex = dealer + 1;
 		const int endIndex = playersVec.size() - 1;
 		const int max_handsize = 5;
-		for (size_t i = startIndex; i < playersVec.size(); ++i)
+		for (size_t i = 0; i < playersVec.size(); ++i)
 		{
-			int turnResult = turn(*playersVec[i]);
+			int index = (i + startIndex) % playersVec.size();
+			int turnResult = turn(*playersVec[index]);
 			if (turnResult != 0)
 			{
 				return turnResult;
 			}
-			after_turn(*playersVec[i]);
-			//at each player, call turn and after_turn. 
-			// if any turn method returns a non-zero value, then immediately return it.
-			//return 0, if success. 
-		}
-		for (size_t j = 0; j < startIndex; ++j)
-		{
-			int turnResult = turn(*playersVec[j]);
-			if (turnResult != 0)
-			{
-				return turnResult;
-			}
-			after_turn(*playersVec[j]);
+			after_turn(*playersVec[index]);
 		}
 		return success;
 	}
@@ -203,30 +204,30 @@ bool poker_rank(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2)
 
 int FiveCardDraw::after_round()
 {
+
 	vector<shared_ptr<Player>> temp;
 	for (size_t i = 0; i < playersVec.size(); ++i)
 	{
 		temp.push_back(playersVec[i]);
 	}
 	sort(temp.begin(), temp.end(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1, p2); });
-
+	
 	size_t index = 0;
-	while (temp[index] < temp[index + 1]) // if temp[index] >= temp[index+1] meaning that, temp[index] is the loser. 
+	size_t lastIndex = temp.size() - 1;
+
+	while (temp[index] != temp[lastIndex])
 	{
 		++temp[index]->lossCounts;
 		++index;
 	}
-	for (size_t i = index; i < temp.size(); ++i)// So from the index to temp.size() (exclusive), they are the winners. 
-	{
-		++temp[i]->winCounts;
-	}
-
+	++temp[lastIndex]->winCounts;
+	reverse(temp.begin(), temp.end());
 	cout << endl;
-	for (size_t i = temp.size() - 1; i >= 0; --i) // print out from highest to lowest. and 0 index is the lowest. 
+	for (size_t i = 0; i < temp.size(); ++i)
 	{
 		cout << "player name: " << temp[i]->playerName << "\nnumber of wins: " << temp[i]->winCounts << "\nnumber of losses: " << temp[i]->lossCounts << "\nplayer's hand: " << temp[i]->playerHand << endl;
-	}
 
+	}
 	for (size_t p = 0; p < playersVec.size(); ++p) // move all players cards to main deck. 
 	{
 		for (size_t h = 0; h < playersVec[p]->playerHand.size(); ++h)
@@ -242,34 +243,32 @@ int FiveCardDraw::after_round()
 		discardDeckHolder.remove_card(dh);
 	}
 
-
 	//ask the rest of the players whether to leave the game
-
 	string leftPlayerName;
-	string playerTempHolder;
 	int indexOfLeftPlayer = -1;
 	bool leave;
-
 	do {
+		leave = false;
 		cout << endl;
 		cout << "Is ther any player whom you want to leave? If there is not, enter 'no'. 'No', 'NO', 'nO' won't be accepted !  " << endl;
 
 		cout << "Player's name: " << endl;
 		cin >> leftPlayerName;
-		playerTempHolder = leftPlayerName;
-
-		if (playerTempHolder.find("no") != string::npos && playerTempHolder.length() == 2) {
-			leave = false; // meaning that no one is leaving, so done with this do-while loop. 
-		}
+		if (leftPlayerName == "no")
+		{
+			leave = false;
+		}	
 		else {
+			cout << "leave the person!!! " << endl;
 			leave = true; // we want someone to leave the game. 
 		}
-		bool validPlayer = true;
+		bool validPlayer = false;
 		for (size_t i = 0; i < playersVec.size(); ++i)
 		{
-			if (leftPlayerName != playersVec[i]->playerName)
+			if (leftPlayerName == playersVec[i]->playerName)
 			{
-				validPlayer = false;
+				validPlayer = true;
+				break;
 			}
 		}
 		if (leave && validPlayer)  // if validPlayer is not true ( meaning that we have an invalid player, so we should skip this part)
@@ -293,15 +292,14 @@ int FiveCardDraw::after_round()
 
 	//ask whether to join the game
 	string joiningPlayer;
-	string joiningPlayerTempHolder;
 	bool join = false;
 	do {
 		cout << endl;
 		cout << "Is there any player whom you want to join? Enter 'no' if you don't want. 'NO' 'No' 'nO' won't be accepted! " << endl;
 		cout << "Player's name: " << endl;
 		cin >> joiningPlayer;
-		joiningPlayerTempHolder = joiningPlayer;
-		if (joiningPlayerTempHolder.find("no") != string::npos && joiningPlayerTempHolder.length() == 2) {
+		if (joiningPlayer == "no")
+		{
 			join = false;
 		}
 		else {
