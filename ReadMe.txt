@@ -49,11 +49,102 @@ Design Decisions
 
 3. I used character arrays for identifying valid ranks and suits for a Card, because it appears much simpler than multiple if statements.
 
+4. In fivecarddraw.cpp, when we were moving all cards from playeers' decks and discard deck to maindeck, we just cleared everything in main, discard, and players' decks. After then, we filled every availiable combination of card into maindeck just as we did in fivecarddarw constructor. We did this for efficienicy. 
+
+
 --------------
 Return Results
 --------------
 COMMAND LINE INPUT:
+===================================================================
 lab3 FiveCardDraw a b c 
+===================================================================
+
+
+
+COMMAND LINE OUTPUT:
+====================================================================
+START ROUND !
+Player's name: b, Hand content:4D 6S 8H KC KD
+
+If any, please type valid indices of Cards which you would like to discard.
+1
+Player's name: a, Hand content:3H 4C 7H 9H JS
+
+If any, please type valid indices of Cards which you would like to discard.
+1
+Player's name: b, Hand content: 4D 4S 8H KC KD
+
+Player's name: a, Hand content: 3H 3S 7H 9H JS
+
+
+player name: a
+number of wins: 1
+number of losses: 0
+player's hand: 3H 3S 7H 9H JS
+
+player name: b
+number of wins: 0
+number of losses: 1
+player's hand: 4D 4S 8H KC KD
+
+
+Is ther any player whom you want to leave? If there is not, enter 'no'. 'No', 'N
+O', 'nO' won't be accepted !
+Player's name:
+b
+leave the person!!!
+
+Is ther any player whom you want to leave? If there is not, enter 'no'. 'No', 'N
+O', 'nO' won't be accepted !
+Player's name:
+no
+
+Is there any player whom you want to join? Enter 'no' if you don't want. 'NO' 'N
+o' 'nO' won't be accepted!
+Player's name:
+d
+
+Is there any player whom you want to join? Enter 'no' if you don't want. 'NO' 'N
+o' 'nO' won't be accepted!
+Player's name:
+no
+
+START ROUND !
+Player's name: a, Hand content:4S 7D JC JD KD
+
+If any, please type valid indices of Cards which you would like to discard.
+Player's name: d, Hand content:2S 3D 5S 6C JH
+
+If any, please type valid indices of Cards which you would like to discard.
+1
+Player's name: a, Hand content: 4S 7D JC JD KD
+
+Player's name: d, Hand content: 2S 5S 6C 6D JH
+
+
+player name: d
+number of wins: 1
+number of losses: 0
+player's hand: 2S 5S 6C 6D JH
+
+player name: a
+number of wins: 1
+number of losses: 1
+player's hand: 4S 7D JC JD KD
+
+
+Is ther any player whom you want to leave? If there is not, enter 'no'. 'No', 'N
+O', 'nO' won't be accepted !
+Player's name:
+no
+
+Is there any player whom you want to join? Enter 'no' if you don't want. 'NO' 'N
+o' 'nO' won't be accepted!
+Player's name:
+d
+Error: already_playing
+==========================================================================================
 
 
 
@@ -62,6 +153,3 @@ Errors Encountered
 ------------------
 I did not encounter any errors in this lab.
 
-------------
-Extra Credit
-------------
