@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 	const int hands_number = 9;
 	const string shuffle = "-shuffle";
 	ErrorControl returned;
-	
+
 	try
 	{
 		if (argc < least_num_arg)
@@ -41,10 +41,10 @@ int main(int argc, char* argv[])
 			shared_ptr<Game> current_game = Game::instance();
 
 			string new_player;
-
 			//add players
 			for (int i = 2; i < argc; i++) {
 				new_player = argv[i];
+
 
 				if (new_player == "no" || new_player == "no*") {
 					cout << new_player << " is not a valid player name." << endl;
@@ -54,13 +54,15 @@ int main(int argc, char* argv[])
 				}
 			}
 
-			while(current_game->get_num_player() >= least_num_players)
+			while (current_game->get_num_player() >= least_num_players)
 			{
+				cout << "START ROUND ! " << endl;
 				current_game->before_round();
 				current_game->round();
 				current_game->after_round();
 			}
 			Game::stop_game();
+			cout << "Game is ended." << endl;
 			return success;
 		}
 	}
