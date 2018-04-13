@@ -1,7 +1,14 @@
+/*
+The name of this file: FiveCardDraw.cpp
+Author: Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
+This is the source file for the FiveCardDraw class, which contains its constructor, turn, and round methods.
+*/
+
 #include "stdafx.h"
 #include "FiveCardDraw.h"
 #include <algorithm>
 
+// FiveCardDraw constructor
 FiveCardDraw::FiveCardDraw()
 {
 	dealer = 0;
@@ -23,6 +30,7 @@ FiveCardDraw::FiveCardDraw()
 	}
 }
 
+//before_turn method
 int FiveCardDraw::before_turn(Player& p)
 {
 	cout << "Player's name: " << p.playerName << ", Hand content:" << p.playerHand << endl;
@@ -46,7 +54,7 @@ int FiveCardDraw::before_turn(Player& p)
 			}
 		}
 	} while (indices.size() > static_cast<size_t>(p.playerHand.size()) || valid_index == false);
-	
+
 	sort(indices.begin(), indices.end());
 	reverse(indices.begin(), indices.end());
 
@@ -57,10 +65,11 @@ int FiveCardDraw::before_turn(Player& p)
 	return success;
 }
 
+//turn method
 int FiveCardDraw::turn(Player& p)
 {
 	size_t t = 0;
-	const int maxHandSize = 5; 
+	const int maxHandSize = 5;
 	int initialPlayerHandSize = p.playerHand.size();
 
 	while (t < maxHandSize - initialPlayerHandSize)
@@ -81,12 +90,14 @@ int FiveCardDraw::turn(Player& p)
 	return success;
 }
 
+//after_turn method
 int FiveCardDraw::after_turn(Player& p)
 {
 	cout << "Player's name: " << p.playerName << ", Hand content: " << p.playerHand << endl;
 	return success;
 }
 
+//before_round method
 int FiveCardDraw::before_round()
 {
 	mainDeck.shuffle();
@@ -145,6 +156,7 @@ int FiveCardDraw::before_round()
 	}
 }
 
+// round method
 int FiveCardDraw::round()
 {
 
@@ -202,6 +214,7 @@ bool poker_rank(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2)
 	}
 }
 
+//after_round method
 int FiveCardDraw::after_round()
 {
 
@@ -211,7 +224,7 @@ int FiveCardDraw::after_round()
 		temp.push_back(playersVec[i]);
 	}
 	sort(temp.begin(), temp.end(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1, p2); });
-	
+
 	size_t index = 0;
 	size_t lastIndex = temp.size() - 1;
 
@@ -242,8 +255,8 @@ int FiveCardDraw::after_round()
 		for (int j = 0; j < rankNum; j++)
 		{
 			Card c;
-			c.s = static_cast<Card::suit>(i); 
-			c.r = static_cast<Card::rank>(j); 
+			c.s = static_cast<Card::suit>(i);
+			c.r = static_cast<Card::rank>(j);
 			mainDeck.add_card(c);
 		}
 	}
@@ -262,7 +275,7 @@ int FiveCardDraw::after_round()
 		if (leftPlayerName == "no")
 		{
 			leave = false;
-		}	
+		}
 		else {
 			cout << "leave the person!!! " << endl;
 			leave = true; // we want someone to leave the game. 
