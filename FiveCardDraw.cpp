@@ -27,30 +27,40 @@ int FiveCardDraw::before_turn(Player& p)
 {
 	cout << "Player's name: " << p.playerName << ", Hand content:" << p.playerHand << endl;
 
-	int count = 0;
 	vector<size_t> indices;
+	const int max_handsize = 5;
+	bool valid_index = true;
 	do {
 		cout << "If any, please type valid indices of Cards which you would like to discard." << endl;
 		string input;
 		size_t index;
 		if (getline(cin, input)) {
+			valid_index = true;
+			indices.clear();
 			stringstream ss(input);
 			while (ss >> index) {
 				indices.push_back(index);
+				if (index >= max_handsize) {
+					valid_index = false;
+				}
 			}
 		}
-	} while (indices.size() > static_cast<size_t>(p.playerHand.size()));
+	} while (indices.size() > static_cast<size_t>(p.playerHand.size()) || valid_index == false);
+
+	sort(indices.begin(), indices.end());
+	reverse(indices.begin(), indices.end());
 
 	for (size_t i = 0; i < indices.size(); ++i) {
-		discardedDeck.add_card(p.playerHand[i]);
-		p.playerHand.remove_card(i);
+		discardedDeck.add_card(p.playerHand[indices[i]]);
+		p.playerHand.remove_card(indices[i]);
 	}
 	return success;
 }
 
 int FiveCardDraw::turn(Player& p)
 {
-	for (size_t i = 0; i < 5 - static_cast<size_t>(p.playerHand.size()); ++i) {
+	const int max_handsize = 5;
+	for (size_t i = 0; i < max_handsize - static_cast<size_t>(p.playerHand.size()); ++i) {
 		if (mainDeck.size() > 0) {
 			p.playerHand << mainDeck;
 		}
@@ -72,19 +82,20 @@ int FiveCardDraw::after_turn(Player& p)
 
 int FiveCardDraw::before_round()
 {
+	const int endIndex = playersVec.size() - 1;
+	const int max_handsize = 5;
+
 	mainDeck.shuffle();
 
-	playersVec[0];
 	if (dealer == playersVec.size() - 1) // if dealer is at last position. 
 	{
 		const int startIndex = 0;
-		const int endIndex = playersVec.size() - 1;
-		const int max_handsize = 5;
+		
 		//while loop with a condition that looks for both values are 5 or not. If 5, then done. 
 		//since we want to make sure each player has received five cards. 
 		size_t eachIndex = 0;
 		//this while loop deals one card from deck to each player. 
-		while (playersVec[startIndex]->playerHand.size() != max_handsize && playersVec[endIndex]->playerHand.size() != max_handsize)
+		while (playersVec[startIndex]->playerHand.size() != max_handsize || playersVec[endIndex]->playerHand.size() != max_handsize)
 		{
 			playersVec[eachIndex % playersVec.size()]->playerHand << mainDeck;
 			++eachIndex;
@@ -100,11 +111,9 @@ int FiveCardDraw::before_round()
 	else // if deal is not at last position. i.e among 3 players, if second player is a dealer, then first player's index is the starting point. 
 	{
 		const int startIndex = dealer + 1;
-		const int endIndex = playersVec.size() - 1;
-		const int max_handsize = 5;
 		size_t eachIndex = startIndex;
 		//this while loop deals one card from deck to each player. 
-		while (playersVec[startIndex]->playerHand.size() != max_handsize && playersVec[dealer]->playerHand.size() != max_handsize)
+		while (playersVec[startIndex]->playerHand.size() != max_handsize || playersVec[dealer]->playerHand.size() != max_handsize)
 		{
 			playersVec[eachIndex % playersVec.size()]->playerHand << mainDeck; // to iterate each player in the playersvec, used % playersVec.size()
 			++eachIndex;
@@ -115,11 +124,14 @@ int FiveCardDraw::before_round()
 		for (size_t i = startIndex; i < playersVec.size(); ++i)
 		{
 			before_turn(*playersVec[i]);
+//			cout << "current discarded Deck: " << discardedDeck << endl; // DEBUGGIN PURPOSES
 		}
 		for (size_t j = 0; j < startIndex; ++j)
 		{
 			before_turn(*playersVec[j]);
+//			cout << "current discarded Deck: " << discardedDeck << endl; // DEBUGGIN PURPOSES
 		}
+//		cout << "current main Dekc: " << mainDeck << endl; // DEBUGGIN PURPOSES
 		return success;
 	}
 }
@@ -212,7 +224,7 @@ int FiveCardDraw::after_round()
 	cout << endl;
 	for (size_t i = temp.size() - 1; i >= 0; --i) // print out from highest to lowest. and 0 index is the lowest. 
 	{
-		cout << "player name: " << temp[i]->playerName << "number of wins: " << temp[i]->winCounts << "number of losses: " << temp[i]->lossCounts << "player's hand: " << temp[i]->playerHand << endl;
+		cout << "player name: " << temp[i]->playerName << "\nnumber of wins: " << temp[i]->winCounts << "\nnumber of losses: " << temp[i]->lossCounts << "\nplayer's hand: " << temp[i]->playerHand << endl;
 	}
 
 	for (size_t p = 0; p < playersVec.size(); ++p) // move all players cards to main deck. 
