@@ -228,19 +228,24 @@ int FiveCardDraw::after_round()
 		cout << "player name: " << temp[i]->playerName << "\nnumber of wins: " << temp[i]->winCounts << "\nnumber of losses: " << temp[i]->lossCounts << "\nplayer's hand: " << temp[i]->playerHand << endl;
 
 	}
-	for (size_t p = 0; p < playersVec.size(); ++p) // move all players cards to main deck. 
+	mainDeck.deck.clear();
+	discardedDeck.deck.clear();
+	for (size_t p = 0; p < playersVec.size(); ++p)
 	{
-		for (size_t h = 0; h < playersVec[p]->playerHand.size(); ++h)
-		{
-			mainDeck.add_card(playersVec[p]->playerHand[h]); // add card from player's hand at position h
-			playersVec[p]->playerHand.remove_card(h); // and remove the card of the hand at position h. 
-		}
+		playersVec[p]->playerHand.hand.clear();
 	}
-	Hand discardDeckHolder;
-	for (size_t dh = 0; dh < discardDeckHolder.size(); ++dh)
+	vector<Card> cardsToMain = vector<Card>();
+	int suitNum = 4;
+	int rankNum = 13;
+	for (int i = 0; i < suitNum; i++)
 	{
-		mainDeck.add_card(discardDeckHolder[dh]);
-		discardDeckHolder.remove_card(dh);
+		for (int j = 0; j < rankNum; j++)
+		{
+			Card c;
+			c.s = static_cast<Card::suit>(i); 
+			c.r = static_cast<Card::rank>(j); 
+			mainDeck.add_card(c);
+		}
 	}
 
 	//ask the rest of the players whether to leave the game
