@@ -20,7 +20,7 @@ prints out the player's name, number of wins, and number of losses.
 using namespace std;
 
 Player::Player(string givenName) :
-	playerName(givenName), winCounts(0), lossCounts(0) { //using the parameter to initialize the playerName. Also, Initaiizing win and loss to 0. 
+	playerName(givenName), winCounts(0), lossCounts(0), chip(20) { //using the parameter to initialize the playerName. Also, Initaiizing win and loss to 0. 
 	playerHand = Hand(); // this has to be default constructed to be empty. 
 	string fileName = givenName;
 	ifstream ifs(fileName + ".txt"); //fileName should be same as player's name, so I added .txt after it. 
@@ -54,6 +54,12 @@ Player::Player(string givenName) :
 		return; // finish execution. 
 	}
 
+}
+
+int Player::resetChip() 
+{
+	chip = 20;
+	return success;
 }
 
 ostream & operator<<(ostream & out, const Player & p)
