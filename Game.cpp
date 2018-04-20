@@ -87,3 +87,23 @@ shared_ptr<Player> Game::find_player(const string & givenPlayer)
 	//if no matching, return a singular pointer. So I decided to return nullptr. 
 	return nullptr;
 }
+
+int Game::busted()
+{
+	for (auto i = 0; i < playersVec.size(); ++i) {
+		if (playersVec[i]->chip == 0) {
+			char c;
+			do {
+				cout << "Please reset your chip count to keep playing. Otherwise, you must quit. Please enter 'r' or 'q'." << endl;
+				cin >> c;
+				if (c == 'r') {
+					playersVec[i].reset();
+				}
+				if (c == 'q') {
+					playersVec.erase(playersVec.begin() + i);
+				}
+			} while (c != 'r' || c != 'q');
+		}
+	}
+	return success;
+}
