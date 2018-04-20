@@ -23,9 +23,10 @@ struct Player
 
 	unsigned int winCounts;
 	unsigned int lossCounts;
+	unsigned int chip;
 
 	Player(string);
-
+	int resetChip();
 };
 ostream& operator<<(ostream&, const Player&); // non-member insertion operator << 
 
