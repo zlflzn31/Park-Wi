@@ -259,6 +259,9 @@ int FiveCardDraw::after_round()
 		}
 	}
 
+	// for players that lost all their chips, make them decide between resetting their chip count and quitting the game
+	busted();
+
 	//ask the rest of the players whether to leave the game
 	string leftPlayerName;
 	int indexOfLeftPlayer = -1;
