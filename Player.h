@@ -24,7 +24,9 @@ struct Player
 	unsigned int winCounts;
 	unsigned int lossCounts;
 	unsigned int chip;
-
+	//lab4 
+	bool isFold;
+	unsigned int betCount;
 	Player(string);
 	int resetChip();
 };
