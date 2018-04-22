@@ -89,6 +89,18 @@ int FiveCardDraw::before_round()
 	{
 		const int startIndex = 0;
 		const int endIndex = playersVec.size() - 1;
+		
+		//lab4 part 
+		//to join the game, each player should spend a chip into the pot. 
+		//so pot should be incremented by 1. 
+		for (auto player : playersVec)
+		{
+			--player->chips;
+			++pot;
+		}
+		
+		
+		
 		//while loop with a condition that looks for both values are 5 or not. If 5, then done. 
 		//since we want to make sure each player has received five cards. 
 		size_t eachIndex = 0;
@@ -112,6 +124,16 @@ int FiveCardDraw::before_round()
 	{
 		const int startIndex = dealer + 1;
 		const int endIndex = playersVec.size() - 1;
+		
+		//lab4 part 
+		//to join the game, each player should spend a chip into the pot. 
+		//so pot should be incremented by 1. 
+		for (auto player : playersVec)
+		{
+			--player->chips;
+			++pot;
+		}
+		
 		size_t eachIndex = startIndex;
 		//this while loop deals one card from deck to each player. 
 		while (playersVec[startIndex]->playerHand.size() != cards_per_hand || playersVec[dealer]->playerHand.size() != cards_per_hand)
