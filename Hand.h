@@ -34,7 +34,7 @@ class Hand {
 	friend ostream & operator<<(ostream &, const Hand &);
 	friend bool poker_rank(const Hand &hand1, const Hand &hand2);
 	friend int rank_hand(const Hand &ahand);
-	friend class FiveCardDraw;
+	friend class PokerGame;
 
 public:
 	Hand();

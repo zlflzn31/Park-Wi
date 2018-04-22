@@ -15,6 +15,7 @@ It also contains start_game and stop_game methods, and an instance method.
 #include "Hand.h"
 #include "VerifyCard.h"
 #include <mutex>
+#include <sys/stat.h>
 
 using namespace std;
 class Deck;
@@ -36,7 +37,9 @@ public:
 	ErrorControl add_player(const string&);
 	shared_ptr<Player> find_player(const string&);
 	int get_num_player();
-	int busted();
+	int busted(); //lab4 
+	int storeGame(); //lab4 storing game result 
+
 	virtual int before_turn(Player&) = 0;
 	virtual int turn(Player&) = 0;
 	virtual int after_turn(Player&) = 0;

@@ -32,7 +32,7 @@ class Deck
 	//these are friended due to they need to access private member variable Deck. 
 	friend ostream &operator << (ostream &, const Deck &); // only for deck 
 	friend void operator<<(Hand &, Deck &); // for both hand and deck 
-	friend class FiveCardDraw;
+	friend class PokerGame;
 public:
 	Deck();
 	Deck(char*);

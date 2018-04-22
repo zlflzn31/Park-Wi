@@ -107,3 +107,20 @@ int Game::busted()
 	}
 	return success;
 }
+
+int Game::storeGame()
+{
+	auto numPlayers = playersVec.size();
+	ofstream file;
+
+	for (auto i = 0; i < numPlayers; i++) {
+		string name = playersVec[i]->playerName;
+		file.close();
+		file.open(name + ".txt");
+		file << playersVec[i]->playerName << endl;
+		file << playersVec[i]->winCounts << endl;
+		file << playersVec[i]->lossCounts << endl;
+		file << playersVec[i]->chip << endl;
+	}
+	return success;
+}
