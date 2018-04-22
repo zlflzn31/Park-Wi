@@ -28,7 +28,8 @@ protected:
 	static shared_ptr<Game> pGame;
 	Deck mainDeck;
 	vector<shared_ptr<Player>> playersVec;
-
+	//lab4 part
+	unsigned int pot = 0;
 public:
 	static shared_ptr<Game> instance();
 	static void start_game(const string&);
