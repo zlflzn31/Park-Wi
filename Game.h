@@ -15,7 +15,6 @@ It also contains start_game and stop_game methods, and an instance method.
 #include "Hand.h"
 #include "VerifyCard.h"
 #include <mutex>
-#include <sys/stat.h>
 
 using namespace std;
 class Deck;
