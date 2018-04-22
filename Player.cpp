@@ -21,7 +21,7 @@ using namespace std;
 
 Player::Player(string givenName) :
 	//lab4 
-	playerName(givenName), winCounts(0), lossCounts(0), betCount(0), isFold(false), chips(20) { //using the parameter to initialize the playerName. Also, Initaiizing win and loss to 0. 
+	playerName(givenName), winCounts(0), lossCounts(0), betCount(0), isFold(false), chip(20) { //using the parameter to initialize the playerName. Also, Initaiizing win and loss to 0. 
 	playerHand = Hand(); // this has to be default constructed to be empty. 
 	string fileName = givenName;
 	ifstream ifs(fileName + ".txt"); //fileName should be same as player's name, so I added .txt after it. 
