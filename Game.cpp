@@ -1,29 +1,27 @@
 /*
-
 The name of this file : Game.cpp
 Author : Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
-
-
 This cpp file contains definitions of methods in the Game abstract base class.
 It includes methods regarding the actual Game instance (instance(), start_game, stop_game),
-the players (add_player, find_player), the turns (before_turn, turn, after_turn), 
+the players (add_player, find_player), the turns (before_turn, turn, after_turn),
 and the rounds (before_round, round, after_round).
 */
 
 #include "stdafx.h"
 #include "Game.h"
 #include "FiveCardDraw.h"
+#include "GameExceptions.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 
-shared_ptr<Game> Game::pGame; 
+shared_ptr<Game> Game::pGame;
 
 // instance method that returns a copy of the static pointer member variable
 shared_ptr<Game> Game::instance() {
 	if (pGame == nullptr) {
-		throw runtime_error("Error: instance_not_available");
+		throw instance_not_available();
 	}
 	else {
 		shared_ptr<Game> ptr = pGame;
@@ -33,23 +31,23 @@ shared_ptr<Game> Game::instance() {
 
 // start_game method
 void Game::start_game(const string& s) {
-		string f = "FiveCardDraw";
-		if (pGame != nullptr) { // check if the static pointer member variable is non-singular
-			throw runtime_error("Error: game_already_started");
-		}
-		else if (s.find(f) == string::npos) { // check if the string contains "FiveCardDraw"
-			throw runtime_error("Error: unknown_game");
-		}
-		else { // dynamically allocate an instance of FiveCardDraw and store its address in pGame
-			shared_ptr<FiveCardDraw> fcd = make_shared<FiveCardDraw>();
-			pGame = fcd;
-		}
+	string f = "FiveCardDraw";
+	if (pGame != nullptr) { // check if the static pointer member variable is non-singular
+		throw game_already_started();
+	}
+	else if (s.find(f) == string::npos) { // check if the string contains "FiveCardDraw"
+		throw unknown_game();
+	}
+	else { // dynamically allocate an instance of FiveCardDraw and store its address in pGame
+		shared_ptr<FiveCardDraw> fcd = make_shared<FiveCardDraw>();
+		pGame = fcd;
+	}
 }
 
 // stop_game method
 void Game::stop_game() {
 	if (pGame == nullptr) { // check if the static pointer member variable is singular
-		throw runtime_error("Error: no_game_in_progress");
+		throw no_game_in_progress();
 	}
 	pGame = nullptr;
 }
@@ -61,17 +59,15 @@ int Game::get_num_player() {
 //vector<shared_ptr<Player>> players;
 ErrorControl Game::add_player(const string & givenPlayer)
 {
-	string givenName = givenPlayer; // name of "given" player's
-									 //this for loop checks if given player's name is same with players' name of the vector. 
-	for (vector<shared_ptr<Player>>::iterator it = playersVec.begin(); it != playersVec.end(); ++it)
+	for (auto i : playersVec) // this for loop checks if given player's name is same with players' name of the vector. 
 	{
-		if ((*it)->playerName == givenName) { // compare playername of each Player of the vector to "given" player's name. 
-			throw runtime_error("Error: already_playing");
+		if ((i->playerName) == givenPlayer) // compare playername of each Player of the vector to "given" player's name. 
+		{
+			throw already_playing();
 		}
 	}
-	//this below logic push backs the given player's name into the vector of the players. 
-	Player temp(givenName);
-	playersVec.push_back(make_shared<Player>(temp));
+	shared_ptr<Player> p = make_shared<Player>(Player(givenPlayer));
+	playersVec.push_back(p);
 	return success;
 }
 

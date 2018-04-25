@@ -34,7 +34,6 @@ Player::Player(string givenName) :
 		//so it has to be greater than 3. 
 		if (stored.size() >= 3)
 		{
-			playerName = stoi(stored[0]);
 			winCounts = stoi(stored[1]); //to convert from string to int. 
 			lossCounts = stoi(stored[2]); //to convert from string to int. 
 		}

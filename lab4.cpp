@@ -12,6 +12,7 @@ This file contains main function.
 #include "Player.h"
 #include "Hand.h"
 #include "FiveCardDraw.h"
+#include "GameExceptions.h"
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -26,52 +27,69 @@ int main(int argc, char* argv[])
 	const int least_num_arg = 4;
 	const int hands_number = 9;
 	const string shuffle = "-shuffle";
-	ErrorControl returned; 
+	ErrorControl returned;
+
+	if (argc < least_num_arg)
+	{
+		returned = usageMsg(argv[program_name], "The program should be run with the name of a game followed by the names of two or more players.");
+		return returned;
+	}
 
 	try
 	{
-		if (argc < least_num_arg)
-		{
-			returned = usageMsg(argv[program_name], "The program should be run with the name of a game followed by the names of two or more players.");
-			return returned;
-		}
-		else
-		{
-			Game::start_game(argv[game_name]);
-			shared_ptr<Game> current_game = Game::instance();
+		Game::start_game(argv[game_name]);
+	}
+	catch (game_already_started)
+	{
+		cout << "This game already started." << endl;
+	}
+	catch (unknown_game)
+	{
+		cout << "This is an unknown game." << endl;
+	}
 
-			string new_player;
-			//add players
-			for (int i = 2; i < argc; i++) {
-				new_player = argv[i];
+	try
+	{
+		shared_ptr<Game> current_game = Game::instance();
+		string new_player;
+		//add players
+		for (int i = 2; i < argc; ++i) {
+			new_player = argv[i];
 
-
-				if (new_player == "no" || new_player == "no*") {
-					cout << new_player << " is not a valid player name." << endl;
-				}
-				else {
+			if (new_player == "no" || new_player == "no*") {
+				cout << new_player << " is not a valid player name." << endl;
+			}
+			else {
+				try
+				{
 					current_game->add_player(new_player);
 				}
+				catch (already_playing)
+				{
+					cout << "This player is already playing." << endl;
+				}
 			}
-
-			while (current_game->get_num_player() >= least_num_players)
-			{
-				cout << "START ROUND ! " << endl;
-				current_game->before_round();
-				current_game->round();
-				current_game->after_round();
-			}
-			Game::stop_game();
-			cout << "Game is ended." << endl;
-			return success;
 		}
+		while (current_game->get_num_player() >= least_num_players)
+		{
+			cout << "Start Round!" << endl;
+			current_game->before_round();
+			current_game->round();
+			current_game->after_round();
+		}
+		try
+		{
+			Game::stop_game();
+		}
+		catch (no_game_in_progress)
+		{
+			cout << "No game in progress." << endl;
+		}
+		cout << "Game ended." << endl;
+		return success;
 	}
-	catch (const runtime_error& error) {
-		cerr << error.what() << endl;
-		return run_time_error;
-	}
-	catch (...) {
-		Game::stop_game();
-		return usageMsg(argv[program_name], "Unknown error");
+	catch (instance_not_available)
+	{
+		cout << "Instance is not available." << endl;
 	}
 }
