@@ -44,6 +44,11 @@ bool Card::operator< (const Card & crs) const
 	return (r < crs.r) || (r == crs.r && s < crs.s);
 };
 
+bool Card::operator== (const Card & c) const
+{
+	return (this->r == c.r && this->s == c.s);
+}
+
 ErrorControl parseFile(vector<Card>& vec, char * file_name)
 {
 	ifstream ifs(file_name);
@@ -202,10 +207,10 @@ ErrorControl pokerHand(const vector<Card> & vec)
 {
 	int numberOfCards = 5;
 	int numberOfHands = vec.size() / numberOfCards;
-	for (size_t s = 0; s < numberOfHands; ++s)
+	for (auto s = 0; s < numberOfHands; ++s)
 	{
 		vector<Card> temp;
-		for (size_t k = 0; k < numberOfCards; ++k)
+		for (auto k = 0; k < numberOfCards; ++k)
 		{
 			temp.push_back(vec[5 * s + k]); //for each five cards at a time from the vec 0~ vec.size().
 		} // from here, temp will have five cards. 

@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <random>
 #include <iterator>
-#include <stdexcept>
+#include <stdexcept> 
 
 /*
 
@@ -166,7 +166,7 @@ ostream & operator<<(ostream & o, const Deck &passedDeck)
 {
 
 	string validCard;
-	for (size_t i = 0; i < passedDeck.size(); ++i)
+	for (auto i = 0; i < passedDeck.size(); ++i)
 	{
 		if (passedDeck.deck[i].r == Card::rank::two) { validCard = "2"; }
 		else if (passedDeck.deck[i].r == Card::rank::three) { validCard = "3"; }

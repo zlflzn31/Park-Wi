@@ -90,39 +90,41 @@ Hand & Hand::operator= (const Hand &givenHand)
 	return *this;
 }
 
-//equilvalence operator
-bool Hand::operator== (const Hand &givenHand) const
+// Hand equivalence operator, returns true iff exactly the same sequence of cards appears in both objects
+bool Hand::operator== (const Hand & h) const
 {
-	if (this->size() != givenHand.size())
+	if (this->size() != h.size())
 	{
 		return false;
 	}
-	bool determineTruth = true;
-	for (auto i = 0; i < givenHand.size(); ++i)
+	bool ans = true;
+	for (auto i = 0; i < h.size(); ++i)
 	{
-		determineTruth &= (this->hand[i].r == givenHand.hand[i].r && this->hand[i].s == givenHand.hand[i].s);
+		ans &= (this->hand[i] == h.hand[i]);
 	}
-	return determineTruth;
+	return ans;
 }
 
-//less than opeator. 
-bool Hand::operator< (const Hand &givenHand) const
+// Hand less than operator, returns true iff the sequence of cards in the object on which the operator was called
+// should appear before the sequence of cards in the passed object according to a lexical ordering
+bool Hand::operator< (const Hand & h) const
 {
-	bool determineTruth = true;
+	bool prefix = true;
 	for (auto i = 0; i < this->size(); ++i)
 	{
-		determineTruth &= ((this->hand[i].r == givenHand.hand[i].r && this->hand[i].s == givenHand.hand[i].s));
+		prefix &= (this->hand[i] == h.hand[i]);
 	}
-	if (determineTruth && this->size() < givenHand.size())
+	if (prefix && this->size() < h.size())
 	{
 		return true;
 	}
-	auto t_s = 0;
-	while ((this->hand[t_s].r == givenHand.hand[t_s].r && this->hand[t_s].s == givenHand.hand[t_s].s))
+
+	auto i = 0;
+	while (this->hand[i] == h.hand[i])
 	{
-		++t_s;
+		++i;
 	}
-	return (this->hand[t_s + 1] < givenHand.hand[t_s + 1]);
+	return (this->hand[i] < h.hand[i]);
 }
 
 //indexing operator in #5
@@ -167,363 +169,325 @@ void operator<<(Hand &givenHand, Deck &givenDeck)
 }
 
 //it determines the rank of a given hand. 
-int rank_hand(const Hand &givenHand)
+int rank_hand(Hand & h)
 {
-	Card first = givenHand.hand[0];
-	Card second = givenHand.hand[1];
-	Card third = givenHand.hand[2];
-	Card fourth = givenHand.hand[3];
-	Card fifth = givenHand.hand[4];
+	Card first = h.hand[0];
+	Card second = h.hand[1];
+	Card third = h.hand[2];
+	Card fourth = h.hand[3];
+	Card fifth = h.hand[4];
 
-	if ((first.s == second.s) && (second.s == third.s) && (third.s == fourth.s) && (fourth.s == fifth.s))  // if same suit. 
+	// All 5 cards have same suit.
+	if (first.s == second.s && second.s == third.s && third.s == fourth.s && fourth.s == fifth.s)
 	{
-		if (fifth.r == Card::ace)
+		// If all 5 cards have same suit and their ranks are consecutive, it is a straight flush.
+		if ((first.r + 4 == fifth.r) || (first.r == '6' && fifth.r == Card::rank::ten) || (first.r == '7' && fifth.r == 'J') ||
+			(first.r == '8' && fifth.r == 'Q') || (first.r == '9' && fifth.r == 'K') || (first.r == Card::rank::ten && fifth.r == 'A') ||
+			(first.r == '2' && second.r == '3' && third.r == '4' && fourth.r == '5' && fifth.r == 'A'))
 		{
-			if ((fourth.r - first.r) == 3)
+			h.handRank = HandRank::straightflush;
+		}
+		// If their ranks are not consecutive, it is just a flush.
+		else
+		{
+			h.handRank = HandRank::flush;
+		}
+	}
+	// AAAAB or ABBBB
+	else if ((first.r == fourth.r) || (second.r == fifth.r))
+	{
+		h.handRank = HandRank::fourofakind;
+	}
+	// AABBB or AAABB
+	else if ((first.r == second.r && second.r != third.r && third.r == fifth.r) ||
+		(first.r == third.r && third.r != fourth.r && fourth.r == fifth.r))
+	{
+		h.handRank = HandRank::fullhouse;
+	}
+	// 5 consecutive ranks regardless of suit
+	else if ((first.r + 1 == second.r && second.r + 1 == third.r && third.r + 1 == fourth.r && fourth.r + 1 == fifth.r) ||
+		(first.r == '6' && second.r == '7' && third.r == '8' && fourth.r == '9' && fifth.r == Card::rank::ten) ||
+		(first.r == '7' && second.r == '8' && third.r == '9' && fourth.r == Card::rank::ten && fifth.r == 'J') ||
+		(first.r == '8' && second.r == '9' && third.r == Card::rank::ten && fourth.r == 'J' && fifth.r == 'Q') ||
+		(first.r == '9' && second.r == Card::rank::ten && third.r == 'J' && fourth.r == 'Q' && fifth.r == 'K') ||
+		(first.r == Card::rank::ten && second.r == 'J' && third.r == 'Q' && fourth.r == 'K' && fifth.r == 'A') ||
+		(first.r == '2' && second.r == '3' && third.r == '4' && fourth.r == '5' && fifth.r == 'A'))
+	{
+		h.handRank = HandRank::straight;
+	}
+	// AAABC, ABBBC, ABCCC
+	else if ((first.r == third.r && third.r != fourth.r && fourth.r != fifth.r) ||
+		(first.r != second.r && second.r == fourth.r && fourth.r != fifth.r) ||
+		(first.r != second.r && second.r != third.r && third.r == fifth.r))
+	{
+		h.handRank = HandRank::threeofakind;
+	}
+	// AABBC, AABCC, ABBCC
+	else if ((first.r == second.r && second.r != third.r && third.r == fourth.r && fourth.r != fifth.r) ||
+		(first.r == second.r && second.r != third.r && third.r != fourth.r && fourth.r == fifth.r) ||
+		(first.r != second.r && second.r == third.r && third.r != fourth.r && fourth.r == fifth.r))
+	{
+		h.handRank = HandRank::twopairs;
+	}
+	// AABCD, ABBCD, ABCCD, ABCDD
+	else if ((first.r == second.r && second.r != third.r && third.r != fourth.r && fourth.r != fifth.r) ||
+		(first.r != second.r && second.r == third.r && third.r != fourth.r && fourth.r != fifth.r) ||
+		(first.r != second.r && second.r != third.r && third.r == fourth.r && fourth.r != fifth.r) ||
+		(first.r != second.r && second.r != third.r && third.r != fourth.r && fourth.r == fifth.r))
+	{
+		h.handRank = HandRank::onepair;
+	}
+	else
+	{
+		h.handRank = HandRank::norank;
+	}
+	return h.handRank;
+}
+
+// returns true iff the first hand object ranks higher than the second hand object in the poker hand ranking definition
+bool poker_rank(const Hand & h1, const Hand & h2)
+{
+	// if two hands' ranks are different
+	if (h1.handRank != h2.handRank)
+	{
+		return (h1.handRank > h2.handRank);
+	}
+
+	Card c10 = h1.hand[0];
+	Card c11 = h1.hand[1];
+	Card c12 = h1.hand[2];
+	Card c13 = h1.hand[3];
+	Card c14 = h1.hand[4];
+	Card c20 = h2.hand[0];
+	Card c21 = h2.hand[1];
+	Card c22 = h2.hand[2];
+	Card c23 = h2.hand[3];
+	Card c24 = h2.hand[4];
+
+	// if both ranks are no rank or flush
+	if (h1.handRank == HandRank::norank || h1.handRank == HandRank::flush)
+	{
+		if (c14.r != c24.r) { return (c24 < c14); }
+		else
+		{
+			if (c13.r != c23.r) { return (c23 < c13); }
+			else
 			{
-				return HandRank::straightflush;
+				if (c12.r != c22.r) { return (c22 < c12); }
+				else
+				{
+					if (c11.r != c21.r) { return (c21 < c11); }
+					else
+					{
+						return (c20 < c10);
+					}
+				}
 			}
 		}
-		if (first.r == fourth.r || second.r == fifth.r)
-		{
-			return HandRank::fourofakind;
-		}
-		if ((first.r == second.r && third.r == fifth.r) ||
-			(first.r == third.r && fourth.r == fifth.r))
-		{
-			return HandRank::fullhouse;
-		}
-		else if ((first.r == third.r && fourth.r != fifth.r) ||
-			(second.r == fourth.r) ||
-			(third.r == fifth.r && first.r != second.r))
-		{
-			return HandRank::threeofakind;
-		}
-		else if ((first.r == second.r && third.r == fourth.r && fourth.r != fifth.r) ||
-			(first.r != second.r && second.r == third.r && fourth.r == fifth.r) ||
-			(first.r == second.r && second.r != third.r && third.r != fourth.r && fourth.r == fifth.r))
-		{
-			return HandRank::twopairs;
-		}
-		else if ((first.r == second.r && second.r != third.r && third.r != fourth.r && fourth.r != fifth.r) ||
-			(first.r != second.r && second.r == third.r && third.r != fourth.r && fourth.r != fifth.r) ||
-			(first.r != second.r && second.r != third.r && third.r == fourth.r && fourth.r != fifth.r) ||
-			(first.r != second.r && second.r != third.r && third.r != fourth.r && fourth.r == fifth.r))
-		{
-			return HandRank::onepair;
-		}
-		return HandRank::flush;
 	}
-	else //if not same suit. 
+	// if both ranks are one pair
+	else if (h1.handRank == HandRank::onepair)
 	{
-		// meaning that if fifth one is great than first one by 5. - consecutive 
-		if ((fifth.r - fourth.r) == 1 && (fourth.r - third.r) == 1 && (third.r - second.r) == 1 && (second.r - first.r) == 1
-			)
+		int h1rank, h2rank;
+		Hand h1copy = Hand(h1);
+		Hand h2copy = Hand(h2);
+		for (auto i = 0; i < h1.size() - 1; ++i)
 		{
-			return HandRank::straightflush;
-
+			if (h1.hand[i].r == h1.hand[i + 1].r)
+			{
+				h1rank = i;
+				h1copy.hand.erase(h1copy.hand.begin() + i, h1copy.hand.begin() + (i + 2));
+			}
+			if (h2.hand[i].r == h2.hand[i + 1].r)
+			{
+				h2rank = i;
+				h2copy.hand.erase(h2copy.hand.begin() + i, h2copy.hand.begin() + (i + 2));
+			}
 		}
-		else if (first.r == fourth.r || second.r == fifth.r)
+		if (!(h1.hand[h1rank] == h2.hand[h2rank]))
 		{
-			return HandRank::fourofakind;
-		}
-		else if ((first.r == second.r && third.r == fifth.r) ||
-			(first.r == third.r && fourth.r == fifth.r))
-		{
-			return HandRank::fullhouse;
-		}
-		else if ((fifth.r - fourth.r == 1 && fourth.r - third.r == 1 && third.r - second.r == 1 && second.r - first.r == 1) ||
-			(fifth.r == Card::ace && fourth.r - third.r == 1 && third.r - second.r == 1 && second.r - first.r == 1)) // meaning every card is consecutive.
-		{
-			return HandRank::straight;
-		}
-		else if ((first.r == third.r && fourth.r != fifth.r) ||
-			(second.r == fourth.r) ||
-			(third.r == fifth.r && first.r != second.r))
-		{
-			return HandRank::threeofakind;
-		}
-		else if ((first.r == second.r && third.r == fourth.r && fourth.r != fifth.r) ||
-			(first.r != second.r && second.r == third.r && fourth.r == fifth.r) ||
-			(first.r == second.r && second.r != third.r && third.r != fourth.r && fourth.r == fifth.r))
-		{
-			return HandRank::twopairs;
-		}
-		else if ((first.r == second.r && second.r != third.r && third.r != fourth.r && fourth.r != fifth.r) ||
-			(first.r != second.r && second.r == third.r && third.r != fourth.r && fourth.r != fifth.r) ||
-			(first.r != second.r && second.r != third.r && third.r == fourth.r && fourth.r != fifth.r) ||
-			(first.r != second.r && second.r != third.r && third.r != fourth.r && fourth.r == fifth.r))
-		{
-			return HandRank::onepair;
+			return (h2.hand[h2rank] < h1.hand[h1rank]);
 		}
 		else
 		{
-			return HandRank::norank;
-		}
-
-	}
-
-}
-
-
-// it returns wheter firsthand is greater than secondhand. 
-bool poker_rank(const Hand &FirHand, const Hand &SecHand)
-{
-	int first = 0, second = 1, third = 2, fourth = 3, fifth = 4; // to deal with hardcoding problem. first = first card. I set first as 0 since array index 0 is essseitnally first. 
-																 // since we have const givens, I make two hand classes to deal with this problem. 
-	Hand hand1;
-	for (int i = 0; i < FirHand.size(); i++) {
-		hand1.hand.push_back(FirHand.hand[i]);
-	}
-	sort(hand1.hand.begin(), hand1.hand.end());
-	Hand hand2;
-	for (int i = 0; i < SecHand.size(); i++) {
-		hand2.hand.push_back(SecHand.hand[i]);
-	}
-	sort(hand2.hand.begin(), hand2.hand.end());
-	int rankhand1 = rank_hand(FirHand);
-	int rankhand2 = rank_hand(SecHand);
-	// if these two rankhands are different, simply compare those two rankhand values. 
-	//if not, we have to compare each case. 
-
-
-	if (rankhand1 == rankhand2)
-	{
-		//if it is straight or straightflush, just sort by hand
-		if (rankhand1 == HandRank::straight || rankhand1 == HandRank::straightflush)
-		{
-			return hand2.hand[fifth].r <hand1.hand[fifth].r;
-		}
-		//flush and no rank's logic acts samely, from highest ranking card to next one. 
-		// enum zero to four, mine is first ~ fifth. so four == fifth. 
-
-		else if (rankhand1 == HandRank::norank || rankhand1 == HandRank::flush)
-		{
-			if (hand1.hand[fifth].r == hand2.hand[fifth].r)
+			sort(h1copy.hand.begin(), h1copy.hand.end());
+			sort(h2copy.hand.begin(), h2copy.hand.end());
+			c10 = h1copy.hand[0];
+			c11 = h1copy.hand[1];
+			c12 = h1copy.hand[2];
+			c20 = h2copy.hand[0];
+			c21 = h2copy.hand[1];
+			c22 = h2copy.hand[2];
+			if (c12.r != c22.r) { return (c22 < c12); }
+			else
 			{
-				if (hand1.hand[fourth].r != hand2.hand[fourth].r)
+				if (c11.r != c21.r) { return (c21 < c11); }
+				else
 				{
-					return hand2.hand[fourth].r < hand1.hand[fourth].r;
+					return (c20 < c10);
 				}
-				else // if fourth == fourth, see third. 
+			}
+		}
+	}
+	// if both ranks are two pair
+	else if (h1.handRank == HandRank::twopairs)
+	{
+		int h1rank, h2rank;
+		Hand h1copy = Hand(h1);
+		Hand h2copy = Hand(h2);
+		for (auto i = h1.size() - 2; i >= 0; i--)
+		{
+			if (h1.hand[i].r == h1.hand[i + 1].r)
+			{
+				h1rank = i;
+				h1copy.hand.erase(h1copy.hand.begin() + i, h1copy.hand.begin() + (i + 2));
+				break;
+			}
+		}
+		for (auto i = h2.size() - 2; i >= 0; i--)
+		{
+			if (h2.hand[i].r == h2.hand[i + 1].r)
+			{
+				h2rank = i;
+				h2copy.hand.erase(h2copy.hand.begin() + i, h2copy.hand.begin() + (i + 2));
+				break;
+			}
+		}
+		if (!(h1.hand[h1rank] == h2.hand[h2rank]))
+		{
+			return (h2.hand[h2rank] < h1.hand[h1rank]);
+		}
+		else
+		{
+			sort(h1copy.hand.begin(), h1copy.hand.end());
+			sort(h2copy.hand.begin(), h2copy.hand.end());
+			for (auto i = 0; i < h1.size() - 1; ++i)
+			{
+				if (h1.hand[i].r == h1.hand[i + 1].r)
 				{
-					if (hand1.hand[third].r != hand2.hand[third].r)
-					{
-						return hand2.hand[third].r < hand1.hand[third].r;
-					}
-					else // if third == third, see second
-					{
-						if (hand1.hand[second].r != hand2.hand[second].r)
-						{
-							return hand2.hand[second].r < hand1.hand[second].r;
-						}
-						else // if second == second, see first. 
-						{
-							if (hand1.hand[first].r != hand2.hand[first].r)
-							{
-								return hand2.hand[first].r < hand1.hand[first].r;
-							}
-						}
-					}
+					h1rank = i;
+					break;
 				}
-
+			}
+			for (auto i = 0; i < h1.size() - 1; ++i)
+			{
+				if (h2.hand[i].r == h2.hand[i + 1].r)
+				{
+					h2rank = i;
+					break;
+				}
+			}
+			if (h1copy.hand[h1rank].r != h2copy.hand[h2rank].r)
+			{
+				return (h2copy.hand[h2rank] < h1copy.hand[h1rank]);
 			}
 			else
 			{
-				return hand2.hand[fifth].r < hand1.hand[fifth].r;
-			}
-
-		}
-		else if (rankhand1 == HandRank::fourofakind)
-		{
-			return hand2.hand[third].r < hand1.hand[third].r;
-
-		}
-		else if (rankhand1 == HandRank::fullhouse)
-		{
-			if (hand1.hand[third].r == hand2.hand[third].r) //so,(I.E) if when same three cards in two hands. 
-			{
-				if (hand1.hand[second].r != hand1.hand[third].r)  //first hand == 22kkk
-				{
-					if (hand2.hand[second].r != hand2.hand[third].r) // second hand == 33kkk
-					{
-						return hand2.hand[second].r < hand1.hand[second].r;
-					}
-					else if (hand2.hand[fourth].r != hand2.hand[third].r) //second = kkkAA
-					{
-						return hand2.hand[fourth].r < hand1.hand[second].r;
-					}
-				}
-				else // if 666kk
-				{
-					if (hand2.hand[second].r != hand2.hand[third].r) //22kkk
-					{
-						return hand2.hand[second].r < hand1.hand[fourth].r;
-					}
-					else if (hand2.hand[fourth].r != hand2.hand[third].r) //kkkaa
-					{
-						return hand2.hand[fourth].r < hand1.hand[fourth].r;
-					}
-				}
-			}
-			else // if third card of each hand is different, simply return below one. 
-			{
-				return hand2.hand[third].r < hand1.hand[third].r;
+				h1copy.hand.erase(h1copy.hand.begin() + h1rank, h1copy.hand.begin() + (h1rank + 2));
+				h2copy.hand.erase(h2copy.hand.begin() + h2rank, h2copy.hand.begin() + (h2rank + 2));
+				return (h2copy.hand[0] < h1copy.hand[0]);
 			}
 		}
-		else if (rankhand1 == HandRank::threeofakind)
+	}
+	// if both ranks are three of a kind
+	else if (h1.handRank == HandRank::threeofakind)
+	{
+		int h1rank, h2rank;
+		Hand h1copy = Hand(h1);
+		Hand h2copy = Hand(h2);
+		for (auto i = 0; i < h1.size() - 2; ++i)
 		{
-			if (hand1.hand[third].r == hand2.hand[third].r)
+			if (h1.hand[i].r == h1.hand[i + 1].r && h1.hand[i + 1].r == h1.hand[i + 2].r)
 			{
-				if (hand1.hand[second].r != hand1.hand[third].r) //IF FIRST HAND IS LIKE, 12888
-				{
-					if (hand2.hand[second].r != hand2.hand[third].r) // SO, FIRST HAND == 12888, SECOND HAND == 34888
-					{
-						if (hand1.hand[first].r != hand2.hand[first].r) // if first card is not same, 
-						{
-							return hand2.hand[first].r < hand1.hand[first].r;
-						}
-						else
-						{
-							return hand2.hand[second].r < hand1.hand[second].r;// first card is same, but second card is not same. 
-						}
-					}
-					else if (hand2.hand[fourth].r != hand2.hand[third].r)// SO FIRST == 12888 SECOND = 888KJ. 
-					{ //the other two cards cannot have any identical. 
-						return hand2.hand[fourth].r < hand1.hand[first].r;
-
-					}
-				}
-				else if (hand1.hand[fourth].r != hand1.hand[third].r) // IF FIRST HAND IS LIKE, 888KJ,
-				{
-					if (hand2.hand[second].r != hand2.hand[third].r) // first hand == 888KJ, second == 12888. 
-					{
-						return hand2.hand[fourth].r < hand1.hand[first].r;
-					}
-					else if (hand2.hand[fourth].r != hand2.hand[third].r) // first hand == 888KJ, second == 888QA. 
-					{
-						if (hand1.hand[fourth].r == hand2.hand[fourth].r) // if fourth card is same, then return fifth card. 
-						{
-							return hand2.hand[fifth].r < hand1.hand[fifth].r;
-						}
-						else
-						{
-							return hand2.hand[fourth].r < hand1.hand[fourth].r;// if fourth card is not same, then simply return it. 
-						}
-					}
-				}
+				h1rank = i;
 			}
-			else // if if third card of each hadnd is different, simply return below one. 
+			if (h2.hand[i].r == h2.hand[i + 1].r && h2.hand[i + 1].r == h2.hand[i + 2].r)
 			{
-				return hand2.hand[third].r < hand1.hand[third].r;
+				h2rank = i;
 			}
 		}
-		else if (rankhand1 == HandRank::twopairs)
+		if (h1copy.hand[h1rank].r != h2copy.hand[h2rank].r)
 		{
-			if (hand1.hand[fourth].r == hand2.hand[fourth].r) // 122AA and 377AA such cases. More detailed bottom. 
-			{
-				// now look for second card, //(112AA, 117AA) or (122AA, 177AA).  
-				//if second card is same, then return result of third card. 
-				if (hand1.hand[second].r == hand2.hand[second].r)
-				{
-					if (hand1.hand[first].r != hand2.hand[first].r) //meaning 177AA, 377AA
-					{
-						return hand2.hand[first].r < hand1.hand[first].r;
-					}
-					else if (hand1.hand[third].r != hand2.hand[third].r) //meaning 113AA, 117AA
-					{
-						return hand2.hand[third].r < hand1.hand[third].r;
-					}
-
-				}
-				//if second card is not same, then return the result of second card. 
-				else //meaning (122AA, 133AA) or (116AA, 338AA).
-				{
-					return hand2.hand[second].r < hand1.hand[second].r;
-				}
-
-			}
-			else //122KK and 122AA right? then simply return fourth one. 
-			{
-				return hand2.hand[fourth].r < hand1.hand[third].r;
-			}
-		}
-		//if one pair
-		else if (rankhand1 == HandRank::onepair)
-		{
-			//find one pair of each first. 
-			Card::rank onePairFirHandRank;
-			for (auto i = 0; i < FirHand.size() - 1; ++i) // no point of looking the last element of the hand.
-			{
-				if (FirHand.hand[i].r == FirHand.hand[i + 1].r)
-				{
-					onePairFirHandRank = FirHand.hand[i].r;
-					break;
-				}
-			}
-			Card::rank onePairSecHandRank;
-			for (auto i = 0; i < SecHand.size() - 1; ++i) // no point of looking the last element of the hand.
-			{
-				if (SecHand.hand[i].r == SecHand.hand[i + 1].r)
-				{
-					onePairSecHandRank = SecHand.hand[i].r;
-					break;
-				}
-			}
-			//see if theese two one pairs are not equal, if not equal, then return the comparison of both. 
-			if (onePairFirHandRank != onePairSecHandRank)
-			{
-				return onePairSecHandRank < onePairFirHandRank;
-			}
-			else // if these two are equal, then look for the other cards. 
-			{
-				vector<Card> FirHandOthers;
-				for (auto i = 0; i < FirHand.size(); ++i)
-				{
-					if (FirHand.hand[i].r != onePairFirHandRank)
-					{
-						FirHandOthers.push_back(FirHand.hand[i]);
-					}
-				}
-				vector<Card> SecHandOthers;
-				for (auto i = 0; i < SecHand.size(); ++i)
-				{
-					if (SecHand.hand[i].r != onePairSecHandRank)
-					{
-						SecHandOthers.push_back(SecHand.hand[i]);
-					}
-				}
-				const int first = 0;
-				const int second = 1;
-				const int third = 2;
-				// sort is needed to be safely determining. 
-				sort(FirHandOthers.begin(), FirHandOthers.end());
-				sort(SecHandOthers.begin(), SecHandOthers.end());
-				// then compare from the highest to lowerst. 
-				if (FirHandOthers[third].r == SecHandOthers[third].r)
-				{
-					if (FirHandOthers[second].r == SecHandOthers[second].r)
-					{
-						return SecHandOthers[first].r < FirHandOthers[first].r;
-					}
-					else
-					{
-						return SecHandOthers[second].r < FirHandOthers[second].r;
-					}
-				}
-				else
-				{
-					return SecHandOthers[third].r < FirHandOthers[third].r;
-				}
-			}
+			return (h2copy.hand[h2rank] < h1copy.hand[h1rank]);
 		}
 		else
 		{
-			return ErrorControl::wrong_implementation_of_poker_rank;
+			h1copy.hand.erase(h1copy.hand.begin() + h1rank, h1copy.hand.begin() + (h1rank + 3));
+			h2copy.hand.erase(h2copy.hand.begin() + h2rank, h2copy.hand.begin() + (h2rank + 3));
+			sort(h1copy.hand.begin(), h1copy.hand.end());
+			sort(h2copy.hand.begin(), h2copy.hand.end());
+			c10 = h1copy.hand[0];
+			c11 = h1copy.hand[1];
+			c20 = h2copy.hand[0];
+			c21 = h2copy.hand[1];
+			if (c11.r != c21.r) { return (c21 < c11); }
+			else
+			{
+				return (c20 < c10);
+			}
 		}
 	}
-	else  //if rankhand1 and rankhand2 are not equal, then simply return it. 
+	// if both ranks are straight or straight flush
+	else if (h1.handRank == HandRank::straight || h1.handRank == HandRank::straightflush)
 	{
-		return rankhand1 > rankhand2;
+		return (h2.hand[4] < h1.hand[4]);
+	}
+	// if both ranks are full house
+	else if (h1.handRank == HandRank::fullhouse)
+	{
+		int triple1, triple2;
+		if (c10.r == c12.r)
+		{
+			triple1 = 0;
+		}
+		else
+		{
+			triple1 = h1.size() - 1;
+		}
+		if (c20.r == c22.r)
+		{
+			triple2 = 0;
+		}
+		else
+		{
+			triple2 = h2.size() - 1;
+		}
+		if (h1.hand[triple1].r != h2.hand[triple2].r)
+		{
+			return (h2.hand[triple2] < h1.hand[triple1]);
+		}
+		else
+		{
+			return (h2.hand[h2.size() - 1 - triple2] < h1.hand[h1.size() - 1 - triple1]);
+		}
+	}
+	// if both ranks are four of a kind
+	else
+	{
+		int quad1, quad2;
+		if (c10.r == c13.r)
+		{
+			quad1 = 0;
+		}
+		else
+		{
+			quad1 = h1.size() - 1;
+		}
+		if (c20.r == c23.r)
+		{
+			quad2 = 0;
+		}
+		else
+		{
+			quad2 = h2.size() - 1;
+		}
+		if (h1.hand[quad1].r != h2.hand[quad2].r)
+		{
+			return (h2.hand[quad2] < h1.hand[quad1]);
+		}
+		else
+		{
+			return (h2.hand[h2.size() - 1 - quad2] < h1.hand[h1.size() - 1 - quad1]);
+		}
 	}
 }

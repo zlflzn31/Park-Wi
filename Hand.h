@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 #include "verifyCard.h"
-#include "deck.h"
+#include "deck.h" 
 
 /*
 The name of this file: Hand.h
@@ -32,8 +32,8 @@ class Hand {
 	//these functions are friended due to they need to access private variable. 
 	friend void operator<<(Hand &, Deck &);
 	friend ostream & operator<<(ostream &, const Hand &);
-	friend bool poker_rank(const Hand &hand1, const Hand &hand2);
-	friend int rank_hand(const Hand &ahand);
+	friend bool poker_rank(const Hand &, const Hand &);
+	friend int rank_hand(Hand &);
 	friend class PokerGame;
 
 public:
@@ -50,6 +50,7 @@ public:
 
 private:
 	vector<Card> hand;
+	int handRank;
 };
 //void operator<<(Hand &hand, Deck &deck);
 void operator<<(Hand &givenHand, Deck &givenDeck);

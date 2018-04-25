@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 	const int least_num_arg = 4;
 	const int hands_number = 9;
 	const string shuffle = "-shuffle";
-	ErrorControl returned;
+	ErrorControl returned; 
 
 	try
 	{

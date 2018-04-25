@@ -163,7 +163,7 @@ int PokerGame::after_round()
 			busted(); //lab4: if a player with 0 chips tries to join the game, make him reset or not join
 		}
 	} while (join);
-	cout << endl;
+	cout << endl; 
 
 	//next dealer ! 
 	if (dealer >= playersVec.size() - 1)

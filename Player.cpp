@@ -1,14 +1,10 @@
 /*
-
 The name of this file : Player.cpp
 Author : Hong Wi, hwi@wustl.edu
-		Jongwhan Park, jongwhan@wustl.edu
-
-
+Jongwhan Park, jongwhan@wustl.edu
 This cpp file contains definitions of methods in the Player struct.
 It includes the constructor that takes in a player's name and a overloaded insertion operator that
 prints out the player's name, number of wins, and number of losses.
-
 */
 
 #include "stdafx.h"
@@ -57,7 +53,7 @@ Player::Player(string givenName) :
 
 }
 
-int Player::resetChip() 
+int Player::resetChip()
 {
 	chip = 20;
 	return success;

@@ -18,7 +18,7 @@ and the rounds (before_round, round, after_round).
 #include <sstream>
 #include <string>
 
-shared_ptr<Game> Game::pGame;
+shared_ptr<Game> Game::pGame; 
 
 // instance method that returns a copy of the static pointer member variable
 shared_ptr<Game> Game::instance() {
@@ -90,7 +90,7 @@ shared_ptr<Player> Game::find_player(const string & givenPlayer)
 
 int Game::busted()
 {
-	for (auto i = 0; i < playersVec.size(); ++i) {
+	for (size_t i = 0; i < playersVec.size(); ++i) {
 		if (playersVec[i]->chip == 0) {
 			char c;
 			do {
@@ -113,7 +113,7 @@ int Game::storeGame()
 	auto numPlayers = playersVec.size();
 	ofstream file;
 
-	for (auto i = 0; i < numPlayers; i++) {
+	for (size_t i = 0; i < numPlayers; i++) {
 		string name = playersVec[i]->playerName;
 		file.close();
 		file.open(name + ".txt");

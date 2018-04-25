@@ -25,6 +25,7 @@ struct Card
 	rank r;
 	suit s;
 	bool operator< (const Card &) const;
+	bool operator== (const Card &) const;
 	//	Card();
 
 };
