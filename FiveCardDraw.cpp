@@ -6,8 +6,8 @@ This is the source file for the FiveCardDraw class, which contains its construct
 
 #include "stdafx.h"
 #include "FiveCardDraw.h"
-#include "PokerGame.h"
-#include <algorithm>
+#include "GameExceptions.h"
+
 
 // FiveCardDraw constructor
 FiveCardDraw::FiveCardDraw() : PokerGame()
@@ -18,33 +18,31 @@ FiveCardDraw::FiveCardDraw() : PokerGame()
 //before_turn method
 int FiveCardDraw::before_turn(Player& p)
 {
+	if (p.isFold)
+	{
+		return 0;
+	}
+
 	cout << "Player's name: " << p.playerName << ", Hand content:" << p.playerHand << endl;
 
-	vector<size_t> indices;
-	bool valid_index = true;
-	do {
-		cout << "If any, please type valid indices of Cards which you would like to discard." << endl;
-		string input;
-		size_t index;
-		if (getline(cin, input)) {
-			valid_index = true;
-			indices.clear();
-			stringstream ss(input);
-			while (ss >> index) {
-				indices.push_back(index);
-				if (index >= cards_per_hand) {
-					valid_index = false;
-				}
-			}
+	vector<bool> ifDelete;
+	string toDiscard; //user response
+
+	while (toDiscard.length() == 0) getline(cin, toDiscard);
+	toDiscard = " " + toDiscard + " ";
+	for (size_t k = 0; k < 5; k++) {
+		if (toDiscard.find(" " + to_string(k + 1) + " ") != string::npos) {
+			ifDelete.push_back(true);
 		}
-	} while (indices.size() > static_cast<size_t>(p.playerHand.size()) || valid_index == false);
+		else ifDelete.push_back(false);
+	}
 
-	sort(indices.begin(), indices.end());
-	reverse(indices.begin(), indices.end());
-
-	for (size_t i = 0; i < indices.size(); ++i) {
-		discardedDeck.add_card(p.playerHand[indices[i]]);
-		p.playerHand.remove_card(indices[i]);
+	//remove the card to discard desk
+	for (size_t i = 5; i > 0; i--) {
+		if (ifDelete[i - 1]) {
+			discardedDeck.add_card(p.playerHand[i - 1]);
+			p.playerHand.remove_card(i - 1);
+		}
 	}
 	return success;
 }
@@ -98,9 +96,6 @@ int FiveCardDraw::before_round()
 			--player->chip;
 			++pot;
 		}
-
-
-
 		//while loop with a condition that looks for both values are 5 or not. If 5, then done. 
 		//since we want to make sure each player has received five cards. 
 		size_t eachIndex = 0;
@@ -111,13 +106,28 @@ int FiveCardDraw::before_round()
 			++eachIndex;
 
 		}
-		//this for loop calls before_turn. 
-		for (size_t i = startIndex; i < playersVec.size(); ++i)
+		
+		// 1st betting phase:
+		// reset the records
+		foldCounts = 0;
+		for (auto p : playersVec)
 		{
-			before_turn(*playersVec[i]);
-			cout << "current discard deck : " << discardedDeck << endl;
+			p->isFold = false;
+			cout << p->playerName << ": " << p->playerHand;
 		}
-		cout << "current mainDeck : " << mainDeck << endl;
+		betting();
+
+		if (playersVec.size() - foldCounts >= 2)
+		{
+			for (auto p : playersVec)
+			{
+				if (!p->isFold)
+				{
+					before_turn(*p);
+				}
+			}
+		}
+		
 		return success;
 	}
 	else // if deal is not at last position. i.e among 3 players, if second player is a dealer, then first player's index is the starting point. 
@@ -133,7 +143,7 @@ int FiveCardDraw::before_round()
 			--player->chip;
 			++pot;
 		}
-		 
+
 		size_t eachIndex = startIndex;
 		//this while loop deals one card from deck to each player. 
 		while (playersVec[startIndex]->playerHand.size() != cards_per_hand || playersVec[dealer]->playerHand.size() != cards_per_hand)
@@ -142,17 +152,34 @@ int FiveCardDraw::before_round()
 			++eachIndex;
 
 		}
-		//this for loop calls before_turn. 
-		// since startIndex can happen at the middle, 
-		//playersvec.size() + (starIndex % playersVec.size()) will iterate indexes that are less than startPoint. 
-		for (size_t i = startIndex; i < playersVec.size(); ++i)
+		
+		// 1st betting phase:
+		foldCounts = 0;
+		for (auto p : playersVec)
 		{
-			before_turn(*playersVec[i]);
+		p->isFold = false;
+		cout << p->playerName << ": " << p->playerHand;
 		}
-		for (auto j = 0; j < startIndex; ++j)
+		betting();
+
+		// players discard cards staring at the dealer
+		if (playersVec.size() - foldCounts >= 2)
 		{
-			before_turn(*playersVec[j]);
+			for (size_t i = startIndex; i < playersVec.size(); ++i)
+			{
+				if (!playersVec[i]->isFold)
+				{
+					before_turn(*playersVec[i]);
+				}
+			}
+			for (auto j = 0; j < startIndex; ++j)
+			{
+				if (!playersVec[j]->isFold)
+					before_turn(*playersVec[j]);
+			}
 		}
+		
+
 		return success;
 	}
 }
@@ -160,21 +187,25 @@ int FiveCardDraw::before_round()
 // round method
 int FiveCardDraw::round()
 {
-
 	if (dealer == playersVec.size() - 1) // if dealer is at last position. 
 	{
 		const int startIndex = 0;
 		const int endIndex = playersVec.size() - 1;
-		for (size_t i = startIndex; i < playersVec.size(); ++i)
+		if (playersVec.size() - foldCounts >= 2)
 		{
-
-
-			int turnResult = turn(*playersVec[i]);
-			if (turnResult != 0)
+			for (size_t i = startIndex; i < playersVec.size(); ++i)
 			{
-				return turnResult;
+				if (!playersVec[i]->isFold)
+				{
+					int turnResult = turn(*playersVec[i]);
+					if (turnResult != 0)
+					{
+						return turnResult;
+					}
+					after_turn(*playersVec[i]);
+				}
 			}
-			after_turn(*playersVec[i]);
+			betting();
 		}
 		return success;
 	}
@@ -182,15 +213,22 @@ int FiveCardDraw::round()
 	{
 		const int startIndex = dealer + 1;
 		const int endIndex = playersVec.size() - 1;
-		for (size_t i = 0; i < playersVec.size(); ++i)
+		if (playersVec.size() - foldCounts >= 2)
 		{
-			int index = (i + startIndex) % playersVec.size();
-			int turnResult = turn(*playersVec[index]);
-			if (turnResult != 0)
+			for (size_t i = 0; i < playersVec.size(); ++i)
 			{
-				return turnResult;
+				if (!playersVec[i]->isFold)
+				{ 
+					int index = (i + startIndex) % playersVec.size();
+					int turnResult = turn(*playersVec[index]);
+					if (turnResult != 0)
+					{
+						return turnResult;
+					}
+					after_turn(*playersVec[index]);
+				}
 			}
-			after_turn(*playersVec[index]);
+			betting();
 		}
 		return success;
 	}
