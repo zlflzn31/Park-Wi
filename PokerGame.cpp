@@ -418,7 +418,7 @@ int PokerGame::after_round()
 			temp.push_back(playersVec[i]);
 		}
 	}
-	sort(temp.begin(), temp.end(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1, p2); });
+	sort(temp.begin(), temp.end(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1->playerHand, p2->playerHand); });
 
 	size_t index = 0;
 	size_t lastIndex = temp.size() - 1;
