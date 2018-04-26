@@ -20,7 +20,7 @@ This header file contains header information about FiveCardDraw class, which inh
 #include <vector> 
 #include <string>
 #include <fstream>
-
+#include <algorithm>
 
 class FiveCardDraw : public PokerGame
 {
