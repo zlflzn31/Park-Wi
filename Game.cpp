@@ -87,18 +87,39 @@ shared_ptr<Player> Game::find_player(const string & givenPlayer)
 int Game::busted()
 {
 	for (size_t i = 0; i < playersVec.size(); ++i) {
-		if (playersVec[i]->chip == 0) {
+		if ( playersVec[i]->noChip() ) { // returns true if no chip ! 
 			char c;
 			do {
 				cout << "Please reset your chip count to keep playing. Otherwise, you must quit. Please enter 'r' or 'q'." << endl;
 				cin >> c;
-				if (c == 'r') {
+				if (c == 'r')
+				{
 					playersVec[i].reset();
 				}
-				if (c == 'q') {
+				if (c == 'q')
+				{
+					ofstream ofs(playersVec[i]->playerName + ".txt");
+					ofs << playersVec[i]->playerName << " " << playersVec[i]->winCounts << playersVec[i]->lossCounts << playersVec[i]->chip;
+					ofs.close();
 					playersVec.erase(playersVec.begin() + i);
 				}
 			} while (c != 'r' || c != 'q');
+		}
+		else // even though he or she has no chips, she or he can still leave. 
+		{
+			char c;
+			do
+			{
+				cout << "You still have chips, but you can leave if you want to. Enter 'q' to leave. Otherwise, enter anything except 'q'." << endl;
+				cin >> c;
+				if (c == 'q')
+				{
+					ofstream ofs(playersVec[i]->playerName + ".txt");
+					ofs << playersVec[i]->playerName << " " << playersVec[i]->winCounts << playersVec[i]->lossCounts << playersVec[i]->chip;
+					ofs.close();
+					playersVec.erase(playersVec.begin() + i);
+				}
+			} while (c != 'q');
 		}
 	}
 	return success;
