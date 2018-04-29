@@ -100,13 +100,23 @@ shared_ptr<Player> Game::find_player(const string & givenPlayer)
 	return nullptr;
 }
 
+
 int Game::busted()
 {
-	for (size_t i = 0; i < playersVec.size(); ++i) {
-		if (playersVec[i]->noChip()) { // returns true if no chip ! 
+
+	int constsizeOftheVec = playersVec.size();
+	int leaveCount = 0;
+	for (auto i = 0; i < constsizeOftheVec; ++i) {
+
+		if (leaveCount == constsizeOftheVec - 1)
+		{
+			break;
+		}
+		if ( playersVec[i]->noChip() ) { // returns true if no chip ! 
 			char c;
 			do {
-				cout << "Please reset your chip count to keep playing. Otherwise, you must quit. Please enter 'r' or 'q'." << endl;
+				cout << "Please reset your chip count to keep playing. Otherwise, you must quit. Please enter r or q." << endl;
+				cout << "r for reset, q for quit" << endl;
 				cin >> c;
 				if (c == 'r')
 				{
@@ -123,23 +133,36 @@ int Game::busted()
 		}
 		else // even though he or she has no chips, she or he can still leave. 
 		{
-			char c;
-			do
+			cout << "Do you want, " << playersVec[i]->playerName << " to leave? " << endl;
+			cout << "If yes, enter the name. If no, enter 'no'. (No, On, NO won't be accpected) " << endl;
+			string c;
+			while (c != playersVec[i]->playerName || c != "no")
 			{
-				cout << "You still have chips, but you can leave if you want to. Enter 'q' to leave. Otherwise, enter anything except 'q'." << endl;
 				cin >> c;
-				if (c == 'q')
+				if (c == playersVec[i]->playerName)
 				{
 					ofstream ofs(playersVec[i]->playerName + ".txt");
 					ofs << playersVec[i]->playerName << " " << playersVec[i]->winCounts << playersVec[i]->lossCounts << playersVec[i]->chip;
 					ofs.close();
 					playersVec.erase(playersVec.begin() + i);
+					--i;
+					++leaveCount;
+					break;
 				}
-			} while (c != 'q');
+				else if (c == "no")
+				{
+					break;
+				}
+				else
+				{
+					cout << "enter valid strings" << endl;
+				}
+			}
 		}
 	}
 	return success;
 }
+
 
 int Game::storeGame()
 {
