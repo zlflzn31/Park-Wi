@@ -34,6 +34,7 @@ class Deck
 	friend void operator<<(Hand &, Deck &); // for both hand and deck 
 	friend class PokerGame;
 	friend class SevenCardStud;
+	friend class TexasHoldEm;
 public:
 	Deck();
 	Deck(char*);
