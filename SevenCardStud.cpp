@@ -1,17 +1,25 @@
 #include "stdafx.h"
-#include "SevenCardStud.h"
+#include "TexasHoldEm.h"
 #include "PokerGame.h"
 #include "GameExceptions.h"
 using namespace std;
 
-SevenCardStud::SevenCardStud() // default constructor
+TexasHoldEm::TexasHoldEm() // default constructor
 {
+	shared = Hand();
 }
 
-Hand SevenCardStud::bestFive(const Hand &h) //MOVE THIS TO POKERGAME
+Hand TexasHoldEm::bestFive(const Hand &h1, const Hand &h2)
 {
 	vector<Hand> vh;
-	
+
+	Hand h;
+	for (auto i = 0; i < h1.size(); ++i) {
+		h.hand.push_back(h1.hand[i]);
+	}
+	for (auto i = 0; i < h2.size(); ++i) {
+		h.hand.push_back(h2.hand[i]);
+	}
 	// construct a vector with all possible Hands of 5. we do this by excluding 2 cards out of the given 7
 	for (int i = 0; i < 7; ++i) {
 		for (int j = i + 1; j < 7; ++j) {
@@ -32,81 +40,110 @@ Hand SevenCardStud::bestFive(const Hand &h) //MOVE THIS TO POKERGAME
 	return vh[0];
 }
 
-int SevenCardStud::before_turn(Player &p)
+int TexasHoldEm::before_turn(Player &)
 {
 	return success;
 }
 
-int SevenCardStud::turn(Player &p)
+int TexasHoldEm::turn(Player &)
 {
 	return success;
 }
 
-int SevenCardStud::after_turn(Player &p)
+int TexasHoldEm::after_turn(Player &)
 {
 	return success;
 }
 
-int SevenCardStud::before_round()
+int TexasHoldEm::before_round()
 {
 	mainDeck.shuffle();
 	dealer = 0;
 	return success;
 }
 
-int SevenCardStud::round()
+int TexasHoldEm::round()
 {
-	// number of face down / face up cards that will be dealt in each turn
-	const vector<int> faceDown = { 2, 0, 0, 0, 1 }; 
-	const vector<int> faceUp = { 1, 1, 1, 1, 0 };
-
-	for (int i = 0; i < 5; ++i) { // for each turn i
-		cout << "\nTurn " << (i + 1) << endl;
-		for (unsigned int j = 0; j < playersVec.size(); ++j) { // for each player j
-			cout << "\nDeal to player " << playersVec[j]->playerName;
-			for (auto k = 0; k < faceDown[i] + faceUp[i]; ++k) { // deal cards face down/face up
-				playersVec[j]->playerHand << mainDeck;
-			}
-			cout << "\nPlayer " << playersVec[j]->playerName << "'s hand: " << playersVec[j]->playerHand; // print all of player j's hand
-			for (unsigned int l = 0; l < playersVec.size(); ++l) { // for each player l that is not j, print out his hand, except with * for cards that are face down
-				if (l != j) {
-					string temp;
-					for (auto m = 0; m < playersVec[l]->playerHand.size(); ++m) { // print out each card in a player's hand
-						if (m == 2 || m == 3 || m == 4 || m == 5) {
-							Card c = playersVec[l]->playerHand[m];
-							if (c.r == Card::rank::two) { temp += '2'; };
-							if (c.r == Card::rank::three) { temp += '3'; };
-							if (c.r == Card::rank::four) { temp += '4'; };
-							if (c.r == Card::rank::five) { temp += '5'; };
-							if (c.r == Card::rank::six) { temp += '6'; };
-							if (c.r == Card::rank::seven) { temp += '7'; };
-							if (c.r == Card::rank::eight) { temp += '8'; };
-							if (c.r == Card::rank::nine) { temp += '9'; };
-							if (c.r == Card::rank::ten) { temp += "10"; };
-							if (c.r == Card::rank::jack) { temp += 'J'; };
-							if (c.r == Card::rank::king) { temp += 'K'; };
-							if (c.r == Card::rank::queen) { temp += 'Q'; };
-							if (c.r == Card::rank::ace) { temp += 'A'; };
-							if (c.s == Card::suit::clubs) { temp += 'C'; };
-							if (c.s == Card::suit::spades) { temp += 'S'; };
-							if (c.s == Card::suit::hearts) { temp += 'H'; };
-							if (c.s == Card::suit::diamonds) { temp += 'D'; };
-						}
-						else {
-							temp += "*";
-						}
-						temp += " ";
-					}
-					cout << "Player " << playersVec[l]->playerName << "'s hand: " << temp << endl;
+	// turn 1
+	cout << "\nTurn 1" << endl;
+	for (size_t i = 0; i < playersVec.size(); ++i) {
+		cout << "\nDeal to player " << playersVec[i]->playerName;
+		playersVec[i]->playerHand << mainDeck;
+		playersVec[i]->playerHand << mainDeck;
+		cout << "\nPlayer " << playersVec[i]->playerName << "'s hand: " << playersVec[i]->playerHand;
+		for (size_t j = 0; j < playersVec.size(); ++j) {
+			if (j != i) {
+				string temp;
+				for (auto k = 0; k < playersVec[j]->playerHand.size(); ++k) {
+					temp += "* ";
 				}
+				cout << "Player " << playersVec[j]->playerName << "'s hand: " << temp << endl;
 			}
 		}
-//		betting();
 	}
+	cout << "Shared cards: none" << endl;
+//	betting();
+
+	//turn 2
+	cout << "\nTurn 2" << endl;
+	shared << mainDeck;
+	shared << mainDeck;
+	shared << mainDeck;
+	for (size_t i = 0; i < playersVec.size(); ++i) {
+		cout << "\nPlayer " << playersVec[i]->playerName << "'s hand: " << playersVec[i]->playerHand;
+		for (size_t j = 0; j < playersVec.size(); ++j) {
+			if (j != i) {
+				string temp;
+				for (auto k = 0; k < playersVec[j]->playerHand.size(); ++k) {
+					temp += "* ";
+				}
+				cout << "Player " << playersVec[j]->playerName << "'s hand: " << temp << endl;
+			}
+		}
+	}
+	cout << "Shared cards: " << shared;
+//	betting();
+
+	//turn 3
+	cout << "\nTurn 3" << endl;
+	shared << mainDeck;
+	for (size_t i = 0; i < playersVec.size(); ++i) {
+		cout << "\nPlayer " << playersVec[i]->playerName << "'s hand: " << playersVec[i]->playerHand;
+		for (size_t j = 0; j < playersVec.size(); ++j) {
+			if (j != i) {
+				string temp;
+				for (auto k = 0; k < playersVec[j]->playerHand.size(); ++k) {
+					temp += "* ";
+				}
+				cout << "Player " << playersVec[j]->playerName << "'s hand: " << temp << endl;
+			}
+		}
+	}
+	cout << "Shared cards: " << shared;
+	//	betting();
+
+	//turn 4
+	cout << "\nTurn 4" << endl;
+	shared << mainDeck;
+	for (size_t i = 0; i < playersVec.size(); ++i) {
+		cout << "\nPlayer " << playersVec[i]->playerName << "'s hand: " << playersVec[i]->playerHand;
+		for (size_t j = 0; j < playersVec.size(); ++j) {
+			if (j != i) {
+				string temp;
+				for (auto k = 0; k < playersVec[j]->playerHand.size(); ++k) {
+					temp += "* ";
+				}
+				cout << "Player " << playersVec[j]->playerName << "'s hand: " << temp << endl;
+			}
+		}
+	}
+	cout << "Shared cards: " << shared;
+	//	betting();
+
 	return success;
 }
 
-int SevenCardStud::after_round()
+int TexasHoldEm::after_round()
 {
 	vector<shared_ptr<Player>> temp;
 	vector<shared_ptr<Player>> foldedTemp;
@@ -124,9 +161,9 @@ int SevenCardStud::after_round()
 	}
 	for (size_t i = 0; i < temp.size(); ++i) // determine hand rank of each player
 	{
-		rank_hand(bestFive(temp[i]->playerHand));
+		rank_hand(bestFive(temp[i]->playerHand, shared));
 	}
-	sort(temp.rbegin(), temp.rend(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(bestFive(p1->playerHand), bestFive(p2->playerHand)); });
+	sort(temp.rbegin(), temp.rend(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(bestFive(p1->playerHand, shared), bestFive(p2->playerHand, shared)); });
 
 	size_t index = 0;
 	size_t lastIndex = temp.size() - 1;
@@ -138,6 +175,16 @@ int SevenCardStud::after_round()
 	}
 
 	++temp[lastIndex]->winCounts;
+	// pot will be pushed to the winner 
+	for (size_t o = 0; o < playersVec.size(); ++o)
+	{
+		if (temp[lastIndex]->playerName == playersVec[o]->playerName)
+		{
+			cout << "current pot value : " << pot << endl;
+			playersVec[o]->chip = playersVec[o]->chip + pot;
+		}
+	}
+	cout << temp[lastIndex]->playerName << endl;
 	reverse(temp.begin(), temp.end());
 	cout << endl;
 	for (size_t i = 0; i < temp.size(); ++i)
@@ -148,6 +195,7 @@ int SevenCardStud::after_round()
 	{
 		++foldedTemp[i]->lossCounts;
 		cout << "player name: " << foldedTemp[i]->playerName << "\nnumber of wins: " << foldedTemp[i]->winCounts << "\nnumber of losses: " << foldedTemp[i]->lossCounts << "\nnumber of chips: " << foldedTemp[i]->chip << "\nfolded, so hands can't be shown" << endl;
+
 	}
 	mainDeck.deck.clear();
 	discardedDeck.deck.clear();
@@ -168,7 +216,7 @@ int SevenCardStud::after_round()
 			mainDeck.add_card(c);
 		}
 	}
-
+	cout << endl;
 	//lab4: store a player's results to a text file
 	storeGame();
 
@@ -207,7 +255,10 @@ int SevenCardStud::after_round()
 			{
 				cout << "There is a player who is already in the game." << endl;
 			}
-			busted(); //lab4: if a player with 0 chips tries to join the game, make him reset or not join
+			if (playersVec[playersVec.size() - 1]->chip == 0)
+			{
+				busted(); //lab4: if a player with 0 chips tries to join the game, make him reset or not join
+			}
 		}
 	} while (join);
 	cout << endl;
