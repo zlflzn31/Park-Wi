@@ -72,10 +72,19 @@ int main(int argc, char* argv[])
 		}
 		while (current_game->get_num_player() >= least_num_players)
 		{
+			// 	ADDED BY HONG 
 			cout << "Start Round!" << endl;
 			current_game->before_round();
 			current_game->round();
-			current_game->after_round();
+			try {
+				current_game->after_round();
+			}
+			catch (only_one_player)
+			{
+				cout << "There is only one player in the game. The game is ended automatically. Thank you for playing. " << endl;
+				return success;
+			}
+			//
 		}
 		try
 		{
