@@ -36,6 +36,7 @@ class Hand {
 	friend int rank_hand(Hand &);
 	friend class PokerGame;
 	friend class SevenCardStud; //lab4
+	friend class TexasHoldEm;
 
 public:
 	Hand();
