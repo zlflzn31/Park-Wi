@@ -33,6 +33,7 @@ class Deck
 	friend ostream &operator << (ostream &, const Deck &); // only for deck 
 	friend void operator<<(Hand &, Deck &); // for both hand and deck 
 	friend class PokerGame;
+	friend class SevenCardStud;
 public:
 	Deck();
 	Deck(char*);
