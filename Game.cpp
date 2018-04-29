@@ -11,6 +11,7 @@ and the rounds (before_round, round, after_round).
 #include "Game.h"
 #include "FiveCardDraw.h"
 #include "SevenCardStud.h" //lab4 jongwhan
+#include "TexasHoldEm.h" //lab4 jongwhan
 #include "GameExceptions.h"
 #include <iostream>
 #include <fstream>
@@ -34,17 +35,24 @@ shared_ptr<Game> Game::instance() {
 void Game::start_game(const string& s) {
 	string f = "FiveCardDraw";
 	string g = "SevenCardStud";
+	string h = "TexasHoldEm";
 
 	if (pGame != nullptr) { // check if the static pointer member variable is non-singular
 		throw game_already_started();
 	}
-	else if ((s.find(f) == string::npos && s.find(g) == string::npos) || (s.find(f) != string::npos && s.find(g) != string::npos)) { 
-		// check if the string contains "FiveCardDraw" or "SevenCardStud". if it contains both, it is also an error
+	else if ((s.find(f) == string::npos && s.find(g) == string::npos && s.find(h) == string::npos) 
+		|| (s.find(f) != string::npos && s.find(g) != string::npos) || (s.find(f) != string::npos && s.find(h) != string::npos)
+		|| (s.find(g) != string::npos && s.find(h) != string::npos)) {
+		// check if the string contains "FiveCardDraw" or "SevenCardStud". if it contains none of them or more than one of them, it is an error
 		throw unknown_game();
 	}
 	else if (s.find(g) != string::npos) { // if string contains "SevenCardStud", dynamically allocate an instance of SevenCardStud
 		shared_ptr<SevenCardStud> scs = make_shared<SevenCardStud>();
 		pGame = scs;
+	}
+	else if (s.find(h) != string::npos) { // if string contains "TexasHoldEm", dynamically allocate an instance of TexasHoldEm
+		shared_ptr<TexasHoldEm> the = make_shared<TexasHoldEm>();
+		pGame = the;
 	}
 	else { // dynamically allocate an instance of FiveCardDraw and store its address in pGame
 		shared_ptr<FiveCardDraw> fcd = make_shared<FiveCardDraw>();
@@ -95,7 +103,7 @@ shared_ptr<Player> Game::find_player(const string & givenPlayer)
 int Game::busted()
 {
 	for (size_t i = 0; i < playersVec.size(); ++i) {
-		if ( playersVec[i]->noChip() ) { // returns true if no chip ! 
+		if (playersVec[i]->noChip()) { // returns true if no chip ! 
 			char c;
 			do {
 				cout << "Please reset your chip count to keep playing. Otherwise, you must quit. Please enter 'r' or 'q'." << endl;

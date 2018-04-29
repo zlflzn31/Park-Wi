@@ -58,6 +58,11 @@ int Player::resetChip()
 	return success;
 }
 
+bool Player::noChip()
+{
+	return (chip == 0);
+}
+
 ostream & operator<<(ostream & out, const Player & p)
 {
 	out << p.playerName << " " << p.winCounts << " " << p.lossCounts << endl; // between each variable, there should be a space. 

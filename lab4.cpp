@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 				}
 				catch (already_playing)
 				{
-					cout << "This player is already playing." << endl;
+					cout << "There is a player who is already playing." << endl;
 				}
 			}
 		}

@@ -1,30 +1,32 @@
 #pragma once
 
 /*
-The name of this file: SevenCardStud.h
+The name of this file: TexasHoldEm.h
 Author: Hong Wi, Jongwhan Park, hwi@wustl.edu, jongwhan@wustl.edu
-This header file contains header information about SevenCardStud class.
+This header file contains header information about TexasHoldEm class.
 */
 
-#ifndef SEVENCARDSTUD_H_
-#define SEVENCARDSTUD_H_
+#ifndef TEXASHOLDEM_H_
+#define TEXASHOLDEM_H_
 #include "Deck.h"
 #include "Game.h"
 #include "Hand.h"
 #include "Player.h"
 #include "PokerGame.h"
 
-class SevenCardStud : public PokerGame
+class TexasHoldEm : public PokerGame
 {
 public:
-	SevenCardStud();
-	Hand bestFive(const Hand &);
+	TexasHoldEm();
+	Hand bestFive(const Hand &, const Hand &);
 	virtual int before_turn(Player &);
 	virtual int turn(Player &);
 	virtual int after_turn(Player &);
 	virtual int before_round();
 	virtual int round();
 	virtual int after_round();
+private:
+	Hand shared;
 };
 
-#endif  //SEVENCARDSTUD_H_
+#endif  //TEXASHOLDEM_H_

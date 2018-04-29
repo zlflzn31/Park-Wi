@@ -106,7 +106,7 @@ int FiveCardDraw::before_round()
 			++eachIndex;
 
 		}
-		
+
 		// 1st betting phase:
 		// reset the records
 		foldCounts = 0;
@@ -127,7 +127,7 @@ int FiveCardDraw::before_round()
 				}
 			}
 		}
-		
+
 		return success;
 	}
 	else // if deal is not at last position. i.e among 3 players, if second player is a dealer, then first player's index is the starting point. 
@@ -152,13 +152,13 @@ int FiveCardDraw::before_round()
 			++eachIndex;
 
 		}
-		
+
 		// 1st betting phase:
 		foldCounts = 0;
 		for (auto p : playersVec)
 		{
-		p->isFold = false;
-		cout << p->playerName << ": " << p->playerHand;
+			p->isFold = false;
+			cout << p->playerName << ": " << p->playerHand;
 		}
 		betting();
 
@@ -178,7 +178,7 @@ int FiveCardDraw::before_round()
 					before_turn(*playersVec[j]);
 			}
 		}
-		
+
 
 		return success;
 	}
@@ -218,7 +218,7 @@ int FiveCardDraw::round()
 			for (size_t i = 0; i < playersVec.size(); ++i)
 			{
 				if (!playersVec[i]->isFold)
-				{ 
+				{
 					int index = (i + startIndex) % playersVec.size();
 					int turnResult = turn(*playersVec[index]);
 					if (turnResult != 0)

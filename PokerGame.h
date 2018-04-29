@@ -31,7 +31,7 @@ protected:
 	Deck mainDeck; // main deck. 
 	unsigned int foldCounts;  // numOfFold: number of players who fold
 	void betting();
-	
+
 };
 
 bool poker_rank(const shared_ptr<Player>&, const shared_ptr<Player>&);
