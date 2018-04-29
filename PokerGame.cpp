@@ -406,19 +406,28 @@ void PokerGame::betting()
 
 
 
-//after_round method
+
 int PokerGame::after_round()
 {
-
 	vector<shared_ptr<Player>> temp;
+	vector<shared_ptr<Player>> foldedTemp;
+
 	for (size_t i = 0; i < playersVec.size(); ++i)
 	{
-		if (!temp[i]->isFold)
+		if (playersVec[i]->isFold == false)
 		{
 			temp.push_back(playersVec[i]);
 		}
+		else 
+		{
+			foldedTemp.push_back(playersVec[i]);
+		}
 	}
-	sort(temp.begin(), temp.end(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1->playerHand, p2->playerHand); });
+	for (size_t i = 0; i < temp.size(); ++i) // determine hand rank of each player
+	{
+		rank_hand(temp[i]->playerHand);
+	}
+	sort(temp.rbegin(), temp.rend(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1->playerHand, p2->playerHand); });
 
 	size_t index = 0;
 	size_t lastIndex = temp.size() - 1;
@@ -428,13 +437,18 @@ int PokerGame::after_round()
 		++temp[index]->lossCounts;
 		++index;
 	}
+
 	++temp[lastIndex]->winCounts;
 	reverse(temp.begin(), temp.end());
 	cout << endl;
 	for (size_t i = 0; i < temp.size(); ++i)
 	{
 		cout << "player name: " << temp[i]->playerName << "\nnumber of wins: " << temp[i]->winCounts << "\nnumber of losses: " << temp[i]->lossCounts << "\nnumber of chips: " << temp[i]->chip << "\nplayer's hand: " << temp[i]->playerHand << endl;
-
+	}
+	for (size_t i = 0; i < foldedTemp.size(); ++i)
+	{
+		++foldedTemp[i]->lossCounts;
+		cout << "player name: " << foldedTemp[i]->playerName << "\nnumber of wins: " << foldedTemp[i]->winCounts << "\nnumber of losses: " << foldedTemp[i]->lossCounts << "\nnumber of chips: " << foldedTemp[i]->chip << "\nfolded, so hands can't be shown" << endl;
 	}
 	mainDeck.deck.clear();
 	discardedDeck.deck.clear();
@@ -461,7 +475,11 @@ int PokerGame::after_round()
 
 	// lab4. for players that lost all their chips, make them decide between resetting their chip count and quitting the game
 	busted();
-
+	cout << "palyersvec size: " << playersVec.size() << endl;
+	if (playersVec.size() == 1)
+	{
+		throw only_one_player();
+	}
 
 	// --------------- THIS BELOW PART SHOULD DEAL WITH THAT 
 	//ask whether to join the game
@@ -503,11 +521,7 @@ int PokerGame::after_round()
 	else {
 		++dealer;
 	}
-	// if one player exists in the game, then end the game. 
-	if (playersVec.size() == 1)
-	{
-		Game::stop_game();
-	}
+
 
 	return 0;
 }
