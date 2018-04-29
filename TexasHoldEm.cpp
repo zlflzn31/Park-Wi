@@ -175,6 +175,16 @@ int TexasHoldEm::after_round()
 	}
 
 	++temp[lastIndex]->winCounts;
+	// pot will be pushed to the winner 
+	for (size_t o = 0; o < playersVec.size(); ++o)
+	{
+		if (temp[lastIndex]->playerName == playersVec[o]->playerName)
+		{
+			cout << "current pot value : " << pot << endl;
+			playersVec[o]->chip = playersVec[o]->chip + pot;
+		}
+	}
+	cout << temp[lastIndex]->playerName << endl;
 	reverse(temp.begin(), temp.end());
 	cout << endl;
 	for (size_t i = 0; i < temp.size(); ++i)
@@ -185,6 +195,7 @@ int TexasHoldEm::after_round()
 	{
 		++foldedTemp[i]->lossCounts;
 		cout << "player name: " << foldedTemp[i]->playerName << "\nnumber of wins: " << foldedTemp[i]->winCounts << "\nnumber of losses: " << foldedTemp[i]->lossCounts << "\nnumber of chips: " << foldedTemp[i]->chip << "\nfolded, so hands can't be shown" << endl;
+
 	}
 	mainDeck.deck.clear();
 	discardedDeck.deck.clear();
@@ -205,7 +216,7 @@ int TexasHoldEm::after_round()
 			mainDeck.add_card(c);
 		}
 	}
-
+	cout << endl;
 	//lab4: store a player's results to a text file
 	storeGame();
 
@@ -244,7 +255,10 @@ int TexasHoldEm::after_round()
 			{
 				cout << "There is a player who is already in the game." << endl;
 			}
-			busted(); //lab4: if a player with 0 chips tries to join the game, make him reset or not join
+			if (playersVec[playersVec.size() - 1]->chip == 0)
+			{
+				busted(); //lab4: if a player with 0 chips tries to join the game, make him reset or not join
+			}
 		}
 	} while (join);
 	cout << endl;
