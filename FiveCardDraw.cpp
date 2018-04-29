@@ -23,27 +23,41 @@ int FiveCardDraw::before_turn(Player& p)
 		return 0;
 	}
 
-	cout << "Player's name: " << p.playerName << ", Hand content:" << p.playerHand << endl;
+	cout << "Player's name: " << p.playerName << ", Hand content:" << p.playerHand;
+	cout << "Enter the position, IN ORDER, of the card that you want to discard. From 0 ~ 4. " << endl;
+	cout << "You can discard multiple cards until you enter 'n' at the end. " <<
+			"i.e (012n) or (01 {endl} 2n)  will discard 0,1, and 2 cards. " << endl;
+	char in;
+	int i = 0, j = 0; // i is index from user input. 
+	while (cin >> in)
+	{
 
-	vector<bool> ifDelete;
-	string toDiscard; //user response
-
-	while (toDiscard.length() == 0) getline(cin, toDiscard);
-	toDiscard = " " + toDiscard + " ";
-	for (size_t k = 0; k < 5; k++) {
-		if (toDiscard.find(" " + to_string(k + 1) + " ") != string::npos) {
-			ifDelete.push_back(true);
+		if (in == 'n')
+		{
+			break;
 		}
-		else ifDelete.push_back(false);
-	}
-
-	//remove the card to discard desk
-	for (size_t i = 5; i > 0; i--) {
-		if (ifDelete[i - 1]) {
-			discardedDeck.add_card(p.playerHand[i - 1]);
-			p.playerHand.remove_card(i - 1);
+		else if (in == '0' || in == '1' || in == '2' || in == '3' || in == '4')
+		{
+			i = in - 48; // change the char value to int
+			try
+			{
+				Card c = p.playerHand[i - j];
+				p.playerHand.remove_card(i - j);
+				discardedDeck.add_card(c);
+				++j;
+			}
+			catch (out_of_range err)
+			{
+				cout << err.what() << " Try again." << endl;
+			}
+		}
+		else
+		{
+			continue;
 		}
 	}
+	cout << endl;
+	
 	return success;
 }
 
@@ -74,7 +88,7 @@ int FiveCardDraw::turn(Player& p)
 //after_turn method
 int FiveCardDraw::after_turn(Player& p)
 {
-	cout << "Player's name: " << p.playerName << ", Hand content: " << p.playerHand << endl;
+	cout << "Player's name: " << p.playerName << ", Hand content: " << p.playerHand << ", folded: " << (p.isFold ? "True" : "False")  <<endl;
 	return success;
 }
 
@@ -106,7 +120,7 @@ int FiveCardDraw::before_round()
 			++eachIndex;
 
 		}
-
+		
 		// 1st betting phase:
 		// reset the records
 		foldCounts = 0;
@@ -127,7 +141,6 @@ int FiveCardDraw::before_round()
 				}
 			}
 		}
-
 		return success;
 	}
 	else // if deal is not at last position. i.e among 3 players, if second player is a dealer, then first player's index is the starting point. 
@@ -152,13 +165,13 @@ int FiveCardDraw::before_round()
 			++eachIndex;
 
 		}
-
+		
 		// 1st betting phase:
 		foldCounts = 0;
 		for (auto p : playersVec)
 		{
-			p->isFold = false;
-			cout << p->playerName << ": " << p->playerHand;
+		p->isFold = false;
+		cout << p->playerName << ": " << p->playerHand;
 		}
 		betting();
 
@@ -178,7 +191,7 @@ int FiveCardDraw::before_round()
 					before_turn(*playersVec[j]);
 			}
 		}
-
+		
 
 		return success;
 	}
@@ -189,6 +202,7 @@ int FiveCardDraw::round()
 {
 	if (dealer == playersVec.size() - 1) // if dealer is at last position. 
 	{
+
 		const int startIndex = 0;
 		const int endIndex = playersVec.size() - 1;
 		if (playersVec.size() - foldCounts >= 2)
@@ -217,9 +231,9 @@ int FiveCardDraw::round()
 		{
 			for (size_t i = 0; i < playersVec.size(); ++i)
 			{
-				if (!playersVec[i]->isFold)
-				{
-					int index = (i + startIndex) % playersVec.size();
+				int index = (i + startIndex) % playersVec.size();
+				if (!playersVec[index]->isFold)
+				{ 
 					int turnResult = turn(*playersVec[index]);
 					if (turnResult != 0)
 					{
