@@ -41,9 +41,9 @@ bool poker_rank(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2)
 }
 
 void PokerGame::betting()
-{	// isBet: is true if someone bets in a rotation
-	// isRaise: is true if someone raises in a rotation
-	// bet: the highest bet in the phase
+{	// betted: is true if someone bets in a rotation
+	// raised: is true if someone raises in a rotation
+	// betValue: the highest bet in the phase
 	bool betted = false, raised = false;
 	unsigned int betValue = 0;
 
@@ -56,6 +56,8 @@ void PokerGame::betting()
 	// playersVec[i] for every p. 
 	for (auto p : playersVec)
 	{
+		cout << endl;
+		cout << p->playerName << " is starting !" << endl;
 		if (!p->isFold)   // if the player is in the round
 		{
 			cout << endl << p->playerName << ": ";
@@ -65,33 +67,52 @@ void PokerGame::betting()
 			}
 			else
 			{
-				cout << "Which action will you talk ? Enter : ";
-				if (!betted)  // no one has bet, so the beginning stage.
+				cout << endl;
+				cout << "DEBUGGING SPOT SECTION 1  " << endl;
+				cout << endl;
+				cout << "Which action will you take ? Enter : ";
+				if (!betted)  // no one has betted yet, so the beginning stage.
 				{
-					cout << " bet_one_chip, " << "bet_two_chips, " << ", or check. " << endl;
+					cout << " bet_one_chip, bet_two_chips, or check. " << endl;
 					string ans;
 					while (cin >> ans)
 					{
 						if (ans == "bet_one_chip")
 						{
+							cout << endl;
+							cout << "DEBUGGING SPOT SECTION 1-1  " << endl;
+							cout << endl;
+							cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+							cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
 							betValue = 1;
-							cout << "You have betted: " << betValue << " times. " << endl
-								<< endl;
+							cout << "current bet value: " << betValue << "." <<  endl 
+							<< endl;
 							betted = true;
 							p->chip = p->chip - betValue;
 							p->betCount = betValue;
+							cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+							cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
+							cout << endl;
 							break;
 						}
 						else if (ans == "bet_two_chips")
 						{
 							if (p->chip > 1)
 							{
+								cout << endl;
+								cout << "DEBUGGING SPOT SECTION 1-2  " << endl;
+								cout << endl;
+								cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
 								betValue = 2;
-								cout << "You have betted: " << betValue << " times. " << endl
+								cout << "current bet value: " << betValue << "." << endl
 									<< endl;
 								betted = true;
 								p->chip = p->chip - betValue;
 								p->betCount = betValue;
+								cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
+								cout << endl;
 								break;
 							}
 							else
@@ -101,8 +122,16 @@ void PokerGame::betting()
 						}
 						else if (ans == "check")
 						{
-							cout << "You have betted: " << betValue << " times. " << endl
-								<< endl;
+							cout << endl;
+							cout << "DEBUGGING SPOT SECTION 1-3 " << endl;
+							cout << endl;
+							cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+							cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
+							cout << "current bet value: " << betValue << "." << endl
+							<< endl;
+							cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+							cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
+							cout << endl;
 							break;
 						}
 						else
@@ -113,7 +142,10 @@ void PokerGame::betting()
 				}
 				else // if betted. 
 				{
-					cout << " raise_one_chip, " << "raise_two_chips, " << "call, " << "or fold." << endl;
+					cout << endl;
+					cout << "DEBUGGING SPOT SECTION 2" << endl;
+					cout << endl;
+					cout << " raise_one_chip, raise_two_chips, call, or fold." << endl;
 					string ans;
 					while (cin >> ans)
 					{
@@ -121,12 +153,20 @@ void PokerGame::betting()
 						{
 							if (p->chip > betValue)
 							{
+								cout << endl;
+								cout << "DEBUGGING SPOT SECTION 2-1" << endl;
+								cout << endl;
+								cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
 								betValue = betValue + 1;
-								cout << "You have betted: " << betValue << " times. " << endl
-									<< endl;
+								cout << "current bet value: " << betValue << "." << endl
+								<< endl;
 								raised = true;
 								p->chip = p->chip - betValue;
 								p->betCount = betValue;
+								cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
+								cout << endl;
 								break;
 							}
 							else
@@ -136,14 +176,23 @@ void PokerGame::betting()
 						}
 						else if (ans == "raise_two_chips")
 						{
+							cout << endl;
+							cout << "DEBUGGING SPOT SECTION 2-2" << endl;
+							cout << endl;
 							if (p->chip > betValue + 1)
 							{
+								cout << endl;
+								cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
 								betValue = betValue + 2;
-								cout << "You have betted: " << betValue << " times. " << endl
-									<< endl;
+								cout << "current bet value: " << betValue << "." << endl
+								<< endl;
 								raised = true;
 								p->chip = p->chip - betValue;
 								p->betCount = betValue;
+								cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
+								cout << endl;
 								break;
 							}
 							else
@@ -153,18 +202,27 @@ void PokerGame::betting()
 						}
 						else if (ans == "call")
 						{
+							cout << endl;
+							cout << "DEBUGGING SPOT SECTION 2-3" << endl;
+							cout << endl;
 							if (p->chip >= betValue)
 							{
-								cout << "You have betted: " << betValue << " times. " << endl
-									<< endl;
+								cout << endl;
+								cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
+								cout << "current bet value: " << betValue << "." << endl
+								<< endl;
 								p->chip = p->chip - betValue;
 								p->betCount = betValue;
+								cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount after his bet." << p->betCount <<endl;
+								cout << endl;
 								break;
 							}
 							else
 							{
-								cout << "Your current chip value is : " << p->chip << ". You will bet all of your chips to the pot."
-									<< "You will stay until the round is over." << endl;
+								cout << "Your current chip value is : " << p->chip << ". You will bet all of your chips to the pot." 
+									 << "You will stay until the round is over." << endl;
 								p->chip = 0;
 								p->betCount = betValue;
 								break;
@@ -172,8 +230,11 @@ void PokerGame::betting()
 						}
 						else if (ans == "fold")
 						{
-							cout << "You have betted: " << betValue << " times. " << endl
-								<< endl;
+							cout << endl;
+							cout << "DEBUGGING SPOT SECTION 2-4" << endl;
+							cout << endl;
+							cout << "current bet value: " << betValue << "." << endl
+							<< endl;
 							for (int i = 0; i < p->playerHand.size(); ++i)
 							{
 								Card c = p->playerHand[i];
@@ -198,9 +259,19 @@ void PokerGame::betting()
 
 	if (betted)  //if betted previously 
 	{
+		cout << endl;
+		cout << "DEBUGGING SPOT SECION 3" << endl;
+		cout << endl;
+		cout << "Someone has betted! " << endl;
+		cout << "Let's start another one." << endl;
 		for (auto p : playersVec)
 		{
-			if ((!p->isFold) && (p->betCount < betValue))
+			cout << endl;
+			cout << p->playerName << " is starting ! " << endl;
+
+			cout << p->playerName << "'s bet count : " << p->betCount << endl;
+			cout << "current bet value : " << betValue << endl;
+			if ((!p->isFold) && (p->betCount < betValue)) 
 			{
 				cout << endl << p->playerName;
 				if (p->noChip())
@@ -209,7 +280,10 @@ void PokerGame::betting()
 				}
 				else
 				{
-					cout << ": raise_one_chip, " << "raise_two_chips, " << "call, " << "or fold." << endl;
+					cout << endl;
+					cout << "DEBUGGING SPOT SECION 3..." << endl;
+					cout << endl;
+					cout << ": raise_one_chip, " << "raise_two_chips, " << "call, " << " or fold." << endl;
 					string ans;
 					while (cin >> ans)
 					{
@@ -217,12 +291,20 @@ void PokerGame::betting()
 						{
 							if (p->chip > betValue)
 							{
+								cout << endl;
+								cout << "DEBUGGING SPOT SECION 3...-1" << endl;
+								cout << endl;
+								cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
 								betValue = betValue + 1;
-								cout << "You have betted: " << betValue << " times. " << endl
-									<< endl;
+								cout << "current bet value: " << betValue << "." << endl
+								<< endl;
 								raised = true;
-								p->chip = p->chip - (betValue - p->betCount);
+								p->chip = p->chip - (betValue);
 								p->betCount = betValue;
+								cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
+								cout << endl;
 								break;
 							}
 							else
@@ -230,16 +312,25 @@ void PokerGame::betting()
 								cout << "Your current chip value is : " << p->chip << ". You mat try other action." << endl;
 							}
 						}
-						else if (ans == "raise_2_chips")
+						else if (ans == "raise_two_chips")
 						{
+							cout << endl;
+							cout << "DEBUGGING SPOT SECION 3...-2" << endl;
+							cout << endl;
 							if (p->chip > betValue + 1)
 							{
+								cout << endl;
+								cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
 								betValue = betValue + 2;
-								cout << "You have betted: " << betValue << " times. " << endl
-									<< endl;
+								cout << "current bet value: " << betValue << "." << endl
+								<< endl;								
 								raised = true;
-								p->chip = p->chip - (betValue - p->betCount);
+								p->chip = p->chip - (betValue);
 								p->betCount = betValue;
+								cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
+								cout << endl;
 								break;
 							}
 							else
@@ -249,12 +340,20 @@ void PokerGame::betting()
 						}
 						else if (ans == "call")
 						{
+							cout << endl;
+							cout << "DEBUGGING SPOT SECION 3...-3" << endl;
+							cout << endl;
 							if (p->chip >= betValue)
 							{
-								cout << "You have betted: " << betValue << " times. " << endl
-									<< endl;
-								p->chip = p->chip - (betValue - p->betCount);
+								cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
+								cout << "current bet value: " << betValue << "." << endl
+								<< endl;								
+								p->chip = p->chip - (betValue);
 								p->betCount = betValue;
+
+								cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
 								break;
 							}
 							else
@@ -268,8 +367,11 @@ void PokerGame::betting()
 						}
 						else if (ans == "fold")
 						{
-							cout << "You have betted: " << betValue << " times. " << endl
-								<< endl;
+							cout << endl;
+							cout << "DEBUGGING SPOT SECION 3...-4" << endl;
+							cout << endl;
+							cout << "current bet value: " << betValue << "." << endl
+							<< endl;
 							for (int i = 0; i < p->playerHand.size(); ++i)
 							{
 
@@ -292,18 +394,20 @@ void PokerGame::betting()
 			}
 		}
 	}
-
-
-
-
-
-
 	while (raised)  // if raised previously 
 	{
+		cout << endl;
+		cout << "DEBUGGING SPOT SECTION 4" << endl;
+		cout << endl;
+		cout << "someone raised ! " << endl;
 		raised = false;
 		for (auto p : playersVec)
 		{
-			if ((!p->isFold) && (p->betCount < betValue))
+			cout << endl;
+			cout << p->playerName << " is starting ! " << endl;
+			cout << p->playerName << "'s bet count : " << p->betCount << endl;
+			cout << "current bet value : " << betValue << endl;
+			if ((!p->isFold) && (p->betCount < betValue)) 
 			{
 				cout << p->playerName << endl;
 				if (p->noChip())
@@ -312,20 +416,32 @@ void PokerGame::betting()
 				}
 				else
 				{
+					cout << endl;
+					cout << "DEBUGGING SPOT SECTION 4..." << endl;
+					cout << endl;
 					cout << ": raise_one_chip, " << "raise_two_chips, " << "call, " << "or fold." << endl;
 					string ans;
 					while (cin >> ans)
 					{
-						if (ans == "raise_1_chip")
+						if (ans == "raise_one_chip")
 						{
+							cout << endl;
+							cout << "DEBUGGING SPOT SECTION 4...-1" << endl;
+							cout << endl;
 							if (p->chip > betValue)
 							{
+								cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
 								betValue = betValue + 1;
-								cout << "You have betted: " << betValue << " times. " << endl
-									<< endl;
+								cout << "current bet value: " << betValue << "." << endl
+								<< endl;								
 								raised = true;
-								p->chip = p->chip - (betValue - p->betCount);
+								p->chip = p->chip - (betValue);
 								p->betCount = betValue;
+
+								cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
+								cout << endl;
 								break;
 							}
 							else
@@ -333,16 +449,26 @@ void PokerGame::betting()
 								cout << "Your current chip value is : " << p->chip << ". You mat try other action." << endl;
 							}
 						}
-						else if (ans == "raise_2_chips")
+						else if (ans == "raise_two_chips")
 						{
+							cout << endl;
+							cout << "DEBUGGING SPOT SECTION 4...-2" << endl;
+							cout << endl;
 							if (p->chip > betValue + 1)
 							{
+								cout << endl;
+								cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
 								betValue = betValue + 2;
-								cout << "You have betted: " << betValue << " times. " << endl
-									<< endl;
+								cout << "current bet value: " << betValue << "." << endl
+								<< endl;
 								raised = true;
-								p->chip = p->chip - (betValue - p->betCount);
+								p->chip = p->chip - (betValue);
 								p->betCount = betValue;
+
+								cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
+								cout << endl;
 								break;
 							}
 							else
@@ -352,12 +478,23 @@ void PokerGame::betting()
 						}
 						else if (ans == "call")
 						{
+							cout << endl;
+							cout << "DEBUGGING SPOT SECTION 4...-3" << endl;
+							cout << endl;
+
 							if (p->chip >= betValue)
 							{
-								cout << "You have betted: " << betValue << " times. " << endl
-									<< endl;
-								p->chip = p->chip - (betValue - p->betCount);
+								cout << endl;
+								cout << p->playerName << "'s current chips before his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount before his bet." << p->betCount << endl;
+								cout << "current bet value: " << betValue << "." << endl
+								<< endl;
+								p->chip = p->chip - (betValue);
 								p->betCount = betValue;
+
+								cout << p->playerName << "'s current chips after his bet: " << p->chip << endl;
+								cout << p->playerName << "'s current betCount after his bet." << p->betCount << endl;
+								cout << endl;
 								break;
 							}
 							else
@@ -371,7 +508,12 @@ void PokerGame::betting()
 						}
 						else if (ans == "fold")
 						{
-							cout << "Cumulative bet is now " << betValue << endl;
+							cout << endl;
+							cout << "DEBUGGING SPOT SECTION 4...-5" << endl;
+							cout << endl;
+
+							cout << "current bet value: " << betValue << "." << endl
+							<< endl;
 							for (int i = 0; i < p->playerHand.size(); ++i)
 							{
 								Card c = p->playerHand[i];
@@ -401,6 +543,7 @@ void PokerGame::betting()
 			pot = pot + p->betCount;
 		}
 	}
+	return;
 }
 
 
@@ -409,16 +552,25 @@ void PokerGame::betting()
 //after_round method
 int PokerGame::after_round()
 {
-
 	vector<shared_ptr<Player>> temp;
+	vector<shared_ptr<Player>> foldedTemp;
+
 	for (size_t i = 0; i < playersVec.size(); ++i)
 	{
-		if (!temp[i]->isFold)
+		if (playersVec[i]->isFold == false)
 		{
 			temp.push_back(playersVec[i]);
 		}
+		else 
+		{
+			foldedTemp.push_back(playersVec[i]);
+		}
 	}
-	sort(temp.begin(), temp.end(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1->playerHand, p2->playerHand); });
+	for (size_t i = 0; i < temp.size(); ++i) // determine hand rank of each player
+	{
+		rank_hand(temp[i]->playerHand);
+	}
+	sort(temp.rbegin(), temp.rend(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1->playerHand, p2->playerHand); });
 
 	size_t index = 0;
 	size_t lastIndex = temp.size() - 1;
@@ -428,12 +580,28 @@ int PokerGame::after_round()
 		++temp[index]->lossCounts;
 		++index;
 	}
+
 	++temp[lastIndex]->winCounts;
+	// pot will be pushed to the winner 
+	for (size_t o = 0; o < playersVec.size(); ++o)
+	{
+		if (temp[lastIndex]->playerName == playersVec[o]->playerName)
+		{
+			cout << "current pot value : " << pot << endl;
+			playersVec[o]->chip = playersVec[o]->chip + pot;
+		}
+	}
+	cout << temp[lastIndex]->playerName << endl;
 	reverse(temp.begin(), temp.end());
 	cout << endl;
 	for (size_t i = 0; i < temp.size(); ++i)
 	{
 		cout << "player name: " << temp[i]->playerName << "\nnumber of wins: " << temp[i]->winCounts << "\nnumber of losses: " << temp[i]->lossCounts << "\nnumber of chips: " << temp[i]->chip << "\nplayer's hand: " << temp[i]->playerHand << endl;
+	}
+	for (size_t i = 0; i < foldedTemp.size(); ++i)
+	{
+		++foldedTemp[i]->lossCounts;
+		cout << "player name: " << foldedTemp[i]->playerName << "\nnumber of wins: " << foldedTemp[i]->winCounts << "\nnumber of losses: " << foldedTemp[i]->lossCounts << "\nnumber of chips: " << foldedTemp[i]->chip << "\nfolded, so hands can't be shown" << endl;
 
 	}
 	mainDeck.deck.clear();
@@ -455,13 +623,17 @@ int PokerGame::after_round()
 			mainDeck.add_card(c);
 		}
 	}
-
+	cout << endl;
 	//lab4: store a player's results to a text file
 	storeGame();
 
 	// lab4. for players that lost all their chips, make them decide between resetting their chip count and quitting the game
 	busted();
-
+	cout << "palyersvec size: " << playersVec.size() << endl;
+	if (playersVec.size() == 1)
+	{
+		throw only_one_player();
+	}
 
 	// --------------- THIS BELOW PART SHOULD DEAL WITH THAT 
 	//ask whether to join the game
@@ -490,7 +662,10 @@ int PokerGame::after_round()
 			{
 				cout << "There is a player who is already in the game." << endl;
 			}
-			busted(); //lab4: if a player with 0 chips tries to join the game, make him reset or not join
+			if (playersVec[playersVec.size() - 1]->chip == 0)
+			{
+				busted(); //lab4: if a player with 0 chips tries to join the game, make him reset or not join
+			}
 		}
 	} while (join);
 	cout << endl;
@@ -503,11 +678,10 @@ int PokerGame::after_round()
 	else {
 		++dealer;
 	}
-	// if one player exists in the game, then end the game. 
-	if (playersVec.size() == 1)
-	{
-		Game::stop_game();
-	}
+
 
 	return 0;
 }
+
+
+
