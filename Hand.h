@@ -35,6 +35,7 @@ class Hand {
 	friend bool poker_rank(const Hand &, const Hand &);
 	friend int rank_hand(Hand &);
 	friend class PokerGame;
+	friend class SevenCardStud;
 
 public:
 	Hand();
