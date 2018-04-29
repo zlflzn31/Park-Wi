@@ -4,6 +4,11 @@
 #include <stdexcept>
 using namespace std;
 
+struct only_one_player : public exception
+{
+	explicit only_one_player() : exception() { }
+};
+
 struct no_game_in_progress : public exception
 {
 	explicit no_game_in_progress() : exception() { }
@@ -29,4 +34,4 @@ struct unknown_game : public exception
 	explicit unknown_game() : exception() { }
 };
 
-#endif //GameExceptions_H_
+#endif //GAMEEXCEPTIONS_H_
