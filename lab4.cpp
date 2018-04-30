@@ -114,16 +114,29 @@ int main(int argc, char* argv[])
 			break;
 		}
 		else {
-			cout << "Which game would you like to play? Type 'FiveCardDraw', 'SevenCardStud', or 'TexasHoldEm'.";
+			cout << "Which game would you like to play? Type 'FiveCardDraw', 'SevenCardStud', or 'TexasHoldEm', followed by names of players." << endl;
 			cin >> s;
+
+			try
+			{
+				Game::start_game(s);
+			}
+			catch (game_already_started)
+			{
+				cout << "This game already started." << endl;
+			}
+			catch (unknown_game)
+			{
+				cout << "This is an unknown game." << endl;
+			}
 			try
 			{
 				shared_ptr<Game> current_game = Game::instance();
-				string new_player;
-				//add players
-				for (int i = 2; i < argc; ++i) {
-					new_player = argv[i];
-
+				string line, new_player;
+				getline(cin, line);
+				stringstream s(line);
+				while (s >> new_player) {
+					//add players
 					if (new_player == "no" || new_player == "no*") {
 						cout << new_player << " is not a valid player name." << endl;
 					}
@@ -134,6 +147,7 @@ int main(int argc, char* argv[])
 						}
 						catch (already_playing)
 						{
+							cout << "well hello";
 							cout << "There is a player who is already playing." << endl;
 						}
 					}
@@ -150,6 +164,7 @@ int main(int argc, char* argv[])
 					catch (only_one_player)
 					{
 						cout << "There is only one player in the game. The game is ended automatically. Thank you for playing. " << endl;
+						break;
 					}
 				}
 				try
