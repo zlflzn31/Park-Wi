@@ -71,7 +71,6 @@ int main(int argc, char* argv[])
 				catch (no_player)
 				{
 					cout << "There is no player in the game. The game is ended automatically. Thank you for playing. " << endl;
-					return success;
 				}
 			}
 		}
@@ -86,10 +85,9 @@ int main(int argc, char* argv[])
 			}
 			catch (only_one_player)
 			{
-				cout << "There is only one player in the game. The game is ended automatically. Thank you for playing. " << endl;
-				return success;
+				cout << "There is only one player in the game. The game is ended automatically. Thank you for playing." << endl;
+				break;
 			}
-			//
 		}
 		try
 		{
@@ -100,10 +98,76 @@ int main(int argc, char* argv[])
 			cout << "No game in progress." << endl;
 		}
 		cout << "Game ended." << endl;
-		return success;
 	}
 	catch (instance_not_available)
 	{
-		cout << "Instance is not available." << endl;
+		cout << "Game instance is not available." << endl;
 	}
+
+	while (true)
+	{
+		cout << "Type 'newgame' to start a new game. Any other response will terminate the program." << endl;
+		string s;
+		cin >> s;
+		if (s != "newgame") {
+			cout << "Thanks for playing!" << endl;
+			break;
+		}
+		else {
+			cout << "Which game would you like to play? Type 'FiveCardDraw', 'SevenCardStud', or 'TexasHoldEm'.";
+			cin >> s;
+			try
+			{
+				shared_ptr<Game> current_game = Game::instance();
+				string new_player;
+				//add players
+				for (int i = 2; i < argc; ++i) {
+					new_player = argv[i];
+
+					if (new_player == "no" || new_player == "no*") {
+						cout << new_player << " is not a valid player name." << endl;
+					}
+					else {
+						try
+						{
+							current_game->add_player(new_player);
+						}
+						catch (already_playing)
+						{
+							cout << "There is a player who is already playing." << endl;
+						}
+					}
+				}
+				while (current_game->get_num_player() >= least_num_players)
+				{
+					// 	ADDED BY HONG 
+					cout << "Start Round!" << endl;
+					current_game->before_round();
+					current_game->round();
+					try {
+						current_game->after_round();
+					}
+					catch (only_one_player)
+					{
+						cout << "There is only one player in the game. The game is ended automatically. Thank you for playing. " << endl;
+					}
+				}
+				try
+				{
+					Game::stop_game();
+				}
+				catch (no_game_in_progress)
+				{
+					cout << "No game in progress." << endl;
+				}
+				cout << "Game ended." << endl;
+				return success;
+			}
+			catch (instance_not_available)
+			{
+				cout << "Game instance is not available." << endl;
+			}
+		}
+	}
+	return success;
 }
