@@ -68,6 +68,11 @@ int main(int argc, char* argv[])
 				{
 					cout << "There is a player who is already playing." << endl;
 				}
+				catch (no_player)
+				{
+					cout << "There is no player in the game. The game is ended automatically. Thank you for playing. " << endl;
+					return success;
+				}
 			}
 		}
 		while (current_game->get_num_player() >= least_num_players)
