@@ -220,7 +220,6 @@ int TexasHoldEm::after_round()
 
 	// lab4. for players that lost all their chips, make them decide between resetting their chip count and quitting the game
 	busted();
-	cout << "palyersvec size: " << playersVec.size() << endl;
 	if (playersVec.size() == 1)
 	{
 		throw only_one_player();
