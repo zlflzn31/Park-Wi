@@ -147,12 +147,19 @@ int main(int argc, char* argv[])
 						}
 						catch (already_playing)
 						{
-							cout << "well hello";
 							cout << "There is a player who is already playing." << endl;
 						}
 					}
 				}
-				while (current_game->get_num_player() >= least_num_players)
+				try
+				{
+					if (current_game->get_num_player() == least_num_players) throw only_one_player();
+				}
+				catch (only_one_player)
+				{
+					cout << "You cannot play a game with just one player!" << endl;
+				}
+				while (current_game->get_num_player() > least_num_players)
 				{
 					// 	ADDED BY HONG 
 					cout << "Start Round!" << endl;
@@ -176,7 +183,6 @@ int main(int argc, char* argv[])
 					cout << "No game in progress." << endl;
 				}
 				cout << "Game ended." << endl;
-				return success;
 			}
 			catch (instance_not_available)
 			{
