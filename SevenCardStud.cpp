@@ -151,7 +151,6 @@ int SevenCardStud::after_round()
 	cout << endl;
 	for (size_t i = 0; i < temp.size(); ++i)
 	{
-		cout << rank_hand(bestFive(temp[i]->playerHand));
 		cout << "player name: " << temp[i]->playerName << "\nnumber of wins: " << temp[i]->winCounts << "\nnumber of losses: " << temp[i]->lossCounts << "\nnumber of chips: " << temp[i]->chip << "\nplayer's hand: " << temp[i]->playerHand << endl;
 	}
 	for (size_t i = 0; i < foldedTemp.size(); ++i)
