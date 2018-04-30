@@ -37,4 +37,4 @@ struct unknown_game : public exception
 	explicit unknown_game() : exception() { }
 };
 
-#endif //GameExceptions_H_
+#endif //GAMEEXCEPTIONS_H_
