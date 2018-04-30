@@ -30,13 +30,11 @@ Hand TexasHoldEm::bestFive(const Hand &h1, const Hand &h2)
 				}
 			}
 			sort(candidate.hand.begin(), candidate.hand.end());
+			rank_hand(candidate);
 			vh.push_back(candidate);
 		}
 	}
-	for (size_t i = 0; i < vh.size(); ++i) {
-		rank_hand(vh[i]);
-	}
-	sort(vh.rbegin(), vh.rend(), [&](Hand &h1, Hand &h2) { return poker_rank(h1, h2); });
+	sort(vh.begin(), vh.end(), [](Hand &h1, Hand &h2) { return (rank_hand(h1) > rank_hand(h2)); });
 	return vh[0];
 }
 
@@ -163,7 +161,7 @@ int TexasHoldEm::after_round()
 	{
 		rank_hand(bestFive(temp[i]->playerHand, shared));
 	}
-	sort(temp.rbegin(), temp.rend(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(bestFive(p1->playerHand, shared), bestFive(p2->playerHand, shared)); });
+	sort(temp.rbegin(), temp.rend(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return (rank_hand(bestFive(p1->playerHand, shared)) > rank_hand(bestFive(p2->playerHand, shared))); });
 
 	size_t index = 0;
 	size_t lastIndex = temp.size() - 1;
