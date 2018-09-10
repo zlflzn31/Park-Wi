@@ -4,6 +4,17 @@
 #include "GameExceptions.h"
 using namespace std;
 
+
+/*
+The name of this file : SevenCardStud.cpp
+Author : Hong Wi, hwi@wustl.edu
+Jongwhan Park, jongwhan@wustl.edu
+This cpp file delas with SevenCardStud. 
+It follows the procedure of a game from PokerGame.cpp. 
+After then, everything of this file is to run a SevenCardStud game on the command prompt.
+*/
+
+
 SevenCardStud::SevenCardStud() // default constructor
 {
 }
