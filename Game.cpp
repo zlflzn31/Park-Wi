@@ -1,12 +1,3 @@
-/*
-The name of this file : Game.cpp
-Author : Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
-This cpp file contains definitions of methods in the Game abstract base class.
-It includes methods regarding the actual Game instance (instance(), start_game, stop_game),
-the players (add_player, find_player), the turns (before_turn, turn, after_turn),
-and the rounds (before_round, round, after_round).
-*/
-
 #include "stdafx.h"
 #include "Game.h"
 #include "FiveCardDraw.h"
@@ -17,6 +8,15 @@ and the rounds (before_round, round, after_round).
 #include <fstream>
 #include <sstream>
 #include <string>
+
+/*
+The name of this file : Game.cpp
+Author : Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
+This cpp file contains definitions of methods in the Game abstract base class.
+It includes methods regarding the actual Game instance (instance(), start_game, stop_game),
+the players (add_player, find_player), the turns (before_turn, turn, after_turn),
+and the rounds (before_round, round, after_round).
+*/
 
 shared_ptr<Game> Game::pGame;
 
@@ -31,7 +31,7 @@ shared_ptr<Game> Game::instance() {
 	}
 }
 
-// start_game method. changed for lab4 jongwhan
+// start_game method
 void Game::start_game(const string& s) {
 	string f = "FiveCardDraw";
 	string g = "SevenCardStud";
@@ -68,11 +68,12 @@ void Game::stop_game() {
 	pGame = nullptr;
 }
 
+// How many players are in the current game ? 
 int Game::get_num_player() {
 	return playersVec.size();
 }
 
-//vector<shared_ptr<Player>> players;
+//adding a player logic 
 ErrorControl Game::add_player(const string & givenPlayer)
 {
 	for (auto i : playersVec) // this for loop checks if given player's name is same with players' name of the vector. 
@@ -87,6 +88,7 @@ ErrorControl Game::add_player(const string & givenPlayer)
 	return success;
 }
 
+// finding a player logic
 shared_ptr<Player> Game::find_player(const string & givenPlayer)
 {
 	//a logic to iterate vector<shared_ptr<Playrer>> in game class. 
@@ -100,7 +102,7 @@ shared_ptr<Player> Game::find_player(const string & givenPlayer)
 	return nullptr;
 }
 
-
+//busted is very important feature in our project. It determines if the user has no chip and is asked to leave the game.
 int Game::busted()
 {
 
@@ -163,7 +165,7 @@ int Game::busted()
 	return success;
 }
 
-
+//save the game information
 int Game::storeGame()
 {
 	auto numPlayers = playersVec.size();
