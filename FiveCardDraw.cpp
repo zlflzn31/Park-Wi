@@ -1,13 +1,14 @@
-/*
-The name of this file: FiveCardDraw.cpp
-Author: Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
-This is the source file for the FiveCardDraw class, which contains its constructor, turn, and round methods.
-*/
-
 #include "stdafx.h"
 #include "FiveCardDraw.h"
 #include "GameExceptions.h"
 
+
+
+/*
+The name of this file: FiveCardDraw.cpp
+Author: Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
+This is an abstract file for the FiveCardDraw class, which contains its constructor, turn, and round methods.
+*/
 
 // FiveCardDraw constructor
 FiveCardDraw::FiveCardDraw() : PokerGame()
@@ -148,7 +149,6 @@ int FiveCardDraw::before_round()
 		const int startIndex = dealer + 1;
 		const int endIndex = playersVec.size() - 1;
 
-		//lab4 part 
 		//to join the game, each player should spend a chip into the pot. 
 		//so pot should be incremented by 1. 
 		for (auto player : playersVec)
