@@ -68,16 +68,6 @@ Design Decisions
 
 3. I used character arrays for identifying valid ranks and suits for a Card, because it appears much simpler than multiple if statements.
 
---------------
-Return Results
---------------
-
-
-------------------
-Errors Encountered
-------------------
-We did not encounter any errors in this lab.
-
 ------------
 Extra Credit
 ------------
