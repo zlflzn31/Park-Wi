@@ -74,7 +74,7 @@ Design Decisions
 Return Results (TESTING THE PROGREM)
 --------------
 
-![alt text](http://url/to/img.png)
+![alt text](C:\Users\wihon\Desktop\output.png)
 
 
 output.png contains the output of this program.
