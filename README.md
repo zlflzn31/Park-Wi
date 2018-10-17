@@ -1,6 +1,6 @@
 # Park-Wi
 
-Hong Wi, Jongwhan Park lab4
+Hong Wi, Jongwhan Park lab4(Card game project)
 ===========================
 Program name: lab4.exe
 Author: Hong Wi (hwi@wustl.edu), Jongwhan Park (jongwhan@wustl.edu)
@@ -179,9 +179,6 @@ ab's current bet count = 1 and total chips == 18
 ba's current bet count = 2 and total chips == 17
 ================================================================================
 
-================================================================================
-
-
 ab: raise_one_chip, raise_two_chips, call, or fold.
 call
 
@@ -191,8 +188,6 @@ current bet value: 2.
 
 ab's current chips after his bet: 17
 ab's current betCount after his bet.2
-
-================================================================================
 
 ================================================================================
 
@@ -239,23 +234,15 @@ Player ca's hand: 7D 8C 8D
 Player ac's hand: * * 10H
 ================================================================================
 
-
 ac: Which action will you take ? Enter :  bet_one_chip, bet_two_chips, or check.
 
+
 ===============================END OF THE PROGRAM=================================
-==================================WE STOPPED FROM HERE. BECAUSE SHOWING EVERYTHING 
-THAT THIS PROGRAM COULD DO RESULT OVER 1000 LINES IN README FILE. ALMOST EVERY PROCESS
-FOR TEXASHOLDEM AND SEVENCARDSTUD WILL BE VERY SIMULAR TO FIVECARDDRAW. ALSO, THE 
+ALMOST EVERY PROCESS FOR TEXASHOLDEM AND SEVENCARDSTUD WILL BE VERY SIMULAR TO FIVECARDDRAW. ALSO, THE 
 REASON WHY ab and ba's numbers of wins and losses are 5 and 7 IS THAT WE HAVE DONE 
 FEW GAMES WITH THOSE NAMES PREVIOUSLY. SO FOR EVERY NEW GAME FOR PREVIOUS PLAYERS, 
 THEIR CHIPS WILL BE RESETTED IN EACH GAME. HOWEVER, SINCE THEY ARE SAME HUMAN BEINGS, 
-WE DECIDED TO KEEP THEIR NUMBERS OF WINS AND LOSSES PERMENANTLY. ==================
-
-
-------------------
-Errors Encountered
-------------------
-We did not encounter any errors in this lab.
+WE DECIDED TO KEEP THEIR NUMBERS OF WINS AND LOSSES PERMENANTLY.
 
 ------------
 Extra Credit
