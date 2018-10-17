@@ -74,8 +74,7 @@ Design Decisions
 Return Results (TESTING THE PROGREM)
 --------------
 
-![alt text](C:\Users\wihon\Desktop\output.png)
-
+![Alt text](C:\Users\wihon\Desktop\output.png?raw=true "Optional Title")
 
 output.png contains the output of this program.
 
