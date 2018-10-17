@@ -6,4 +6,4 @@ In this porject, we are assigned to develop a card game that runs Five Card Draw
 
 Since we worked this project om Visual Studio 2015, we highly recommend you to run it using Visual Studio 2015. Some codes from our porject will not be complied on the newest Visual Studio due to version difference. 
 
-Please see ReadMe.txt for more details. 
+Please see ReadMe.txt for more details about how this program is working. 
