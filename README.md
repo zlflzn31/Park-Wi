@@ -94,8 +94,7 @@ H:\My Documents\Visual Studio 2015\Projects\lab4!\Debug>lab4! FiveCardDraw ab ba
 Start Round!
 ab: 5S 7H 8D 10C AC
 ba: 3H 4H 5H 8H KD
-================================================================================
-
+(================================================================================)
 
 ab: Which action will you take ? Enter :  bet_one_chip, bet_two_chips, or check.
 
@@ -108,7 +107,7 @@ current bet value: 0.
 ab's current chips after his bet: 19
 ab's current betCount after his bet.0
 
-================================================================================
+(================================================================================)
 
 
 ba: Which action will you take ? Enter :  bet_one_chip, bet_two_chips, or check.
@@ -122,11 +121,11 @@ current bet value: 0.
 ba's current chips after his bet: 19
 ba's current betCount after his bet.0
 
-================================================================================
+(================================================================================)
 
 ab's current bet count = 0 and total chips == 19
 ba's current bet count = 0 and total chips == 19
-================================================================================
+(================================================================================)
 
 Player's name: ba, Hand content:3H 4H 5H 8H KD
 Enter the positions of the card that you want to discard. From 0 ~ 4.
@@ -145,7 +144,7 @@ Player's name: ba, Hand content: 5H 8H 8S JS KD
 , folded: False
 Player's name: ab, Hand content: 2D 6C 8D 10C AC
 , folded: False
-================================================================================
+(================================================================================)
 
 
 ab: Which action will you take ? Enter :  bet_one_chip, bet_two_chips, or check.
@@ -159,7 +158,7 @@ current bet value: 1.
 ab's current chips after his bet: 18
 ab's current betCount after his bet.1
 
-================================================================================
+(================================================================================)
 
 
 ba: Which action will you take ? Enter :  raise_one_chip, raise_two_chips, call,
@@ -173,11 +172,11 @@ current bet value: 2.
 ba's current chips after his bet: 17
 ba's current betCount after his bet.2
 
-================================================================================
+(================================================================================)
 
 ab's current bet count = 1 and total chips == 18
 ba's current bet count = 2 and total chips == 17
-================================================================================
+(================================================================================)
 
 ab: raise_one_chip, raise_two_chips, call, or fold.
 call
@@ -188,8 +187,7 @@ current bet value: 2.
 
 ab's current chips after his bet: 17
 ab's current betCount after his bet.2
-
-================================================================================
+(================================================================================)
 
 ba
 
@@ -232,8 +230,7 @@ Player ca's hand:
 Deal to player ca
 Player ca's hand: 7D 8C 8D
 Player ac's hand: * * 10H
-================================================================================
-
+(================================================================================)
 ac: Which action will you take ? Enter :  bet_one_chip, bet_two_chips, or check.
 
 
