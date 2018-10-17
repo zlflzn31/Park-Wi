@@ -94,7 +94,7 @@ H:\My Documents\Visual Studio 2015\Projects\lab4!\Debug>lab4! FiveCardDraw ab ba
 Start Round!
 ab: 5S 7H 8D 10C AC
 ba: 3H 4H 5H 8H KD
-(================================================================================)
+(==============================================================================)
 
 ab: Which action will you take ? Enter :  bet_one_chip, bet_two_chips, or check.
 
@@ -107,8 +107,7 @@ current bet value: 0.
 ab's current chips after his bet: 19
 ab's current betCount after his bet.0
 
-(================================================================================)
-
+(==============================================================================)
 
 ba: Which action will you take ? Enter :  bet_one_chip, bet_two_chips, or check.
 
@@ -121,31 +120,28 @@ current bet value: 0.
 ba's current chips after his bet: 19
 ba's current betCount after his bet.0
 
-(================================================================================)
-
+(==============================================================================)
 ab's current bet count = 0 and total chips == 19
 ba's current bet count = 0 and total chips == 19
-(================================================================================)
+(==============================================================================)
 
 Player's name: ba, Hand content:3H 4H 5H 8H KD
 Enter the positions of the card that you want to discard. From 0 ~ 4.
 You can discard multiple cards. Seperate the indices in between with 'space'.
-For any player after the 'first' one, you have to PRESS ENTER ONCE!! and then ty
-pe the indices you want to discard.
+For any player after the 'first' one, you have to PRESS ENTER ONCE!! and then type the indices you want to discard.
 0 1
 Player's name: ab, Hand content:5S 7H 8D 10C AC
 Enter the positions of the card that you want to discard. From 0 ~ 4.
 You can discard multiple cards. Seperate the indices in between with 'space'.
-For any player after the 'first' one, you have to PRESS ENTER ONCE!! and then ty
-pe the indices you want to discard.
+For any player after the 'first' one, you have to PRESS ENTER ONCE!! and then type the indices you want to discard.
 1 0
 1 0
 Player's name: ba, Hand content: 5H 8H 8S JS KD
 , folded: False
 Player's name: ab, Hand content: 2D 6C 8D 10C AC
 , folded: False
-(================================================================================)
 
+(==============================================================================)
 
 ab: Which action will you take ? Enter :  bet_one_chip, bet_two_chips, or check.
 
@@ -158,8 +154,7 @@ current bet value: 1.
 ab's current chips after his bet: 18
 ab's current betCount after his bet.1
 
-(================================================================================)
-
+(==============================================================================)
 
 ba: Which action will you take ? Enter :  raise_one_chip, raise_two_chips, call,
  or fold.
@@ -172,11 +167,12 @@ current bet value: 2.
 ba's current chips after his bet: 17
 ba's current betCount after his bet.2
 
-(================================================================================)
+(==============================================================================)
 
 ab's current bet count = 1 and total chips == 18
 ba's current bet count = 2 and total chips == 17
-(================================================================================)
+
+(==============================================================================)
 
 ab: raise_one_chip, raise_two_chips, call, or fold.
 call
@@ -187,7 +183,8 @@ current bet value: 2.
 
 ab's current chips after his bet: 17
 ab's current betCount after his bet.2
-(================================================================================)
+
+(==============================================================================)
 
 ba
 
@@ -210,14 +207,11 @@ ab
 Do you want, ba to leave?
 If yes, enter the name. If not, enter 'no' (NO, No, On won't be accepted).
 no
-There is only one player in the game. The game is ended automatically. Thank you
- for playing.
+There is only one player in the game. The game is ended automatically. Thank you for playing.
 Game ended.
-Type 'newgame' to start a new game. Any other response will terminate the progra
-m.
+Type 'newgame' to start a new game. Any other response will terminate the program.
 newgame
-Which game would you like to play? Type 'FiveCardDraw', 'SevenCardStud', or 'Tex
-asHoldEm', followed by names of players.
+Which game would you like to play? Type 'FiveCardDraw', 'SevenCardStud', or 'Tex asHoldEm', followed by names of players.
 SevenCardStud ac ca
 Start Round!
 
@@ -230,11 +224,14 @@ Player ca's hand:
 Deal to player ca
 Player ca's hand: 7D 8C 8D
 Player ac's hand: * * 10H
-(================================================================================)
+(==============================================================================)
 ac: Which action will you take ? Enter :  bet_one_chip, bet_two_chips, or check.
 
+=================================================================================
 
 ===============================END OF THE PROGRAM=================================
+
+=================================================================================
 ALMOST EVERY PROCESS FOR TEXASHOLDEM AND SEVENCARDSTUD WILL BE VERY SIMULAR TO FIVECARDDRAW. ALSO, THE 
 REASON WHY ab and ba's numbers of wins and losses are 5 and 7 IS THAT WE HAVE DONE 
 FEW GAMES WITH THOSE NAMES PREVIOUSLY. SO FOR EVERY NEW GAME FOR PREVIOUS PLAYERS, 
