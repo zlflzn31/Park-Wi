@@ -74,6 +74,7 @@ Design Decisions
 Return Results (TESTING THE PROGREM)
 --------------
 
+![alt text](http://url/to/img.png)
 
 
 output.png contains the output of this program.
