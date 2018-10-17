@@ -76,9 +76,7 @@ Return Results (TESTING THE PROGREM)
 
 ![output](https://user-images.githubusercontent.com/21351568/47060581-d2183680-d193-11e8-8d11-96b4b8ae8ecb.png)
 
-output.png contains the output of this program.
-
-(!) ALMOST EVERY PROCESS FOR TEXASHOLDEM AND SEVENCARDSTUD WILL BE VERY SIMULAR TO FIVECARDDRAW.
+(!) EVERY PROCESS FOR TEXASHOLDEM AND SEVENCARDSTUD WILL BE VERY SIMULAR TO FIVECARDDRAW.
 
 ------------
 Extra Credit
