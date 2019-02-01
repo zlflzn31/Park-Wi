@@ -3,15 +3,21 @@
 Hong Wi, Jongwhan Park lab4(Card game project)
 ===========================
 Program name: lab4.exe
+
 Author: Hong Wi (hwi@wustl.edu), Jongwhan Park (jongwhan@wustl.edu)
+
 Included: lab4.cpp, Deck.h, Deck.cpp, FiveCardDraw.h, FiveCardDraw.cpp, Game.h, Game.cpp, GameExceptions.h, Hand.h, Hand.cpp, Player.h, Player.cpp, PokerGame.h, PokerGame.cpp, SevenCardStud.h, SevenCardStud.cpp, TexasHoldEm.h, TexasHoldEm.cpp, verifyCard.h, verifyCard.cpp
 
 ----------------
 File Description
 ----------------
-lab4.cpp: Contains the main function that runs the functions developed in this lab. This file takes in the name of the game and the names of players on the command line, and makes a corresponding game. Then, it starts the game and proceeds with the game until it stops. You can choose from FiveCardDraw, SevenCardStud, and TexasHoldEm.
+- lab4.cpp: Contains the main function that runs the functions developed in this lab. 
 
-Deck.h: Header file that contains declarations of Deck class.
+This file takes in the name of the game and the names of players on the command line, and makes a corresponding game. 
+
+Then, it starts the game and proceeds with the game until it stops. You can choose from FiveCardDraw, SevenCardStud, and TexasHoldEm.
+
+- Deck.h: Header file that contains declarations of Deck class.
 
 Deck.cpp: Source file that contains definitions of Deck class, along with its methods.
 
