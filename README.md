@@ -11,51 +11,27 @@ Included: lab4.cpp, Deck.h, Deck.cpp, FiveCardDraw.h, FiveCardDraw.cpp, Game.h, 
 ----------------
 File Description
 ----------------
-- lab4.cpp: Contains the main function that runs the functions developed in this lab. 
-
-This file takes in the name of the game and the names of players on the command line, and makes a corresponding game. 
-
-Then, it starts the game and proceeds with the game until it stops. You can choose from FiveCardDraw, SevenCardStud, and TexasHoldEm.
-
+- lab4.cpp: Contains the main function that runs the functions developed in this lab. This file takes in the name of the game and the names of players on the command line, and makes a corresponding game. Then, it starts the game and proceeds with the game until it stops. You can choose from FiveCardDraw, SevenCardStud, and TexasHoldEm.
 - Deck.h: Header file that contains declarations of Deck class.
-
-Deck.cpp: Source file that contains definitions of Deck class, along with its methods.
-
-FiveCardDraw.h: Header file for a FiveCardDraw class that is derived through public inheritance from the Game abstract base class. This header file enables the player to play the FiveCardDraw game.
-
-FiveCardDraw.cpp: Source file for a FiveCardDraw class that includes definitions of game, player, turn, and round methods that is specified to this class. This source file enables the player to play the FiveCardDraw game.
-
-Game.h: Header file for a Game abstract base class.
-
-Game.cpp: Source file for a Game abstract base class, that includes various game, player, turn, and round methods.
-
-GameExceptions.h: Header file that contains exceptions that are thrown in specific circumstances.
-
-Hand.h: Header file that contains declarations of Hand class.
-
-Hand.cpp: Source file that contains definitions of Hand class, along with its methods.
-
-Player.h: Header file for the Player struct that contains member variables and its methods.
-
-Player.cpp: Source file for the Player struct that includes its constructor and an overloaded insertion operator.
-
-PokerGame.h: Header file that contains declarations of PokerGame class, which is an intermedate class derived from Game class.
-
-PokerGame.cpp: Source file for the PokerGame class that includes its functions.
-
-SevenCardStud.h: Header file for a SevenCardStud class that is derived through public inheritance from the PokerGame base class. This header file enables the player to play the SevenCardStud game.
-
-SevenCardStud.cpp: Source file for a SevenCardStud class that includes definitions of round, after_round method. It also includes a definition for the bestFive function that determines the best rank that can be obtained by choosing 5 out of 7 cards. This source file enables the player to play the SevenCardStud game.
-
-TexasHoldEm.h: Header file for a TexasHoldEm class that is derived through public inheritance from the PokerGame base class. This header file enables the player to play the TexasHoldEm game.
-
-TexasHoldEm.cpp: Source file for a TexasHoldEm class that includes definitions of round, after_round method. It also includes a definition for the bestFive function that determine the best rank that can be obtained by choosing 5 out of 7 cards, which compose of 2 of player's cards and 5 of shared cards. This source file enables the player to play the TexasHoldEm game.
-
-verifyCard.h: Header file that contains declarations of the Card struct, enum types of ReturnType depending on success or failure of the program, and parseFile, printVector, rankHands, and usage functions.
-
-verifyCard.cpp: Source file that contains definitions of the Card struct.
-
-ReadMe.txt: Documentation of details of the lab, different errors encountered, and results of trials.
+- Deck.cpp: Source file that contains definitions of Deck class, along with its methods.
+- FiveCardDraw.h: Header file for a FiveCardDraw class that is derived through public inheritance from the Game abstract base class. This header file enables the player to play the FiveCardDraw game.
+- FiveCardDraw.cpp: Source file for a FiveCardDraw class that includes definitions of game, player, turn, and round methods that is specified to this class. This source file enables the player to play the FiveCardDraw game.
+- Game.h: Header file for a Game abstract base class.
+- Game.cpp: Source file for a Game abstract base class, that includes various game, player, turn, and round methods.
+- GameExceptions.h: Header file that contains exceptions that are thrown in specific circumstances.
+- Hand.h: Header file that contains declarations of Hand class.
+- Hand.cpp: Source file that contains definitions of Hand class, along with its methods.
+- Player.h: Header file for the Player struct that contains member variables and its methods.
+- Player.cpp: Source file for the Player struct that includes its constructor and an overloaded insertion operator.
+- PokerGame.h: Header file that contains declarations of PokerGame class, which is an intermedate class derived from Game class.
+- PokerGame.cpp: Source file for the PokerGame class that includes its functions.
+- SevenCardStud.h: Header file for a SevenCardStud class that is derived through public inheritance from the PokerGame base class. This header file enables the player to play the SevenCardStud game.
+- SevenCardStud.cpp: Source file for a SevenCardStud class that includes definitions of round, after_round method. It also includes a definition for the bestFive function that determines the best rank that can be obtained by choosing 5 out of 7 cards. This source file enables the player to play the SevenCardStud game.
+- TexasHoldEm.h: Header file for a TexasHoldEm class that is derived through public inheritance from the PokerGame base class. This header file enables the player to play the TexasHoldEm game.
+- TexasHoldEm.cpp: Source file for a TexasHoldEm class that includes definitions of round, after_round method. It also includes a definition for the bestFive function that determine the best rank that can be obtained by choosing 5 out of 7 cards, which compose of 2 of player's cards and 5 of shared cards. This source file enables the player to play the TexasHoldEm game.
+- verifyCard.h: Header file that contains declarations of the Card struct, enum types of ReturnType depending on success or failure of the program, and parseFile, printVector, rankHands, and usage functions.
+- verifyCard.cpp: Source file that contains definitions of the Card struct.
+- ReadMe.txt: Documentation of details of the lab, different errors encountered, and results of trials.
 
 ---------------
 Program Summary
