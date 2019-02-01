@@ -9,6 +9,13 @@ Author: Hong Wi (hwi@wustl.edu), Jongwhan Park (jongwhan@wustl.edu)
 Included: lab4.cpp, Deck.h, Deck.cpp, FiveCardDraw.h, FiveCardDraw.cpp, Game.h, Game.cpp, GameExceptions.h, Hand.h, Hand.cpp, Player.h, Player.cpp, PokerGame.h, PokerGame.cpp, SevenCardStud.h, SevenCardStud.cpp, TexasHoldEm.h, TexasHoldEm.cpp, verifyCard.h, verifyCard.cpp
 
 ----------------
+What I learned
+----------------
+- C++ style OOP for game development 
+- How to appropriately use C++ STL such as vector and define custom operators
+- C++ access control and memory management
+
+----------------
 File Description
 ----------------
 - lab4.cpp: Contains the main function that runs the functions developed in this lab. This file takes in the name of the game and the names of players on the command line, and makes a corresponding game. Then, it starts the game and proceeds with the game until it stops. You can choose from FiveCardDraw, SevenCardStud, and TexasHoldEm.
@@ -36,12 +43,12 @@ File Description
 ---------------
 Program Summary
 ---------------
-Given the game name "FiveCardDraw", "SevenCardStud", or "TexasHoldEm" in addition to names of at least 2 players, this program instantiates a game with those players. 
-For FiveCardDraw, when the game starts, each player is dealt 5 cards from the main deck. Each player decides to discard some number of cards, which are then put into the discarded deck. Each round, every player is determined their hand rank, and the player with the highest rank wins the round.
-For SevenCardStud, each turn, the players are dealt some number of face up and face down cards. At the end, each player will have 7 cards, from which he can choose best 5 to determine his rank. Then, the player with the highest rank wins the round.
-For TexasHoldEm, each player gets 2 cards, and there are 5 shared cards. From a combined total of 7 cards, each player chooses best 5 to determine his rank. Then, the player with the highest rank wins the round.
-For each game, a player can leave or join the game every round as well. If every player leaves the game or only one player remains, the game terminates. 
-After each game is over, you can choose to start a new game. 
+1. Given the game name "FiveCardDraw", "SevenCardStud", or "TexasHoldEm" in addition to names of at least 2 players, this program instantiates a game with those players. 
+2. For FiveCardDraw, when the game starts, each player is dealt 5 cards from the main deck. Each player decides to discard some number of cards, which are then put into the discarded deck. Each round, every player is determined their hand rank, and the player with the highest rank wins the round.
+3. For SevenCardStud, each turn, the players are dealt some number of face up and face down cards. At the end, each player will have 7 cards, from which he can choose best 5 to determine his rank. Then, the player with the highest rank wins the round.
+4. For TexasHoldEm, each player gets 2 cards, and there are 5 shared cards. From a combined total of 7 cards, each player chooses best 5 to determine his rank. Then, the player with the highest rank wins the round.
+5. For each game, a player can leave or join the game every round as well. If every player leaves the game or only one player remains, the game terminates. 
+6. After each game is over, you can choose to start a new game. 
 
 
 ----------------
@@ -59,9 +66,3 @@ Return Results (TESTING THE PROGREM)
 ![output](https://user-images.githubusercontent.com/21351568/47060581-d2183680-d193-11e8-8d11-96b4b8ae8ecb.png)
 
 (!) EVERY PROCESS FOR TEXASHOLDEM AND SEVENCARDSTUD WILL BE VERY SIMULAR TO FIVECARDDRAW.
-
-------------
-Extra Credit
-------------
-We have implemented a TexasHoldEm class that creates and plays a TexasHoldEm class. 
-Please refer to TexasHoldEm.cpp and TexasHoldEm.h.
