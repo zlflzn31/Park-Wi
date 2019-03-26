@@ -1,19 +1,14 @@
+/*
+The name of this file: TexasHoldEm.cpp
+Author: Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
+This is the source file for the TexasHoldEm class, which contains its constructor, turn, and round methods.
+TexasHoldEm's behavior is implemented by this class and pokergame class.
+*/
 #include "stdafx.h"
 #include "TexasHoldEm.h"
 #include "PokerGame.h"
 #include "GameExceptions.h"
 using namespace std;
-
-
-/*
-The name of this file : TexasHoldEm.cpp
-Author : Hong Wi, hwi@wustl.edu
-Jongwhan Park, jongwhan@wustl.edu
-This cpp file delas with TexasHoldEm. 
-It follows the procedure of a game from PokerGame.cpp. 
-After then, everything of this file is to run a TexasHoldEm game on the command prompt.
-*/
-
 
 TexasHoldEm::TexasHoldEm() // default constructor
 {
@@ -91,7 +86,7 @@ int TexasHoldEm::round()
 		}
 	}
 	cout << "Shared cards: none" << endl;
-//	betting();
+	betting();
 
 	//turn 2
 	cout << "\nTurn 2" << endl;
@@ -111,7 +106,7 @@ int TexasHoldEm::round()
 		}
 	}
 	cout << "Shared cards: " << shared;
-//	betting();
+	betting();
 
 	//turn 3
 	cout << "\nTurn 3" << endl;
@@ -129,7 +124,7 @@ int TexasHoldEm::round()
 		}
 	}
 	cout << "Shared cards: " << shared;
-	//	betting();
+	betting();
 
 	//turn 4
 	cout << "\nTurn 4" << endl;
@@ -147,7 +142,7 @@ int TexasHoldEm::round()
 		}
 	}
 	cout << "Shared cards: " << shared;
-	//	betting();
+	betting();
 
 	return success;
 }
@@ -226,17 +221,22 @@ int TexasHoldEm::after_round()
 		}
 	}
 	cout << endl;
-	//lab4: store a player's results to a text file
-	storeGame();
+	storeGame(); 	//Store a player's results to a text file, we store every players' information in after round. 
+					//Because even though game is ended automatically, we want to save their information. 
 
-	// lab4. for players that lost all their chips, make them decide between resetting their chip count and quitting the game
-	busted();
+	busted(); 	// For players that lost all their chips, make them decide between resetting their chip count and quitting the game
+	leave();	// After players who have no chips decide to reset their chips, then I ask all players if they want to leave. 
+				// Since players with chips also have decision to leave the game, we implemented like this way. 
+	;
+
 	if (playersVec.size() == 1)
 	{
 		throw only_one_player();
 	}
-
-	// --------------- THIS BELOW PART SHOULD DEAL WITH THAT 
+	if (playersVec.size() == 0)
+	{
+		throw no_player();
+	}
 	//ask whether to join the game
 	string joiningPlayer;
 	bool join = false;
@@ -280,6 +280,6 @@ int TexasHoldEm::after_round()
 		++dealer;
 	}
 
-
+	pot = 0;
 	return 0;
 }
