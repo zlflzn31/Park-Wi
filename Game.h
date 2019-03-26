@@ -34,13 +34,12 @@ public:
 	static shared_ptr<Game> instance();
 	static void start_game(const string&);
 	static void stop_game();
-
 	ErrorControl add_player(const string&);
 	shared_ptr<Player> find_player(const string&);
 	int get_num_player();
 	int busted(); //lab4 
 	int storeGame(); //lab4 storing game result 
-
+	int leave();
 	virtual int before_turn(Player&) = 0;
 	virtual int turn(Player&) = 0;
 	virtual int after_turn(Player&) = 0;
