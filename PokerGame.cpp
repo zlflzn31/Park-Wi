@@ -541,6 +541,10 @@ int PokerGame::after_round()
 	{
 		rank_hand(temp[i]->playerHand);
 	}
+	/*
+	[&] is a C++ lambda expression. Including & inside of the brackets makes everything that is mentioned inside the lambda 
+	(in this case, player and its hand) and can be accessed outside of its scope will be captured by reference. 
+	*/
 	sort(temp.rbegin(), temp.rend(), [&](shared_ptr<Player>& p1, shared_ptr<Player>& p2) { return poker_rank(p1->playerHand, p2->playerHand); });
 
 	size_t index = 0;
