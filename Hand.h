@@ -65,5 +65,3 @@ bool poker_rank(const Hand &FirHand, const Hand &SecHand);
 int rank_hand(Hand &);
 
 #endif /* HAND_H */
-
-
