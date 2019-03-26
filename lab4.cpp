@@ -1,5 +1,5 @@
 /*
-The name of this file: lab3.cpp
+The name of this file: lab4!.cpp
 Author: Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
 This file contains main function.
 */
@@ -88,6 +88,11 @@ int main(int argc, char* argv[])
 				cout << "There is only one player in the game. The game is ended automatically. Thank you for playing." << endl;
 				break;
 			}
+			catch (no_player)
+			{
+				cout << "There is no player in the game. The game is ended automatically. Thank you for playing." << endl;
+				break;
+			}
 		}
 		try
 		{
@@ -159,6 +164,10 @@ int main(int argc, char* argv[])
 				{
 					cout << "You cannot play a game with just one player!" << endl;
 				}
+				catch (no_player)
+				{
+					cout << "There is no player in the game. The game is ended automatically. Thank you for playing." << endl;
+				}
 				while (current_game->get_num_player() > least_num_players)
 				{
 					// 	ADDED BY HONG 
@@ -171,6 +180,11 @@ int main(int argc, char* argv[])
 					catch (only_one_player)
 					{
 						cout << "There is only one player in the game. The game is ended automatically. Thank you for playing. " << endl;
+						break;
+					}
+					catch (no_player)
+					{
+						cout << "There is no player in the game. The game is ended automatically. Thank you for playing." << endl;
 						break;
 					}
 				}
