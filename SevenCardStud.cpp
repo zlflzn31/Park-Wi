@@ -1,28 +1,23 @@
+/*
+The name of this file: SevenCardStud.cpp
+Author: Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
+This is the source file for the SevenCardStud class, which contains its constructor, turn, and round methods.
+SevenCardStud's behavior is implemented by this class and pokergame class.
+*/
 #include "stdafx.h"
 #include "SevenCardStud.h"
 #include "PokerGame.h"
 #include "GameExceptions.h"
 using namespace std;
 
-
-/*
-The name of this file : SevenCardStud.cpp
-Author : Hong Wi, hwi@wustl.edu
-Jongwhan Park, jongwhan@wustl.edu
-This cpp file delas with SevenCardStud. 
-It follows the procedure of a game from PokerGame.cpp. 
-After then, everything of this file is to run a SevenCardStud game on the command prompt.
-*/
-
-
 SevenCardStud::SevenCardStud() // default constructor
 {
 }
 
-Hand SevenCardStud::bestFive(const Hand &h) 
+Hand SevenCardStud::bestFive(const Hand &h)
 {
 	vector<Hand> vh;
-	
+
 	// construct a vector with all possible Hands of 5. we do this by excluding 2 cards out of the given 7
 	for (int i = 0; i < 7; ++i) {
 		for (int j = i + 1; j < 7; ++j) {
@@ -66,7 +61,7 @@ int SevenCardStud::before_round()
 int SevenCardStud::round()
 {
 	// number of face down / face up cards that will be dealt in each turn
-	const vector<int> faceDown = { 2, 0, 0, 0, 1 }; 
+	const vector<int> faceDown = { 2, 0, 0, 0, 1 };
 	const vector<int> faceUp = { 1, 1, 1, 1, 0 };
 
 	for (int i = 0; i < 5; ++i) { // for each turn i
@@ -110,7 +105,7 @@ int SevenCardStud::round()
 				}
 			}
 		}
-//		betting();
+		betting();
 	}
 	return success;
 }
@@ -158,7 +153,7 @@ int SevenCardStud::after_round()
 		}
 	}
 	cout << temp[lastIndex]->playerName << endl;
-//	reverse(temp.begin(), temp.end());
+	//	reverse(temp.begin(), temp.end());
 	cout << endl;
 	for (size_t i = 0; i < temp.size(); ++i)
 	{
@@ -190,17 +185,22 @@ int SevenCardStud::after_round()
 		}
 	}
 	cout << endl;
-	//lab4: store a player's results to a text file
-	storeGame();
+	storeGame(); 	//Store a player's results to a text file, we store every players' information in after round. 
+					//Because even though game is ended automatically, we want to save their information. 
 
-	// lab4. for players that lost all their chips, make them decide between resetting their chip count and quitting the game
-	busted();
+	busted(); 	// For players that lost all their chips, make them decide between resetting their chip count and quitting the game
+	leave();	// After players who have no chips decide to reset their chips, then I ask all players if they want to leave. 
+				// Since players with chips also have decision to leave the game, we implemented like this way. 
+
+
 	if (playersVec.size() == 1)
 	{
 		throw only_one_player();
 	}
-
-	// --------------- THIS BELOW PART SHOULD DEAL WITH THAT 
+	if (playersVec.size() == 0)
+	{
+		throw no_player();
+	}
 	//ask whether to join the game
 	string joiningPlayer;
 	bool join = false;
@@ -243,10 +243,9 @@ int SevenCardStud::after_round()
 	else {
 		++dealer;
 	}
+	pot = 0;
 
 
 	return 0;
 }
-
-
 
