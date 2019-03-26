@@ -1,14 +1,16 @@
+/*
+The name of this file: FiveCardDraw.cpp
+Author: Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
+This is the source file for the FiveCardDraw class, which contains its constructor, turn, and round methods.
+FiveCardDraw's behavior is implemented by this class and pokergame class. 
+*/
+
+
+
 #include "stdafx.h"
 #include "FiveCardDraw.h"
 #include "GameExceptions.h"
 
-
-
-/*
-The name of this file: FiveCardDraw.cpp
-Author: Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
-This is an abstract file for the FiveCardDraw class, which contains its constructor, turn, and round methods.
-*/
 
 // FiveCardDraw constructor
 FiveCardDraw::FiveCardDraw() : PokerGame()
@@ -25,41 +27,58 @@ int FiveCardDraw::before_turn(Player& p)
 	}
 
 	cout << "Player's name: " << p.playerName << ", Hand content:" << p.playerHand;
-	cout << "Enter the position, IN ORDER, of the card that you want to discard. From 0 ~ 4. " << endl;
-	cout << "You can discard multiple cards until you enter 'n' at the end. " <<
-			"i.e (012n) or (01 {endl} 2n)  will discard 0,1, and 2 cards. " << endl;
-	char in;
-	int i = 0, j = 0; // i is index from user input. 
-	while (cin >> in)
-	{
+	cout << "Enter the positions of the card that you want to discard. From 0 ~ 4. " << endl;
+	cout << "You can discard multiple cards. Seperate the indices in between with 'space'. " << endl;
+	cout << "For any player after the 'first' one, you have to PRESS ENTER ONCE!! and then type the indices you want to discard. \n";
 
-		if (in == 'n')
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	string line, s;
+	vector<int> v;
+	getline(cin, line);
+	stringstream iss(line);
+	while (iss >> s) {
+		if (s == "0" || s == "1" || s == "2" || s == "3" || s == "4") {
+			v.push_back(stoi(s));
+		}
+	}
+	sort(v.rbegin(), v.rend());
+
+	for (size_t i = 0; i < v.size(); ++i) {
+		Card c = p.playerHand[i];
+		p.playerHand.remove_card(v[i]);
+		discardedDeck.add_card(c);
+	}
+
+	return success;
+/*	while (cin >> in)
+	{
+		if (in == "n")
 		{
 			break;
 		}
-		else if (in == '0' || in == '1' || in == '2' || in == '3' || in == '4')
+		else if (in == "0" || in == "1" || in == "2" || in == "3" || in == "4")
 		{
-			i = in - 48; // change the char value to int
-			try
+			vector<shared_ptr<Player>> temp;
+			Card c;
+			for (size_t i = 0; i < playersVec.size(); ++i)
 			{
-				Card c = p.playerHand[i - j];
-				p.playerHand.remove_card(i - j);
-				discardedDeck.add_card(c);
-				++j;
+					temp.push_back(playersVec[i]);				
+					if (temp[i]->playerName == p.playerName)
+					{
+						c = temp[i]->playerHand[stoi(in)];
+
+					}
 			}
-			catch (out_of_range err)
-			{
-				cout << err.what() << " Try again." << endl;
-			}
+			p.playerHand.remove_card( stoi(in) );
+			discardedDeck.add_card(c);
+			cout << stoi(in) << endl;
 		}
 		else
 		{
-			continue;
+			cout << "Please, enter valid strings" << endl;
 		}
 	}
-	cout << endl;
-	
-	return success;
+	return success;*/
 }
 
 //turn method
@@ -89,7 +108,7 @@ int FiveCardDraw::turn(Player& p)
 //after_turn method
 int FiveCardDraw::after_turn(Player& p)
 {
-	cout << "Player's name: " << p.playerName << ", Hand content: " << p.playerHand << ", folded: " << (p.isFold ? "True" : "False")  <<endl;
+	cout << "Player's name: " << p.playerName << ", Hand content: " << p.playerHand << ", folded: " << (p.isFold ? "True" : "False") << endl;
 	return success;
 }
 
@@ -121,7 +140,7 @@ int FiveCardDraw::before_round()
 			++eachIndex;
 
 		}
-		
+
 		// 1st betting phase:
 		// reset the records
 		foldCounts = 0;
@@ -149,6 +168,7 @@ int FiveCardDraw::before_round()
 		const int startIndex = dealer + 1;
 		const int endIndex = playersVec.size() - 1;
 
+		//lab4 part 
 		//to join the game, each player should spend a chip into the pot. 
 		//so pot should be incremented by 1. 
 		for (auto player : playersVec)
@@ -165,13 +185,13 @@ int FiveCardDraw::before_round()
 			++eachIndex;
 
 		}
-		
+
 		// 1st betting phase:
 		foldCounts = 0;
 		for (auto p : playersVec)
 		{
-		p->isFold = false;
-		cout << p->playerName << ": " << p->playerHand;
+			p->isFold = false;
+			cout << p->playerName << ": " << p->playerHand;
 		}
 		betting();
 
@@ -191,7 +211,7 @@ int FiveCardDraw::before_round()
 					before_turn(*playersVec[j]);
 			}
 		}
-		
+
 
 		return success;
 	}
@@ -200,6 +220,9 @@ int FiveCardDraw::before_round()
 // round method
 int FiveCardDraw::round()
 {
+	cout << "ROUND IS IN ACTION" << endl;
+	cout << "***********************************************************" << endl;
+
 	if (dealer == playersVec.size() - 1) // if dealer is at last position. 
 	{
 
@@ -216,9 +239,11 @@ int FiveCardDraw::round()
 					{
 						return turnResult;
 					}
-					after_turn(*playersVec[i]);
+					after_turn(*playersVec[i]); 
+					cout << " after_turn in round" << endl;
 				}
 			}
+			cout << " before betting in round" << endl;
 			betting();
 		}
 		return success;
@@ -233,15 +258,17 @@ int FiveCardDraw::round()
 			{
 				int index = (i + startIndex) % playersVec.size();
 				if (!playersVec[index]->isFold)
-				{ 
+				{
 					int turnResult = turn(*playersVec[index]);
 					if (turnResult != 0)
 					{
 						return turnResult;
 					}
 					after_turn(*playersVec[index]);
+					cout << " after_turn in round" << endl;
 				}
 			}
+			cout << " before betting in round" << endl;
 			betting();
 		}
 		return success;
