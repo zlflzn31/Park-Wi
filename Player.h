@@ -28,7 +28,6 @@ struct Player
 	bool isFold;
 	unsigned int betCount;
 	Player(string);
-	int resetChip();
 	bool noChip();
 };
 ostream& operator<<(ostream&, const Player&); // non-member insertion operator << 
