@@ -1,14 +1,3 @@
-#include "stdafx.h"
-#include "Game.h"
-#include "FiveCardDraw.h"
-#include "SevenCardStud.h" //lab4 jongwhan
-#include "TexasHoldEm.h" //lab4 jongwhan
-#include "GameExceptions.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-
 /*
 The name of this file : Game.cpp
 Author : Hong Wi, hwi@wustl.edu, Jongwhan Park, jongwhan@wustl.edu
@@ -17,6 +6,17 @@ It includes methods regarding the actual Game instance (instance(), start_game, 
 the players (add_player, find_player), the turns (before_turn, turn, after_turn),
 and the rounds (before_round, round, after_round).
 */
+
+#include "stdafx.h"
+#include "Game.h"
+#include "FiveCardDraw.h"
+#include "GameExceptions.h"
+#include "SevenCardStud.h"
+#include "TexasHoldEm.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 shared_ptr<Game> Game::pGame;
 
@@ -31,7 +31,7 @@ shared_ptr<Game> Game::instance() {
 	}
 }
 
-// start_game method
+// start_game method. changed for lab4 jongwhan
 void Game::start_game(const string& s) {
 	string f = "FiveCardDraw";
 	string g = "SevenCardStud";
@@ -40,7 +40,7 @@ void Game::start_game(const string& s) {
 	if (pGame != nullptr) { // check if the static pointer member variable is non-singular
 		throw game_already_started();
 	}
-	else if ((s.find(f) == string::npos && s.find(g) == string::npos && s.find(h) == string::npos) 
+	else if ((s.find(f) == string::npos && s.find(g) == string::npos && s.find(h) == string::npos)
 		|| (s.find(f) != string::npos && s.find(g) != string::npos) || (s.find(f) != string::npos && s.find(h) != string::npos)
 		|| (s.find(g) != string::npos && s.find(h) != string::npos)) {
 		// check if the string contains "FiveCardDraw" or "SevenCardStud". if it contains none of them or more than one of them, it is an error
@@ -68,12 +68,11 @@ void Game::stop_game() {
 	pGame = nullptr;
 }
 
-// How many players are in the current game ? 
 int Game::get_num_player() {
 	return playersVec.size();
 }
 
-//adding a player logic 
+//vector<shared_ptr<Player>> players;
 ErrorControl Game::add_player(const string & givenPlayer)
 {
 	for (auto i : playersVec) // this for loop checks if given player's name is same with players' name of the vector. 
@@ -88,7 +87,6 @@ ErrorControl Game::add_player(const string & givenPlayer)
 	return success;
 }
 
-// finding a player logic
 shared_ptr<Player> Game::find_player(const string & givenPlayer)
 {
 	//a logic to iterate vector<shared_ptr<Playrer>> in game class. 
@@ -102,70 +100,72 @@ shared_ptr<Player> Game::find_player(const string & givenPlayer)
 	return nullptr;
 }
 
-//busted is very important feature in our project. It determines if the user has no chip and is asked to leave the game.
 int Game::busted()
 {
 
 	int constsizeOftheVec = playersVec.size();
-	int leaveCount = 0;
 	for (auto i = 0; i < constsizeOftheVec; ++i) {
 
-		if (leaveCount == constsizeOftheVec - 1)
-		{
-			break;
-		}
-		if ( playersVec[i]->noChip() ) { // returns true if no chip ! 
-			char c;
-			do {
-				cout << "Please reset your chip count to keep playing. Otherwise, you must quit. Please enter r or q." << endl;
-				cout << "r for reset, q for quit" << endl;
-				cin >> c;
-				if (c == 'r')
-				{
-					playersVec[i].reset();
-				}
-				if (c == 'q')
-				{
-					ofstream ofs(playersVec[i]->playerName + ".txt");
-					ofs << playersVec[i]->playerName << " " << playersVec[i]->winCounts << playersVec[i]->lossCounts << playersVec[i]->chip;
-					ofs.close();
-					playersVec.erase(playersVec.begin() + i);
-				}
-			} while (c != 'r' || c != 'q');
-		}
-		else // even though he or she has no chips, she or he can still leave. 
-		{
-			cout << "Do you want, " << playersVec[i]->playerName << " to leave? " << endl;
-			cout << "If yes, enter the name. If no, enter 'no'. (No, On, NO won't be accpected) " << endl;
-			string c;
-			while (c != playersVec[i]->playerName || c != "no")
+		if (playersVec[i]->noChip()) { // returns true if no chip ! 
+			cout << "Please reset your chip count to keep playing. If you want to reset, press r. " << endl;
+			cout << "If you do wish to leave the game, press anything to continue the process of the game " <<
+					"You will be asked to leave in the following step" << endl;
+			string c; 
+			while (c != "r")
 			{
 				cin >> c;
-				if (c == playersVec[i]->playerName)
+				if (c == "r")
 				{
-					ofstream ofs(playersVec[i]->playerName + ".txt");
-					ofs << playersVec[i]->playerName << " " << playersVec[i]->winCounts << playersVec[i]->lossCounts << playersVec[i]->chip;
-					ofs.close();
-					playersVec.erase(playersVec.begin() + i);
-					--i;
-					++leaveCount;
-					break;
-				}
-				else if (c == "no")
-				{
-					break;
+					cout << "chips before reset : " << playersVec[i]->chip << endl;
+					playersVec[i]->chip = 20;
+					cout << "chips after reset : " << playersVec[i]->chip << endl;
 				}
 				else
 				{
-					cout << "enter valid strings" << endl;
+					break;
 				}
 			}
 		}
 	}
 	return success;
 }
+int Game::leave()
+{
+	vector<shared_ptr<Player>> temp;
+	for (size_t i = 0; i < playersVec.size(); ++i)
+	{
+		temp.push_back(playersVec[i]);
+	}
+	int indexOfVec = 0;
+	for (size_t j = 0; j <temp.size(); ++j)
+	{
+		cout << "Do you want, " << temp[j]->playerName << " to leave?" << endl;
+		cout << "If yes, enter the name. If not, enter 'no' (NO, No, On won't be accepted). " << endl;
+		string c;
+		while (c != temp[j]->playerName || c != "no")
+		{
+			cin >> c;
+			if (c == temp[j]->playerName)
+			{
+				playersVec.erase(playersVec.begin() + indexOfVec);
+				--indexOfVec;
+				break;
+			}
+			else if (c == "no")
+			{
+				break;
+			}
+			else
+			{
+				cout << "You have to differenticate between lower and upper cases. JFK != jfk" << endl;
+				cout << "So, please enter valid strings." << endl;
+			}
+		}
+		++indexOfVec;
+	}
+	return success;
+}
 
-//save the game information
 int Game::storeGame()
 {
 	auto numPlayers = playersVec.size();
@@ -182,3 +182,4 @@ int Game::storeGame()
 	}
 	return success;
 }
+
