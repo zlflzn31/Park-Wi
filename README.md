@@ -2,6 +2,8 @@
 
 Hong Wi, Jongwhan Park lab4(Card game project)
 ===========================
+> This program is written in VS 2015. If you try to learn with most updated VS, there could be potential errors. If you try to learn this program, please do it in VS 2015. 
+
 Program name: lab4.exe
 
 Author: Hong Wi (hwi@wustl.edu), Jongwhan Park (jongwhan@wustl.edu)
