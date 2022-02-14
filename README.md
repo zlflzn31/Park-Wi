@@ -2,7 +2,7 @@
 
 Hong Wi, Jongwhan Park lab4(Card game project)
 ===========================
-> This program is written in VS 2015. If you try to run the program with most updated VS, there could be potential errors. If you try to learn this program, please do it in VS 2015. 
+> This program is written in VS 2015. If you try to run the program with the most updated VS, there could be potential errors.
 
 Program name: lab4.exe
 
